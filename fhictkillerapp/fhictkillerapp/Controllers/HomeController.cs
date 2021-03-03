@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Logic;
 namespace fhictkillerapp.Controllers
 {
     public class HomeController : Controller
@@ -20,6 +20,8 @@ namespace fhictkillerapp.Controllers
 
         public IActionResult Index()
         {
+            Test test = new Test();
+
             return View();
         }
 

@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
+using Common;
+
+namespace Logic
+{
+    class CliverrContext : DbContext
+    {
+        
+        public DbSet<Posts> Posts { get; set; }
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite("Data Source=./bin/Debug/netcoreapp3.1/cliverr.db");
+    }
+}
