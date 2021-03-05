@@ -9,9 +9,13 @@ namespace Logic
     public class Querries
     {
         CliverrContext db = new CliverrContext();
-        public void AddPost(Posts insertPost) 
+        public void DbTest() 
         {
             db.Database.EnsureCreated();
+        }
+        public void AddPost(Posts insertPost) 
+        {
+
             db.Posts.Add(insertPost);
             db.SaveChanges();
         }

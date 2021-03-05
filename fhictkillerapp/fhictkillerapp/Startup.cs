@@ -7,16 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Logic;
 
 namespace fhictkillerapp
 {
     public class Startup
     {
+        Querries querries = new Querries();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
+            querries.DbTest();
         }
+            
 
         public IConfiguration Configuration { get; }
 

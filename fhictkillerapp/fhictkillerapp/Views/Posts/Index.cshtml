@@ -1,15 +1,29 @@
-﻿@*
-
-*@
-@model Common.Posts
-<form asp-action="AddPost" asp-controller="Posts">
-    <label asp-for="PostName"></label>
-    <input asp-for="PostName" placeholder="Your name goes here" />
-    <label asp-for="PostDescription"></label>
-    <input asp-for="PostDescription" placeholder="Your name goes here" />
-    <label asp-for="PostFileName"></label>
-    <input asp-for="PostFileName" placeholder="Your name goes here" />
-    <input type="submit" />
-</form>
-@{
-}
+﻿@model IEnumerable<Common.Posts>
+@Html.ActionLink("Create Post", // <-- Link text
+                 "CreatePost", // <-- Action Method Name
+                 "Posts", // <-- Controller Name
+                 null, // <-- Route value
+                 null // <-- htmlArguments
+                 )
+<div style="width: 900px;
+        height: 800px;">
+    @foreach (var item in Model)
+    {
+        <div style="        width: 200px;
+        height: 200px;
+        float: left;
+        background-color: aqua;
+        border-style: solid;
+        margin: 5px;
+        border-radius: 5px;
+        ">
+            <p>@item.PostName</p>
+            @Html.ActionLink("Click here", // <-- Link text
+                 "ViewPost", // <-- Action Method Name
+                 "Posts", // <-- Controller Name
+                 new {  item.PostId }, // <-- Route value
+                 null // <-- htmlArguments
+                 )
+        </div>
+    }
+</div>
