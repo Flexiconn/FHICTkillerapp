@@ -2,9 +2,13 @@
 
 *@
 @model Common.Posts
-<form asp-action="Create" asp-controller="Posts">
+<form asp-action="AddPost" asp-controller="Posts">
     <label asp-for="PostName"></label>
     <input asp-for="PostName" placeholder="Your name goes here" />
+    <label asp-for="PostDescription"></label>
+    <input asp-for="PostDescription" placeholder="Your name goes here" />
+    <label asp-for="PostFileName"></label>
+    <input asp-for="PostFileName" placeholder="Your name goes here" />
     <input type="submit" />
 </form>
 @{
