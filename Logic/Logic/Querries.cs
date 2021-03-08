@@ -27,5 +27,11 @@ namespace Logic
             postsList.AddRange(db.Posts.Select(x => x).ToList());
             return (postsList);
         }
+
+        public Posts GetPost(string id)
+        {
+            Posts post = db.Posts.Where(b => b.PostId == id).FirstOrDefault();
+            return (post);
+        }
     }
 }

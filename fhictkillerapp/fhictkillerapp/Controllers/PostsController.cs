@@ -13,7 +13,7 @@ namespace fhictkillerapp.Controllers
     {
         Querries querries = new Querries();
         // GET: PostsController
-
+        
 
         public ActionResult AddPost(Posts posts)
         {
@@ -30,11 +30,11 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpGet]
-        //[Route("Posts/ViewPost/{id:int}")]
-        public ActionResult ViewPost(string id)
+        public ActionResult ViewPost(string Id)
         {
-            Console.WriteLine(id);
-            return View(id);
+            ViewBag.Post = querries.GetPost(Id);
+            Console.WriteLine(Id);
+            return View();
         }
 
         public ActionResult CreatePost()
