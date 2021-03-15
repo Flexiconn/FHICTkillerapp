@@ -4,16 +4,22 @@ using System.Text;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Common;
+using Common.Models;
 
 namespace Logic
 {
     class CliverrContext : DbContext
     {
-        
-        public DbSet<Posts> Posts { get; set; }
 
+        public DbSet<Posts> Posts { get; set; }
+        public DbSet<PostTags> PostTags { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=./bin/Debug/netcoreapp3.1/cliverr.db");
+        { 
+            options.UseSqlite("Data Source=./bin/Debug/netcoreapp3.1/cliverr.db");
+
+        }
+
     }
 }
+

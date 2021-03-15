@@ -6,21 +6,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Logic;
 using Common;
+using System.Net.Http.Headers;
+using Common.Models;
+using System.IO;
 
 namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
-        Querries querries = new Querries();
-        // GET: PostsController
-        
 
-        public ActionResult AddPost(Posts posts)
+
+    Querries querries = new Querries();
+        // GET: PostsController
+
+        [HttpPost]
+        public ActionResult AddPost(PostUpload postUpload)
         {
-            posts.PostId = Guid.NewGuid().ToString();
-            querries.AddPost(posts);
+            postUpload.PostId = Guid.NewGuid().ToString();
+            querries.AddPost(postUpload);
             return Redirect("Index");
         }
+
+    
 
         public ActionResult Index()
         {
@@ -41,5 +48,7 @@ namespace fhictkillerapp.Controllers
         {
             return View();
         }
+
+
     }
 }

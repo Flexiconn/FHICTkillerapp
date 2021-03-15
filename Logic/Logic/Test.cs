@@ -1,5 +1,5 @@
 ﻿using System;
-using Common;
+using Common.Models;
 
 namespace Logic
 {
@@ -7,7 +7,7 @@ namespace Logic
     {
         Querries Querries = new Querries();
 
-        public void newPost(Posts posts) 
+        public void newPost(PostUpload posts) 
         {
             Querries.AddPost(posts);
 

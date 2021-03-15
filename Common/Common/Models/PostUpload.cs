@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Common.Models;
+using System.Text;
 
-namespace Common
+namespace Common.Models
 {
-    public class Posts
+    public class PostUpload
     {
         [Key]
         public string PostId { get; set; }
+        public IFormFile MyImage { set; get; }
         public string PostName { get; set; }
         public string PostDescription { get; set; }
-        public string PostFileName { get; set; }
-        public virtual PostTags Tags { get; set; }
+        
     }
 }

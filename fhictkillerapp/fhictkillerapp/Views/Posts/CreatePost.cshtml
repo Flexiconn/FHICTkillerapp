@@ -1,15 +1,15 @@
 ﻿@*
 
 *@
-@model Common.Posts
-<form asp-action="AddPost" asp-controller="Posts">
+@model Common.Models.PostUpload
+<form asp-action="AddPost" asp-controller="Posts" enctype="multipart/form-data">
     <label asp-for="PostName"></label>
     <input asp-for="PostName" placeholder="Your name goes here" />
     <label asp-for="PostDescription"></label>
     <input asp-for="PostDescription" placeholder="Your name goes here" />
-    <label asp-for="PostFileName"></label>
-    <input asp-for="PostFileName" placeholder="Your name goes here" />
-    <input type="submit" />
+    <label asp-for="MyImage"></label>
+    <input asp-for="MyImage" />
+    <input type="submit"/>
 </form>
 @{
 }
