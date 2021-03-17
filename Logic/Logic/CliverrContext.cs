@@ -13,6 +13,15 @@ namespace Logic
 
         public DbSet<Posts> Posts { get; set; }
         public DbSet<PostTags> PostTags { get; set; }
+        public DbSet<Account> Account { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Account>()
+            .HasOne(a => a.Posts)
+            .WithOne(a => a.Account)
+            .HasForeignKey<Posts>(c => c.PostAuthor);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         { 

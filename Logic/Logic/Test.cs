@@ -9,7 +9,7 @@ namespace Logic
 
         public void newPost(PostUpload posts) 
         {
-            Querries.AddPost(posts);
+           // Querries.AddPost(posts);
 
         }
        

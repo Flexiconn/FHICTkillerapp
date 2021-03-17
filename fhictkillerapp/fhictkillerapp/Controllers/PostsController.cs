@@ -22,8 +22,9 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult AddPost(PostUpload postUpload)
         {
+
             postUpload.PostId = Guid.NewGuid().ToString();
-            querries.AddPost(postUpload);
+            querries.AddPost(postUpload, HttpContext.Session.GetString("SessionId"));
             return Redirect("Index");
         }
 
@@ -46,9 +47,13 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult CreatePost()
         {
-            return View();
+            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId"))) 
+            {
+                return View();
+            }
+
+            return RedirectToAction("Login","Account");
+
         }
-
-
     }
 }

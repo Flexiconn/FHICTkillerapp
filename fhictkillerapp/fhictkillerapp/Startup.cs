@@ -27,6 +27,8 @@ namespace fhictkillerapp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDistributedMemoryCache(); //This way ASP.NET Core will use a Memory Cache to store session variables
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +48,8 @@ namespace fhictkillerapp
 
             app.UseAuthorization();
 
+            app.UseSession(); //make sure add this line before UseMvc()
+
 
             app.UseEndpoints(endpoints =>
             {
@@ -53,6 +57,8 @@ namespace fhictkillerapp
                     name: "default",
                     pattern: "{controller=Posts}/{action=Index}/{id?}");
             });
+
+
 
         }
     }

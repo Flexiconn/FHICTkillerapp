@@ -15,9 +15,10 @@ namespace Logic
         {
             db.Database.EnsureCreated();
         }
-        public void AddPost(PostUpload insertPost) 
+
+        public void AddPost(PostUpload insertPost,string sesId) 
         {
-            string pathString = System.IO.Path.Combine("../Data/IMG/", insertPost.PostId);
+            string pathString = System.IO.Path.Combine("~/Data/IMG/", insertPost.PostId);
             System.IO.Directory.CreateDirectory(pathString);
             insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
 
@@ -26,7 +27,7 @@ namespace Logic
             posts.PostName = insertPost.PostName;
             posts.PostDescription = insertPost.PostDescription;
             posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-            db.Posts.Add(posts);
+            db.Account.Where(b => b.SessionId == sesId).FirstOrDefault().Posts = posts;
             db.SaveChanges();
         }
 
@@ -42,6 +43,36 @@ namespace Logic
         {
             Posts post = db.Posts.Where(b => b.PostId == id).FirstOrDefault();
             return (post);
+        }
+
+        public void CreateAccount(Account account)
+        {
+            account.Id = Guid.NewGuid().ToString();
+            account.SessionId = null;
+            db.Account.Add(account);
+            db.SaveChanges();
+            Console.WriteLine("succes: " + account.Id);
+        }
+
+        public string LoginAccount(Account account)
+        {
+            var acc = db.Account.Where(b => b.Name == account.Name).FirstOrDefault();
+            if(acc != null && acc.Name == account.Name && acc.Password == account.Password) 
+            {
+                acc.SessionId = Guid.NewGuid().ToString();
+                db.SaveChanges();
+                return (acc.SessionId);
+            }
+
+            return ("nope");
+        }
+
+        public bool CheckIfSignedIn(string Id) {
+            if (Id != null && Id == db.Account.Where(b => b.SessionId == Id).FirstOrDefault().SessionId)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
