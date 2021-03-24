@@ -14,6 +14,7 @@ namespace Logic
         public DbSet<Posts> Posts { get; set; }
         public DbSet<PostTags> PostTags { get; set; }
         public DbSet<Account> Account { get; set; }
+        public DbSet<Chat> Chat { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -18,7 +18,7 @@ namespace Logic
 
         public void AddPost(PostUpload insertPost,string sesId) 
         {
-            string pathString = System.IO.Path.Combine("~/Data/IMG/", insertPost.PostId);
+            string pathString = System.IO.Path.Combine("wwwroot/Data/IMG/", insertPost.PostId);
             System.IO.Directory.CreateDirectory(pathString);
             insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
 
@@ -73,6 +73,20 @@ namespace Logic
                 return true;
             }
             return false;
+        }
+
+        public void SendMessage(Chat Message, string id) 
+        {
+            Message.DateTime = DateTime.Now;
+            Message.Account = db.Account.Where(b => b.SessionId == id).FirstOrDefault();
+            db.Chat.Add(Message);
+            db.SaveChanges();
+        }
+
+        public List<Chat> GetMessages(string chatId) 
+        {
+
+            return db.Chat.Where(b => b.ChatId == chatId).ToList();
         }
     }
 }
