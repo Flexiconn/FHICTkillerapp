@@ -20,7 +20,7 @@ namespace fhictkillerapp.Controllers
 
         public IActionResult Index()
         {
-            Test test = new Test();
+           // Test test = new Test();
 
             return View();
         }

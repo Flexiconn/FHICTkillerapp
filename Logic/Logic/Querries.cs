@@ -39,6 +39,11 @@ namespace Logic
             return (postsList);
         }
 
+        public Account GetAccount(string id)
+        {
+            return (db.Account.Where(b => b.SessionId == id).FirstOrDefault());
+        }
+
         public Posts GetPost(string id)
         {
             Posts post = db.Posts.Where(b => b.PostId == id).FirstOrDefault();
@@ -52,6 +57,12 @@ namespace Logic
             db.Account.Add(account);
             db.SaveChanges();
             Console.WriteLine("succes: " + account.Id);
+        }
+
+        public void AddOrder(order order)
+        {
+            db.Add(order);
+            db.SaveChanges();
         }
 
         public string LoginAccount(Account account)

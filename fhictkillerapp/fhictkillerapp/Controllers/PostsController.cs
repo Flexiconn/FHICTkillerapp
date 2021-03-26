@@ -16,7 +16,7 @@ namespace fhictkillerapp.Controllers
     {
 
 
-    Querries querries = new Querries();
+        Querries querries = new Querries();
         // GET: PostsController
 
         [HttpPost]
@@ -28,7 +28,7 @@ namespace fhictkillerapp.Controllers
             return Redirect("Index");
         }
 
-    
+
 
         public ActionResult Index()
         {
@@ -47,12 +47,34 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult CreatePost()
         {
-            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId"))) 
+            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 return View();
             }
 
-            return RedirectToAction("Login","Account");
+            return RedirectToAction("Login", "Account");
+
+        }
+
+        public ActionResult Order()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult OrderPost( string orderMessage, string postId)
+        {
+            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            {
+                order order = new order();
+                order.orderMessage = orderMessage;
+                Console.WriteLine(orderMessage);
+                order.post = querries.GetPost(postId);
+                order.buyer = querries.GetAccount(HttpContext.Session.GetString("SessionId"));
+                querries.AddOrder(order);
+            }
+
+            return RedirectToAction("Login", "Account");
 
         }
     }

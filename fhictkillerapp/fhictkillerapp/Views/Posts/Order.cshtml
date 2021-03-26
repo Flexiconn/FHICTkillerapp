@@ -1,0 +1,14 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Common.Models.OrderFormat;
+
+<form asp-action="OrderPost" asp-controller="Posts" enctype="multipart/form-data">
+    <label asp-for="orderMessage"></label>
+    <input asp-for="orderMessage" placeholder="Your name goes here" />
+    <label asp-for="PostId"></label>
+    <input asp-for="PostId" placeholder="Your name goes here" />
+    <input type="submit" />
+</form>
