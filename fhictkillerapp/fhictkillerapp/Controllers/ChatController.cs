@@ -14,6 +14,11 @@ namespace fhictkillerapp.Controllers
         public IActionResult Index()
         {
             ViewBag.chat = Querries.GetMessages(null);
+            var test = Querries.GetMessages(null);
+            foreach (var t in test) 
+            {
+                Console.WriteLine(t.Value);
+            }
             return View();
         }
 

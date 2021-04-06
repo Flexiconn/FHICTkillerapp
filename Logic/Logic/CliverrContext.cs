@@ -23,6 +23,10 @@ namespace Logic
             .HasOne(a => a.Posts)
             .WithOne(a => a.Account)
             .HasForeignKey<Posts>(c => c.PostAuthor);
+
+            modelBuilder.Entity<Account>()
+                .HasMany(c => c.Chat)
+                .WithOne(e => e.Account);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
