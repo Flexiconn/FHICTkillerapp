@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Common;
 using Common.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic
 {
@@ -39,6 +40,16 @@ namespace Logic
             return (postsList);
         }
 
+        public Account GetAccount(string id)
+        {
+            return (db.Account.Where(b => b.SessionId == id).FirstOrDefault());
+        }
+
+        public string GetAccountName(string id)
+        {
+            return (db.Account.Where(b => b.Id.ToString() == id).FirstOrDefault().Name);
+        }
+
         public Posts GetPost(string id)
         {
             Posts post = db.Posts.Where(b => b.PostId == id).FirstOrDefault();
@@ -47,11 +58,17 @@ namespace Logic
 
         public void CreateAccount(Account account)
         {
-            account.Id = Guid.NewGuid().ToString();
+            account.Id = Guid.NewGuid().ToString().ToUpper();
             account.SessionId = null;
             db.Account.Add(account);
             db.SaveChanges();
             Console.WriteLine("succes: " + account.Id);
+        }
+
+        public void AddOrder(order order)
+        {
+            db.Add(order);
+            db.SaveChanges();
         }
 
         public string LoginAccount(Account account)
@@ -83,10 +100,22 @@ namespace Logic
             db.SaveChanges();
         }
 
-        public List<Chat> GetMessages(string chatId) 
+        public Dictionary<ClientChat,string> GetMessages(string chatId) 
         {
-
-            return db.Chat.Where(b => b.ChatId == chatId).ToList();
+            Dictionary<ClientChat, string> msgs = new Dictionary<ClientChat, string>();
+            var msg = db.Chat.Where(b => b.ChatId == chatId).ToList();
+            foreach (var s in msg) 
+            {
+                ClientChat chat = new ClientChat();
+                chat.ChatId = s.ChatId;
+                chat.DateTime = s.DateTime;
+                chat.Message = s.Message;
+                chat.MessageId = s.MessageId;
+                var tthis = db.Chat.FromSqlRaw("SELECT MessageId, AccountId, ChatId, DateTime, Message FROM Chat").ToList();
+                Console.WriteLine("test " + tthis[0].Account);
+                msgs.Add(chat, GetAccountName(s.Account.ToString()));
+            }
+            return msgs;
         }
 
         public List<ChatClient> GetMessagesClient(string chatId)

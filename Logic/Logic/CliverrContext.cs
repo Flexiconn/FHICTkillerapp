@@ -15,6 +15,7 @@ namespace Logic
         public DbSet<PostTags> PostTags { get; set; }
         public DbSet<Account> Account { get; set; }
         public DbSet<Chat> Chat { get; set; }
+        public DbSet<order> Order { get; set; }
         public DbSet<OrderPurchase> OrderPurchases { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,6 +24,10 @@ namespace Logic
             .HasOne(a => a.Posts)
             .WithOne(a => a.Account)
             .HasForeignKey<Posts>(c => c.PostAuthor);
+
+            modelBuilder.Entity<Account>()
+                .HasMany(c => c.Chat)
+                .WithOne(e => e.Account);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

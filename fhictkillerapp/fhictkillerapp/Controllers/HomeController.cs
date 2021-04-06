@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Logic;
+using Data;
+
 namespace fhictkillerapp.Controllers
 {
     public class HomeController : Controller
@@ -20,8 +22,9 @@ namespace fhictkillerapp.Controllers
 
         public IActionResult Index()
         {
-            Test test = new Test();
-
+            // Test test = new Test();
+            Connection connection = new Connection();
+            connection.start();
             return View();
         }
 

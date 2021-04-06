@@ -14,5 +14,7 @@ namespace Common.Models
         public string Name { get; set; }
         public string Password { get; set; }
         public virtual Posts Posts { get; set; }
+        public ICollection<Chat> Chat { get; set; }
+
     }
 }
