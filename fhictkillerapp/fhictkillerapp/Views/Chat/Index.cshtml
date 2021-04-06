@@ -17,12 +17,18 @@
         border-radius: 5px;
         border-width: 2px;
         position: relative;
-    ">
-        <p>@item.Message</p>
+        ">
         <p style="font-size: 8px;
-        float: right;
-">@item.DateTime</p>
-    </div>
+            float: left;
+            ">@item.AccountName</p>
+
+        <p style="font-size: 12px;
+            float: left;
+            ">@item.Message</p>
+        <p style="font-size: 8px;
+            float: right;
+            ">@item.DateTime</p>
+        </div>
     }
  </div>
         <form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data">

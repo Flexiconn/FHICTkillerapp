@@ -13,7 +13,8 @@ namespace fhictkillerapp.Controllers
         Logic.Querries Querries = new Logic.Querries();
         public IActionResult Index()
         {
-            ViewBag.chat = Querries.GetMessages(null);
+
+            ViewBag.chat = Querries.GetMessagesClient(null);
             return View();
         }
 
@@ -36,7 +37,7 @@ namespace fhictkillerapp.Controllers
         public ActionResult GetMessages(Chat chat)
         {
             Console.WriteLine(chat.Message);
-            Console.WriteLine(Querries.GetMessages(null).Count);
+            Console.WriteLine(Querries.GetMessagesClient(null).Count);
             return Redirect("Index");
         }
     }
