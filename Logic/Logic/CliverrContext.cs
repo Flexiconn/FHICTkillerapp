@@ -16,6 +16,7 @@ namespace Logic
         public DbSet<Account> Account { get; set; }
         public DbSet<Chat> Chat { get; set; }
         public DbSet<order> Order { get; set; }
+        public DbSet<OrderPurchase> OrderPurchases { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

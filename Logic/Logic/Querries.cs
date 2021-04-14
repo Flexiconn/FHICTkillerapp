@@ -117,5 +117,15 @@ namespace Logic
             }
             return msgs;
         }
+
+        public List<ChatClient> GetMessagesClient(string chatId)
+        {
+            List<ChatClient> msgs = new List<ChatClient>();
+            foreach (var item in db.Chat.Where(b => b.ChatId == chatId).ToList()) 
+            {
+                msgs.Add(new ChatClient(item.MessageId, "test name", item.Message, item.DateTime));
+            }
+            return msgs;
+        }
     }
 }

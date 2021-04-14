@@ -77,5 +77,18 @@ namespace fhictkillerapp.Controllers
             return RedirectToAction("Login", "Account");
 
         }
+
+        
+        public ActionResult OrderPost()
+        {
+            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("Index", "Chat");
+            }
+
+            return RedirectToAction("Login", "Account");
+
+        }
+
     }
 }
