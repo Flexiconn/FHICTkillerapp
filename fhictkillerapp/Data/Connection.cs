@@ -11,27 +11,30 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Connection
+    public class Connection : IConnection
     {
         private MySqlConnection connection;
         private string server;
         private string database;
         private string uid;
         private string password;
+
+        public Connection() {
+            Initialize();
+
+
+        }
         public void start() 
         {
             Initialize();
-            open();
-            querry();
-            GetAccount("test");
-            AddPost(new PostUpload() {PostId ="awda", PostName= "test",PostDescription="testtest" }, "test");
-            close();
+            //open();
+            //close();
         }
         private void Initialize()
         {
 
             server = "localhost";
-            database = "killer";
+            database = "killerapp";
             uid = "root";
             password = "root";
             string connectionString;
@@ -52,6 +55,7 @@ namespace Data
 
         public Account GetAccount(string id)
         {
+            open();
             string query = $"SELECT * FROM account WHERE SessionId='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
@@ -66,228 +70,193 @@ namespace Data
                 thisAccount.Password = dataReader["Password"].ToString();
             }
             dataReader.Close();
-
+            close();
             return thisAccount;
         }
 
         public void AddPost(PostUpload insertPost, string sesId)
-
-        public Account GetAccount(string id)
         {
-            string pathString = System.IO.Path.Combine("wwwroot/Data/IMG/", insertPost.PostId);
-            System.IO.Directory.CreateDirectory(pathString);
-            insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
+            open();
+            //string pathString = System.IO.Path.Combine("wwwroot/Data/IMG/", insertPost.PostId);
+            //System.IO.Directory.CreateDirectory(pathString);
+            //insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
 
-            string query = $"INSERT INTO ";
+
+            //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
+
+            string query = $"INSERT INTO post (PostId, PostName, PostDescription, PostAuthor) VALUES('{insertPost.PostId}', '{insertPost.PostName}', '{insertPost.PostDescription}','53EFCF09-36AF-4B04-A61C-27A1625C96C1'); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
-
-            Posts posts = new Posts();
-            posts.PostId = insertPost.PostId;
-            posts.PostName = insertPost.PostName;
-            posts.PostDescription = insertPost.PostDescription;
-            posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-            db.Account.Where(b => b.SessionId == sesId).FirstOrDefault().Posts = posts;
-            db.SaveChanges();
+            close();
         }
+
+
 
         public List<Posts> GetPosts()
         {
+            open();
+            string query = $"SELECT * FROM post";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
             List<Posts> postsList = new List<Posts>();
-            var postList = db.Posts.Select(x => x).ToList();
-            postsList.AddRange(db.Posts.Select(x => x).ToList());
+            //Read the data and store them in the list
+            while (dataReader.Read())
+            {
+                postsList.Add(new Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() });
+            }
+            dataReader.Close();
+            close();
             return (postsList);
         }
 
-        public Account GetAccount(string id)
-        {
-            return (db.Account.Where(b => b.SessionId == id).FirstOrDefault());
-        }
+
 
         public string GetAccountName(string id)
         {
-            return (db.Account.Where(b => b.Id.ToString() == id).FirstOrDefault().Name);
+            open();
+            string query = $"SELECT * FROM post WHERE PostId='{id}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            dataReader.Read();
+            var name = dataReader["Name"].ToString();
+            dataReader.Close();
+            close();
+            return (name);
         }
 
         public Posts GetPost(string id)
         {
-            Posts post = db.Posts.Where(b => b.PostId == id).FirstOrDefault();
+
+            open();
+            string query = $"SELECT * FROM post WHERE PostId='{id}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            List<Posts> postsList = new List<Posts>();
+            //Read the data and store them in the list
+            dataReader.Read();
+
+            Posts post = new Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
+            
+            dataReader.Close();
+            close();
             return (post);
         }
 
         public void CreateAccount(Account account)
         {
+            open();
             account.Id = Guid.NewGuid().ToString().ToUpper();
             account.SessionId = null;
-            db.Account.Add(account);
-            db.SaveChanges();
-            Console.WriteLine("succes: " + account.Id);
+            string query = $"INSERT INTO account (Id, SessionId, Name, Password) VALUES('{account.Id}', '{account.SessionId}', '{account.Name}','{account.Password}'); ";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
         }
 
         public void AddOrder(order order)
         {
-            db.Add(order);
-            db.SaveChanges();
+            open();
+            string query = $"INSERT INTO account (OrderId, BuyerId, PostId, ChatId) VALUES('{order.orderId}', '{order.buyer}', '{order.post}','{order.chat}'); ";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
         }
 
         public string LoginAccount(Account account)
         {
-            var acc = db.Account.Where(b => b.Name == account.Name).FirstOrDefault();
+            open();
+            string query = $"SELECT * FROM account WHERE Password='{account.Password}' AND Name='{account.Name}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            Account acc = new Account();
+            //Read the data and store them in the list
+            while (dataReader.Read())
+            {
+                acc.Name = dataReader["Name"].ToString();
+                acc.Password = dataReader["Password"].ToString();
+                acc.Id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
             if (acc != null && acc.Name == account.Name && acc.Password == account.Password)
             {
                 acc.SessionId = Guid.NewGuid().ToString();
-                db.SaveChanges();
+                query = $"UPDATE account SET SessionId='{acc.SessionId}' WHERE Id='{acc.Id}'";
+                cmd = new MySqlCommand(query, connection);
+                //Create a data reader and Execute the command
+                cmd.ExecuteNonQuery();
+                close();
                 return (acc.SessionId);
             }
-
+            close();
             return ("nope");
         }
 
         public bool CheckIfSignedIn(string Id)
         {
-            if (Id != null && Id == db.Account.Where(b => b.SessionId == Id).FirstOrDefault().SessionId)
+            open();
+            string query = $"SELECT SessionId FROM account WHERE SessionId='{Id}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            while (dataReader.Read())
             {
-                return true;
+                if (Id != null && Id == dataReader["SessionId"].ToString())
+                {
+                    dataReader.Close();
+                    close();
+                    return true;
+                }
             }
+            dataReader.Close();
+            close();
             return false;
         }
 
         public void SendMessage(Chat Message, string id)
         {
+            open();
             Message.DateTime = DateTime.Now;
-            Message.Account = db.Account.Where(b => b.SessionId == id).FirstOrDefault();
-            db.Chat.Add(Message);
-            db.SaveChanges();
+            string query = $"SELECT Id FROM account WHERE SessionId='{id}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Read the data and store them in the list
+            dataReader.Read();
+            var Idd = dataReader["Id"].ToString();
+            dataReader.Close();
+            
+            query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES('{Guid.NewGuid().ToString()}','{Message.ChatId}','{Idd}','{Message.Message}','{Message.DateTime}')";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
         }
 
         public Dictionary<ClientChat, string> GetMessages(string chatId)
         {
+            open();
             Dictionary<ClientChat, string> msgs = new Dictionary<ClientChat, string>();
-            var msg = db.Chat.Where(b => b.ChatId == chatId).ToList();
-            foreach (var s in msg)
+
+            string query = $"SELECT * IN chat where chatId='{chatId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            while (dataReader.Read())
             {
-                ClientChat chat = new ClientChat();
-                chat.ChatId = s.ChatId;
-                chat.DateTime = s.DateTime;
-                chat.Message = s.Message;
-                chat.MessageId = s.MessageId;
-                var tthis = db.Chat.FromSqlRaw("SELECT MessageId, AccountId, ChatId, DateTime, Message FROM Chat").ToList();
-                Console.WriteLine("test " + tthis[0].Account);
-                msgs.Add(chat, GetAccountName(s.Account.ToString()));
+                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString()}, dataReader["AccountId"].ToString());
             }
+            dataReader.Close();
+            close();
             return msgs;
         }
-
-        public void AddPost(PostUpload insertPost, string sesId)
-        {
-            //string pathString = System.IO.Path.Combine("wwwroot/Data/IMG/", insertPost.PostId);
-            //System.IO.Directory.CreateDirectory(pathString);
-            //insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
-
-            Posts posts = new Posts();
-            posts.PostId = insertPost.PostId;
-            posts.PostName = insertPost.PostName;
-            posts.PostDescription = insertPost.PostDescription;
-            //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-
-            string query = $"INSERT INTO posts (PostId, PostName, PostDescription, PostAuthor) VALUES('{insertPost.PostId}', '{insertPost.PostName}', '{insertPost.PostDescription}','test'); ";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
-            Console.WriteLine("test");
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-        }
-
-        public List<Posts> GetPosts()
-        {
-            List<Posts> postsList = new List<Posts>();
-            var postList = db.Posts.Select(x => x).ToList();
-            postsList.AddRange(db.Posts.Select(x => x).ToList());
-            return (postsList);
-        }
-        //public string GetAccountName(string id)
-        //{
-        //    return (db.Account.Where(b => b.Id.ToString() == id).FirstOrDefault().Name);
-        //}
-
-        //public Posts GetPost(string id)
-        //{
-        //    Posts post = db.Posts.Where(b => b.PostId == id).FirstOrDefault();
-        //    return (post);
-        //}
-
-        //public void CreateAccount(Account account)
-        //{
-        //    account.Id = Guid.NewGuid().ToString().ToUpper();
-        //    account.SessionId = null;
-        //    db.Account.Add(account);
-        //    db.SaveChanges();
-        //    Console.WriteLine("succes: " + account.Id);
-        //}
-
-        //public void AddOrder(order order)
-        //{
-        //    db.Add(order);
-        //    db.SaveChanges();
-        //}
-
-        //public string LoginAccount(Account account)
-        //{
-        //    var acc = db.Account.Where(b => b.Name == account.Name).FirstOrDefault();
-        //    if (acc != null && acc.Name == account.Name && acc.Password == account.Password)
-        //    {
-        //        acc.SessionId = Guid.NewGuid().ToString();
-        //        db.SaveChanges();
-        //        return (acc.SessionId);
-        //    }
-
-        //    return ("nope");
-        //}
-
-        //public bool CheckIfSignedIn(string Id)
-        //{
-        //    if (Id != null && Id == db.Account.Where(b => b.SessionId == Id).FirstOrDefault().SessionId)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        //public void SendMessage(Chat Message, string id)
-        //{
-        //    Message.DateTime = DateTime.Now;
-        //    Message.Account = db.Account.Where(b => b.SessionId == id).FirstOrDefault();
-        //    db.Chat.Add(Message);
-        //    db.SaveChanges();
-        //}
-
-        //public Dictionary<ClientChat, string> GetMessages(string chatId)
-        //{
-        //    Dictionary<ClientChat, string> msgs = new Dictionary<ClientChat, string>();
-        //    var msg = db.Chat.Where(b => b.ChatId == chatId).ToList();
-        //    foreach (var s in msg)
-        //    {
-        //        ClientChat chat = new ClientChat();
-        //        chat.ChatId = s.ChatId;
-        //        chat.DateTime = s.DateTime;
-        //        chat.Message = s.Message;
-        //        chat.MessageId = s.MessageId;
-        //        var tthis = db.Chat.FromSqlRaw("SELECT MessageId, AccountId, ChatId, DateTime, Message FROM Chat").ToList();
-        //        Console.WriteLine("test " + tthis[0].Account);
-        //        msgs.Add(chat, GetAccountName(s.Account.ToString()));
-        //    }
-        //    return msgs;
-        //}
-
-        //public List<ChatClient> GetMessagesClient(string chatId)
-        //{
-        //    List<ChatClient> msgs = new List<ChatClient>();
-        //    foreach (var item in db.Chat.Where(b => b.ChatId == chatId).ToList())
-        //    {
-        //        msgs.Add(new ChatClient(item.MessageId, "test name", item.Message, item.DateTime));
-        //    }
-        //    return msgs;
-        //}
-
     }
 }

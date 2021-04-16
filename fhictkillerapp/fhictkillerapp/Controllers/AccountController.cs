@@ -10,7 +10,7 @@ namespace fhictkillerapp.Controllers
 {
     public class AccountController : Controller
     {
-        Logic.Querries Querries = new Logic.Querries();
+        Data.Connection Querries = new Data.Connection();
         public IActionResult Index()
         {
             return View();
