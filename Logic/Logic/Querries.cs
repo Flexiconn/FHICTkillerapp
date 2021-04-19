@@ -110,7 +110,7 @@ namespace Logic
                 chat.ChatId = s.ChatId;
                 chat.DateTime = s.DateTime;
                 chat.Message = s.Message;
-                chat.MessageId = s.MessageId;
+                chat.MessageId = s.MessageId.ToString();
                 var tthis = db.Chat.FromSqlRaw("SELECT MessageId, AccountId, ChatId, DateTime, Message FROM Chat").ToList();
                 Console.WriteLine("test " + tthis[0].Account);
                 msgs.Add(chat, GetAccountName(s.Account.ToString()));
@@ -123,7 +123,7 @@ namespace Logic
             List<ChatClient> msgs = new List<ChatClient>();
             foreach (var item in db.Chat.Where(b => b.ChatId == chatId).ToList()) 
             {
-                msgs.Add(new ChatClient(item.MessageId, "test name", item.Message, item.DateTime));
+                msgs.Add(new ChatClient(item.MessageId.ToString(), "test name", item.Message, item.DateTime));
             }
             return msgs;
         }

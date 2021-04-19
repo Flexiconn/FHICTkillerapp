@@ -19,6 +19,6 @@ namespace Data
         string LoginAccount(Account account);
         bool CheckIfSignedIn(string Id);
         void SendMessage(Chat Message, string id);
-        Dictionary<ClientChat, string> GetMessages(string chatId);
+        List<ClientChat> GetMessages(string chatId);
     }
 }

@@ -11,13 +11,16 @@ namespace fhictkillerapp.Controllers
     public class ChatController : Controller
     {
         Data.Connection Querries = new Data.Connection();
-        public IActionResult Index()
+        [Route("chat/{id}")]
+        public IActionResult Index(string id)
         {
+            Console.WriteLine(id);
 
-            ViewBag.chat = Querries.GetMessages(null);
+            ViewBag.chat = Querries.GetMessages(id);
             return View();
         }
 
+        
         public IActionResult Chat() 
         {
 

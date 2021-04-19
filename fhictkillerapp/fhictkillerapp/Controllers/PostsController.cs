@@ -64,13 +64,12 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult OrderPost( string orderMessage, string postId)
         {
+            Console.WriteLine(orderMessage + "    " + postId);
             if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 order order = new order();
-                order.orderMessage = orderMessage;
-                Console.WriteLine(orderMessage);
-                order.post = Querries.GetPost(postId);
-                order.buyer = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
+                order.post.PostId = postId;
+                order.buyer.Id = Querries.GetAccount(HttpContext.Session.GetString("SessionId")).Id;
                 Querries.AddOrder(order);
             }
 
@@ -79,16 +78,6 @@ namespace fhictkillerapp.Controllers
         }
 
         
-        public ActionResult OrderPost()
-        {
-            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
-            {
-                return RedirectToAction("Index", "Chat");
-            }
-
-            return RedirectToAction("Login", "Account");
-
-        }
 
     }
 }

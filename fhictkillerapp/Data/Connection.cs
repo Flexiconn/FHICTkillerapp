@@ -161,7 +161,9 @@ namespace Data
         public void AddOrder(order order)
         {
             open();
-            string query = $"INSERT INTO account (OrderId, BuyerId, PostId, ChatId) VALUES('{order.orderId}', '{order.buyer}', '{order.post}','{order.chat}'); ";
+            order.orderId = Guid.NewGuid();
+            Console.WriteLine(order.buyer.Id + "           " + order.post.PostId);
+            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId) VALUES ('{order.orderId.ToString()}', '{order.buyer.Id}', '{order.post.PostId}','{Guid.NewGuid().ToString()}');";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
@@ -239,20 +241,18 @@ namespace Data
             close();
         }
 
-        public Dictionary<ClientChat, string> GetMessages(string chatId)
+        public List<ClientChat> GetMessages(string chatId)
         {
             open();
-            Dictionary<ClientChat, string> msgs = new Dictionary<ClientChat, string>();
-
-            string query = $"SELECT * IN chat where chatId='{chatId}'";
+            List<ClientChat> msgs = new List<ClientChat>();
+            string query = $"SELECT * FROM chat WHERE chatId='{chatId}';";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dataReader = cmd.ExecuteReader();
 
             //Create a data reader and Execute the command
-            cmd.ExecuteNonQuery();
             while (dataReader.Read())
             {
-                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString()}, dataReader["AccountId"].ToString());
+                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString()});
             }
             dataReader.Close();
             close();
