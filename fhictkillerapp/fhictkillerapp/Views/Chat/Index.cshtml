@@ -1,15 +1,13 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
 @model Common.Models.Chat
 <div>
     @foreach (var item in ViewBag.Chat)
     {
-    <div style="
+    <div style="        
         width: 200px;
-        height: 50px;
+        height: 60px;
         float: left;
         background-color: white;
         border-style: solid;
@@ -17,10 +15,11 @@
         border-radius: 5px;
         border-width: 2px;
         position: relative;
-        ">
+        clear: both;
+    ">
         <p style="font-size: 8px;
             float: left;
-            ">@item.MessageId</p>
+            ">@item.AccountName</p>
 
         <p style="font-size: 12px;
             float: left;
@@ -29,8 +28,9 @@
         </div>
     }
  </div>
-        <form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data">
-            <label asp-for="Message"></label>
-            <input asp-for="Message" placeholder="Your name goes here" />
-            <input type="submit" />
-        </form>
+<form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data">
+    <label asp-for="Message"></label>
+    <input asp-for="Message" placeholder="Your name goes here" />
+    <input type="hidden" name="ChatId" id="ChatId" value="@ViewBag.chatid">
+    <input type="submit" />
+</form>

@@ -18,7 +18,11 @@ namespace Data
         void AddOrder(order order);
         string LoginAccount(Account account);
         bool CheckIfSignedIn(string Id);
-        void SendMessage(Chat Message, string id);
+        void SendMessage(Chat Message, string id, string chatId);
         List<ClientChat> GetMessages(string chatId);
+        Account GetProfileInfo(string Id);
+        List<order> GetOrders(string Id);
+        List<order> GetOrdersIncoming(string Id);
+        void AddFunds(float amount, string id);
     }
 }

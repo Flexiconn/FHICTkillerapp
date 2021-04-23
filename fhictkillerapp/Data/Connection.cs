@@ -162,8 +162,7 @@ namespace Data
         {
             open();
             order.orderId = Guid.NewGuid();
-            Console.WriteLine(order.buyer.Id + "           " + order.post.PostId);
-            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId) VALUES ('{order.orderId.ToString()}', '{order.buyer.Id}', '{order.post.PostId}','{Guid.NewGuid().ToString()}');";
+            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES ('{order.orderId.ToString()}', '{order.buyer.Id}', '{order.post.PostId}','{Guid.NewGuid().ToString()}','false');";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
@@ -221,8 +220,9 @@ namespace Data
             return false;
         }
 
-        public void SendMessage(Chat Message, string id)
+        public void SendMessage(Chat Message, string id, string chatid)
         {
+            Console.WriteLine(chatid);
             open();
             Message.DateTime = DateTime.Now;
             string query = $"SELECT Id FROM account WHERE SessionId='{id}'";
@@ -234,7 +234,7 @@ namespace Data
             var Idd = dataReader["Id"].ToString();
             dataReader.Close();
             
-            query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES('{Guid.NewGuid().ToString()}','{Message.ChatId}','{Idd}','{Message.Message}','{Message.DateTime}')";
+            query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES('{Guid.NewGuid().ToString()}','{chatid}','{Idd}','{Message.Message}','{Message.DateTime}')";
             cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
@@ -245,18 +245,112 @@ namespace Data
         {
             open();
             List<ClientChat> msgs = new List<ClientChat>();
-            string query = $"SELECT * FROM chat WHERE chatId='{chatId}';";
+            string query = $"SELECT * FROM `chat` INNER JOIN account ON chat.AccountId = account.Id WHERE chatId ='{chatId}';";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dataReader = cmd.ExecuteReader();
 
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString()});
+                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString() });
             }
             dataReader.Close();
             close();
             return msgs;
+        }
+
+        public Account GetProfileInfo(string Id) {
+            open();
+            
+            string query = $"SELECT * FROM account WHERE SessionId='{Id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            Account acc = new Account();
+            while (dataReader.Read())
+            {
+                acc.Name = dataReader["Name"].ToString();
+                acc.Balance = dataReader["Balance"].ToString();
+            }
+            dataReader.Close();
+            close();
+            return acc;
+        }
+
+        public List<order> GetOrders(string Id)
+        {
+            open();
+            string query = $"SELECT * FROM account WHERE SessionId='{Id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                Id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
+
+            query = $"SELECT * FROM `order` WHERE BuyerId='{Id}';";
+            cmd = new MySqlCommand(query, connection);
+            dataReader = cmd.ExecuteReader();
+            List<order> orders = new List<order>();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                orders.Add(new order() { postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
+            }
+            dataReader.Close();
+            close();
+            return orders;
+        }
+
+        public List<order> GetOrdersIncoming(string Id) {
+            open();
+            string query = $"SELECT * FROM account WHERE SessionId='{Id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                Id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
+
+            query = $"SELECT * FROM `order` INNER JOIN post ON order.PostId = post.PostId WHERE post.PostAuthor = '{Id}';";
+            cmd = new MySqlCommand(query, connection);
+            dataReader = cmd.ExecuteReader();
+            List<order> orders = new List<order>();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                orders.Add(new order() { postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
+            }
+            dataReader.Close();
+            close();
+            return orders;
+        }
+
+        public void AddFunds(float amount, string id)
+        {
+            open();
+            float funds;
+            string query = $"SELECT * FROM account WHERE SessionId='{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            dataReader.Read();
+
+            id = dataReader["Id"].ToString();
+            funds = (float)dataReader["Balance"];
+            
+            dataReader.Close();
+            funds = funds + amount;
+            Console.WriteLine("funds: " + funds);
+            query = $"UPDATE account SET Balance='{funds}' WHERE Id='{id}';";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
         }
     }
 }

@@ -4,17 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Logic;
 using Common;
 using System.Net.Http.Headers;
 using Common.Models;
 using System.IO;
+using System.Web;
 
 namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
-
 
         Data.Connection Querries = new Data.Connection();
         // GET: PostsController
@@ -38,6 +37,7 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpGet]
+        [Route("post/{id}")]
         public ActionResult ViewPost(string Id)
         {
             ViewBag.Post = Querries.GetPost(Id);
@@ -56,15 +56,16 @@ namespace fhictkillerapp.Controllers
 
         }
 
-        public ActionResult Order()
+        [Route("order/{id}")]
+        public ActionResult Order(string id)
         {
+            ViewBag.order = id;
             return View();
         }
 
         [HttpPost]
         public ActionResult OrderPost( string orderMessage, string postId)
         {
-            Console.WriteLine(orderMessage + "    " + postId);
             if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 order order = new order();

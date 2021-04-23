@@ -7,21 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Logic;
 using Data;
 
 namespace fhictkillerapp
 {
     public class Startup
     {
-        Querries querries = new Querries();
         Connection con = new Connection();
         
         public Startup(IConfiguration configuration)
         {
             con.start();
             Configuration = configuration;
-            querries.DbTest();
         }
             
 
