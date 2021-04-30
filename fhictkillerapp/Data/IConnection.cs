@@ -19,10 +19,11 @@ namespace Data
         string LoginAccount(Account account);
         bool CheckIfSignedIn(string Id);
         void SendMessage(Chat Message, string id, string chatId);
-        List<ClientChat> GetMessages(string chatId);
+        List<ClientChat> GetMessages(string chatId, string id);
         Account GetProfileInfo(string Id);
         List<order> GetOrders(string Id);
         List<order> GetOrdersIncoming(string Id);
         void AddFunds(float amount, string id);
+        BackPanel GetEarnings(string id);
     }
 }

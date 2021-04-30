@@ -16,7 +16,7 @@ namespace fhictkillerapp.Controllers
         {
             Console.WriteLine(id);
 
-            ViewBag.chat = Querries.GetMessages(id);
+            ViewBag.chat = Querries.GetMessages(id, HttpContext.Session.GetString("SessionId"));
             ViewBag.chatid = id;
             return View();
         }
@@ -41,7 +41,7 @@ namespace fhictkillerapp.Controllers
         public ActionResult GetMessages(Chat chat)
         {
             Console.WriteLine(chat.Message);
-            Console.WriteLine(Querries.GetMessages(null).Count);
+            Console.WriteLine(Querries.GetMessages(null, null).Count);
             return new EmptyResult();
         }
     }

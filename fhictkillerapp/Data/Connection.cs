@@ -241,7 +241,7 @@ namespace Data
             close();
         }
 
-        public List<ClientChat> GetMessages(string chatId)
+        public List<ClientChat> GetMessages(string chatId, string id)
         {
             open();
             List<ClientChat> msgs = new List<ClientChat>();
@@ -252,11 +252,21 @@ namespace Data
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString() });
+                msgs.Add(new ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString(), DateTime = DateTime.Parse(dataReader["DateTime"].ToString()) });
+                if (dataReader["SessionId"].ToString() == id)
+                {
+                    msgs.Last().Sender = true;
+                }
+                else {
+                    msgs.Last().Sender = false;
+                }
             }
             dataReader.Close();
             close();
-            return msgs;
+            var persons = from p in msgs
+                          orderby p.DateTime
+                          select p;
+            return persons.ToList();
         }
 
         public Account GetProfileInfo(string Id) {
@@ -351,6 +361,37 @@ namespace Data
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
+        }
+
+        public BackPanel GetEarnings(string id)
+        {
+            open();
+            BackPanel backPanel = new BackPanel();
+            string query = $"SELECT * FROM account WHERE SessionId='{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            dataReader.Read();
+
+            id = dataReader["Id"].ToString();
+            dataReader.Close();
+
+            query = $"SELECT * FROM `order` INNER JOIN post ON order.PostId = post.PostId WHERE post.PostAuthor = '{id}';";
+            cmd = new MySqlCommand(query, connection);
+            dataReader = cmd.ExecuteReader();
+            List<string> orders = new List<string>();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                if (dataReader["Status"].ToString() == "Delivered") {
+                    backPanel.orders.Add(new order() { postId = dataReader["PostId"].ToString(), buyerId = dataReader["BuyerId"].ToString() });
+                    backPanel.earnings = backPanel.earnings + (int)dataReader["PostPrice"];
+                }
+            }
+            dataReader.Close();
+
+            close();
+            return backPanel;
         }
     }
 }

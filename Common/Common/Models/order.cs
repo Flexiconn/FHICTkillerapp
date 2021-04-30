@@ -15,6 +15,8 @@ namespace Common.Models
         public string orderMessage { get; set; }
         public string postId { get; set; }
         public string chatId { get; set; }
+        public string buyerId { get; set; }
+
         public string status { get; set; }
 
         public order() {
