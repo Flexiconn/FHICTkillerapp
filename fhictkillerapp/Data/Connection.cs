@@ -71,10 +71,8 @@ namespace Data
         {
             string query = $"SELECT * FROM account WHERE SessionId='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             Account thisAccount = new Account();
-            //Read the data and store them in the list
             while (dataReader.Read())
             {
                 thisAccount.Id = dataReader["Id"].ToString();
@@ -83,7 +81,6 @@ namespace Data
                 thisAccount.Password = dataReader["Password"].ToString();
             }
             dataReader.Close();
-
             return thisAccount;
         }
 
