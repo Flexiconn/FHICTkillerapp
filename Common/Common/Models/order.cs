@@ -13,5 +13,15 @@ namespace Common.Models
         public Posts post { get; set; }
         public Chat chat { get; set; }
         public string orderMessage { get; set; }
+        public string postId { get; set; }
+        public string chatId { get; set; }
+        public string buyerId { get; set; }
+
+        public string status { get; set; }
+
+        public order() {
+            buyer = new Account();
+            post = new Posts();
+        }
     }
 }

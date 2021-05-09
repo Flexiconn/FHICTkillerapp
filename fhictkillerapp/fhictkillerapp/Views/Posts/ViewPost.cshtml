@@ -2,8 +2,4 @@
 <p>@ViewBag.Post.PostDescription</p>
 <p>@ViewBag.Post.PostFileName</p>
 <img src="@Url.Content(ViewBag.Post.PostFileName)">
-@Html.ActionLink("Order", // <-- Link text
-     "Order", // <-- Action Method Name
-     "Posts", // <-- Controller Name
-     null // <-- Route value
-     )
+<a href="/order/@ViewBag.Post.PostId">Continue</a>

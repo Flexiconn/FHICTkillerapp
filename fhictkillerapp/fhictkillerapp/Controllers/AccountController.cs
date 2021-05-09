@@ -10,7 +10,7 @@ namespace fhictkillerapp.Controllers
 {
     public class AccountController : Controller
     {
-        Logic.Querries Querries = new Logic.Querries();
+        Data.Connection Querries = new Data.Connection();
         public IActionResult Index()
         {
             return View();
@@ -25,6 +25,21 @@ namespace fhictkillerapp.Controllers
         {
             return View();
         }
+
+        [Route("Myaccount")]
+        public IActionResult MyAccount()
+        {
+            ViewBag.OrdersIncoming = Querries.GetOrdersIncoming(HttpContext.Session.GetString("SessionId"));
+            ViewBag.Orders = Querries.GetOrders(HttpContext.Session.GetString("SessionId"));
+            ViewBag.Profile = Querries.GetProfileInfo(HttpContext.Session.GetString("SessionId"));
+            return View();
+        }
+
+        public IActionResult AddFunds()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult RegisterAccount(Account account)
         {
@@ -39,6 +54,14 @@ namespace fhictkillerapp.Controllers
             HttpContext.Session.SetString("SessionId", Querries.LoginAccount(account));
             Console.WriteLine(HttpContext.Session.GetString("SessionId"));
             return View("Index");
+        }
+
+        [HttpPost]
+        public IActionResult AddfundsToAccount(int amount)
+        {
+            Console.WriteLine(amount);
+            Querries.AddFunds(amount, HttpContext.Session.GetString("SessionId"));
+            return RedirectToAction("MyAccount","Account");
         }
     }
 }

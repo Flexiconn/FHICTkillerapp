@@ -10,14 +10,18 @@ namespace fhictkillerapp.Controllers
 {
     public class ChatController : Controller
     {
-        Logic.Querries Querries = new Logic.Querries();
-        public IActionResult Index()
+        Data.Connection Querries = new Data.Connection();
+        [Route("chat/{id}")]
+        public IActionResult Index(string id)
         {
+            Console.WriteLine(id);
 
-            ViewBag.chat = Querries.GetMessagesClient(null);
+            ViewBag.chat = Querries.GetMessages(id, HttpContext.Session.GetString("SessionId"));
+            ViewBag.chatid = id;
             return View();
         }
 
+        
         public IActionResult Chat() 
         {
 
@@ -25,11 +29,11 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMessage(Chat chat)
+        public ActionResult SendMessage(Chat chat, string ChatId)
         {
             Console.WriteLine(chat.Message); 
-            Querries.SendMessage(chat, HttpContext.Session.GetString("SessionId"));
-            return Redirect("Index");
+            Querries.SendMessage(chat, HttpContext.Session.GetString("SessionId"), ChatId);
+            return LocalRedirect("/chat/" + ChatId);
         }
 
 
@@ -37,8 +41,8 @@ namespace fhictkillerapp.Controllers
         public ActionResult GetMessages(Chat chat)
         {
             Console.WriteLine(chat.Message);
-            Console.WriteLine(Querries.GetMessagesClient(null).Count);
-            return Redirect("Index");
+            Console.WriteLine(Querries.GetMessages(null, null).Count);
+            return new EmptyResult();
         }
     }
 }

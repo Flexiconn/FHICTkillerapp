@@ -1,38 +1,69 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-@model Common.Models.Chat
-<div>
+@model Common.Models.ClientChat
+<div style="        
+        margin: auto;
+        overflow: auto;
+        width: 500px;
+        height: 700px;
+    ">
     @foreach (var item in ViewBag.Chat)
     {
-    <div style="
-        width: 200px;
-        height: 50px;
-        float: left;
-        background-color: white;
-        border-style: solid;
-        margin: 5px;
-        border-radius: 5px;
-        border-width: 2px;
-        position: relative;
-        ">
-        <p style="font-size: 8px;
-            float: left;
-            ">@item.AccountName</p>
-
-        <p style="font-size: 12px;
-            float: left;
-            ">@item.Message</p>
-        <p style="font-size: 8px;
+        if (item.Sender)
+        {
+            <div style="
+            width: 200px;
+            height: 60px;
             float: right;
-            ">@item.DateTime</p>
-        </div>
+            background-color: lightgreen;
+            border-style: solid;
+            margin: 5px;
+            border-radius: 5px;
+            border-width: 2px;
+            position: relative;
+            clear: both;
+            ">
+                <p style="font-size: 8px;
+                float: left;
+                ">@item.AccountName</p>
+
+                <p style="font-size: 12px;
+                float: left;
+                ">@item.Message</p>
+
+            </div> }
+        else
+        {
+            <div style="
+            width: 200px;
+            height: 60px;
+            float: left;
+            background-color: white;
+            border-style: solid;
+            margin: 5px;
+            border-radius: 5px;
+            border-width: 2px;
+            position: relative;
+            clear: both;
+            ">
+                <p style="font-size: 8px;
+                float: left;
+                ">@item.AccountName</p>
+
+                <p style="font-size: 12px;
+                float: left;
+                ">@item.Message</p>
+
+            </div>
+        }
+
     }
- </div>
-        <form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data">
-            <label asp-for="Message"></label>
-            <input asp-for="Message" placeholder="Your name goes here" />
-            <input type="submit" />
-        </form>
+</div>
+<form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data" style="        
+        margin: auto;">
+    <label asp-for="Message"></label>
+    <input asp-for="Message" placeholder="Your name goes here" />
+    <input type="hidden" name="ChatId" id="ChatId" value="@ViewBag.chatid">
+    <input type="submit" />
+</form>

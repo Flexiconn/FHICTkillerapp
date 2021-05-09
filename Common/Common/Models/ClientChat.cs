@@ -6,9 +6,11 @@ namespace Common.Models
 {
     public class ClientChat
     {
-        public Guid MessageId { get; set; }
+        public string AccountName { get; set; }
+        public string MessageId { get; set; }
         public string ChatId { get; set; }
         public string Message { get; set; }
+        public bool Sender { get; set; }
         public DateTime DateTime { get; set; }
     }
 }

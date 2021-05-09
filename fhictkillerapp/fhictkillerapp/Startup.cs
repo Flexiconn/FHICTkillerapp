@@ -7,21 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Logic;
 using Data;
 
 namespace fhictkillerapp
 {
     public class Startup
     {
-        Querries querries = new Querries();
         Connection con = new Connection();
         
         public Startup(IConfiguration configuration)
         {
             con.start();
             Configuration = configuration;
-            querries.DbTest();
         }
             
 
@@ -33,6 +30,7 @@ namespace fhictkillerapp
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache(); //This way ASP.NET Core will use a Memory Cache to store session variables
             services.AddSession();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +51,7 @@ namespace fhictkillerapp
             app.UseAuthorization();
 
             app.UseSession(); //make sure add this line before UseMvc()
+
 
 
             app.UseEndpoints(endpoints =>

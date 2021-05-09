@@ -4,19 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Logic;
 using Common;
 using System.Net.Http.Headers;
 using Common.Models;
 using System.IO;
+using System.Web;
 
 namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
 
-
-        Querries querries = new Querries();
+        Data.Connection Querries = new Data.Connection();
         // GET: PostsController
 
         [HttpPost]
@@ -24,7 +23,7 @@ namespace fhictkillerapp.Controllers
         {
 
             postUpload.PostId = Guid.NewGuid().ToString();
-            querries.AddPost(postUpload, HttpContext.Session.GetString("SessionId"));
+            Querries.AddPost(postUpload, HttpContext.Session.GetString("SessionId"));
             return Redirect("Index");
         }
 
@@ -32,22 +31,23 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult Index()
         {
-            IList<Posts> postList = querries.GetPosts();
+            IList<Posts> postList = Querries.GetPosts();
             Console.WriteLine(postList.Count());
             return View(postList);
         }
 
         [HttpGet]
+        [Route("post/{id}")]
         public ActionResult ViewPost(string Id)
         {
-            ViewBag.Post = querries.GetPost(Id);
+            ViewBag.Post = Querries.GetPost(Id);
             Console.WriteLine(Id);
             return View();
         }
 
         public ActionResult CreatePost()
         {
-            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 return View();
             }
@@ -56,22 +56,22 @@ namespace fhictkillerapp.Controllers
 
         }
 
-        public ActionResult Order()
+        [Route("order/{id}")]
+        public ActionResult Order(string id)
         {
+            ViewBag.order = id;
             return View();
         }
 
         [HttpPost]
         public ActionResult OrderPost( string orderMessage, string postId)
         {
-            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 order order = new order();
-                order.orderMessage = orderMessage;
-                Console.WriteLine(orderMessage);
-                order.post = querries.GetPost(postId);
-                order.buyer = querries.GetAccount(HttpContext.Session.GetString("SessionId"));
-                querries.AddOrder(order);
+                order.post.PostId = postId;
+                order.buyer.Id = Querries.GetAccount(HttpContext.Session.GetString("SessionId")).Id;
+                Querries.AddOrder(order);
             }
 
             return RedirectToAction("Login", "Account");
@@ -79,16 +79,6 @@ namespace fhictkillerapp.Controllers
         }
 
         
-        public ActionResult OrderPost()
-        {
-            if (querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
-            {
-                return RedirectToAction("Index", "Chat");
-            }
-
-            return RedirectToAction("Login", "Account");
-
-        }
 
     }
 }
