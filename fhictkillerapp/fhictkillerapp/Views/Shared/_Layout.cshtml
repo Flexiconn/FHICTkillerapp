@@ -3,13 +3,141 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Cliverr</title>
+    <title>Cliverr</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .tcontainer {
+                position: relative;
+                width: 100%;
+                height: 50px;
+                background-color: gray;
+                margin-bottom: 50px;
+            }
+
+
+            .content {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 9;
+            }
+
+                .content a {
+                    float: left;
+                    color: #ddd;
+                    text-align: center;
+                    padding: 14px 16px;
+                    text-decoration: none;
+                    font-size: 17px;
+                    width: 100px;
+                    height: 0px;
+                    z-index: 10;
+                    transition: height 0.1s;
+                    transition-timing-function: ease;
+                }
+
+                    .content a:hover {
+                        background-color: #ddd;
+                        color: black;
+                        height: 55px;
+                        z-index: 10;
+                        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
+                    }
+
+                    .content a.active {
+                        background-color: #04AA6D;
+                        color: white;
+                        z-index: 10;
+                    }
+        </style>
+
+
+        <style>
+
+            .dropdown {
+                float: right;
+                overflow: hidden;
+            }
+
+                .dropdown .dropbtn {
+                    font-size: 16px;
+                    border: none;
+                    outline: none;
+                    color: white;
+                    padding: 14px 16px;
+                    background-color: inherit;
+                    font-family: inherit;
+                    margin: 0;
+                    height: 50px;
+                }
+
+                .navbar a:hover, .dropdown:hover .dropbtn {
+                    background-color: white;
+                    color: black;
+                }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+                .dropdown-content a {
+                    float: none;
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
+                    text-align: left;
+                }
+
+                    .dropdown-content a:hover {
+                        background-color: #ddd;
+                    }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+        </style>
+        <div class="tcontainer">
+
+
+            <div class="content">
+                <a href="#news">News</a>
+                <a href="#news">News</a>
+                <a href="#news">News</a>
+                <a href="#news">News</a>
+
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        Dropdown
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Link 1</a>
+                        <a href="#">Link 2</a>
+                        <a href="#">Link 3</a>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">fhictkillerapp</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -23,19 +151,19 @@
                         </li>
                     </ul>
                 </div>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown button
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="#">Action</a></li>
                         <li><a class="dropdown-item" href="#">Another action</a></li>
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
-                </li>
+                </div>
             </div>
-        </nav>
-    </header>
+        </nav>*@
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

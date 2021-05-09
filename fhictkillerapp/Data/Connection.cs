@@ -34,7 +34,7 @@ namespace Data
         {
 
             server = "localhost";
-            database = "killerapp";
+            database = "killer";
             uid = "root";
             password = "root";
             string connectionString;

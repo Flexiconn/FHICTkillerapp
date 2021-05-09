@@ -9,6 +9,14 @@
         height: 800px;">
     @foreach (var item in Model)
     {
+        <div class="card" style="width: 14rem;">
+            <img src="data\IMG\361a8b37-a37a-4141-ae15-814c5dc3d6e4\Untitled-1.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@item.PostName</h5>
+                <p class="card-text">@item.PostId</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
         <div style="
             width: 200px;
             height: 200px;
@@ -18,13 +26,13 @@
             margin: 5px;
             border-radius: 5px;
             ">
-                <p>@item.PostName</p>
-                <p>@item.PostId</p>
-                @Html.ActionLink("View more", // <-- Link text
-                     "ViewPost", // <-- Action Method Name
-                     "Posts", // <-- Controller Name
-                     new { Id = item.PostId } // <-- Route value
-                     )
-            </div>
+            <p>@item.PostName</p>
+            <p>@item.PostId</p>
+            @Html.ActionLink("View more", // <-- Link text
+                 "ViewPost", // <-- Action Method Name
+                 "Posts", // <-- Controller Name
+                 new { Id = item.PostId } // <-- Route value
+                 )
+        </div>
     }
 </div>
