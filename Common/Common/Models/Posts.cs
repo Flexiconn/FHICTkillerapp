@@ -13,8 +13,12 @@ namespace Common
         public string PostAuthor { get; set; }
         public string PostName { get; set; }
         public string PostDescription { get; set; }
-        public string PostFileName { get; set; }
+        public List<string> images { get; set; }
         public virtual PostTags Tags { get; set; }
         public virtual Account Account { get; set; }
+
+        public Posts() {
+            images = new List<string>();
+        }
     }
 }

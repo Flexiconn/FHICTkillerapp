@@ -34,7 +34,7 @@ namespace Data
         {
 
             server = "localhost";
-            database = "killer";
+            database = "KillerApp";
             uid = "root";
             password = "root";
             string connectionString;
@@ -142,6 +142,19 @@ namespace Data
             Posts post = new Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
             
             dataReader.Close();
+
+            query = $"SELECT * FROM images WHERE Parent='{id}'";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            dataReader = cmd.ExecuteReader();
+            //Read the data and store them in the list
+            while (dataReader.Read()) {
+                post.images.Add(dataReader["Path"].ToString());
+            }
+
+
+            dataReader.Close();
+
             close();
             return (post);
         }
@@ -392,6 +405,133 @@ namespace Data
 
             close();
             return backPanel;
+        }
+
+        public void createReview(string id, Review review) {
+            open();
+            string query = $"SELECT * FROM account WHERE SessionId='{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
+
+            query = $"INSERT INTO review (id, score, text, account, post) VALUES('{Guid.NewGuid().ToString()}','{review.score}','{review.text}','{review.Account.Id}','{review.postId}');";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
+
+        public List<Review> GetReview(string postId) {
+            open();
+            List<Review> reviews = new List<Review>();
+            string query = $"SELECT * FROM review INNER JOIN account ON review.account = account.Id WHERE post='{postId}' ;";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                reviews.Add(new Review()
+                {
+                    Account = new Account() { Name = dataReader["Name"].ToString() },
+                    postId = dataReader["post"].ToString(),
+                    //score = Int32.Parse(dataReader["Id"].ToString()),
+                    text = dataReader["text"].ToString(),
+                    reviewId = dataReader["id"].ToString()
+                });
+            }
+            dataReader.Close();
+
+            return reviews;
+        }
+
+        public void createReport(string id, Report report)
+        {
+            open();
+            string query = $"SELECT * FROM account WHERE SessionId='{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
+
+            query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES('{Guid.NewGuid().ToString()}','{(int)report.ReportType}','{(int)report.reportReason}','{report.reportComment}','{report.reportId}','{report.creatorId.Id}');";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
+
+        public List<Report> getReports(string id)
+        {
+            List<Report> reports = new List<Report>();
+
+            bool admin = false;
+            open();
+            string query = $"SELECT * FROM account WHERE SessionId='{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                id = dataReader["Id"].ToString();
+                admin = (bool)dataReader["admin"];
+
+            }
+
+            dataReader.Close();
+            if (admin == false)
+            {
+                return null;
+            }
+
+            query = $"SELECT * FROM report INNER JOIN account ON report.creator = account.Id WHERE status='open'";
+            cmd = new MySqlCommand(query, connection);
+            dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                reports.Add(new Report()
+                {
+                    creatorId = new Account() { Name = dataReader["Name"].ToString() },
+                    reportComment = dataReader["comment"].ToString(),
+                    reportId = dataReader["reportId"].ToString(),
+                    ReportType = Int32.Parse( dataReader["type"].ToString()),
+                    reportReason = Int32.Parse(dataReader["reason"].ToString())
+                }) ;
+            }
+            dataReader.Close();
+            return reports;
+        }
+
+        public void banUser(string adminId, string userId)
+        {
+            open();
+            bool admin = false;
+            string query = $"SELECT * FROM account WHERE SessionId='{adminId}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            dataReader.Read();
+
+            admin = (bool)dataReader["admin"];
+
+            dataReader.Close();
+            if (admin == true)
+            {
+                query = $"UPDATE account SET ban=1 WHERE Id='{userId}';";
+                cmd = new MySqlCommand(query, connection);
+                //Create a data reader and Execute the command
+                cmd.ExecuteNonQuery();
+            }
+            close();
         }
     }
 }

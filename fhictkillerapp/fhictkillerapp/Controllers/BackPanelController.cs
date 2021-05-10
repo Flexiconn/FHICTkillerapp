@@ -17,5 +17,18 @@ namespace fhictkillerapp.Controllers
             ViewBag.earnings = connection.GetEarnings(HttpContext.Session.GetString("SessionId"));
             return View();
         }
+
+        public ActionResult Admin()
+        {
+            ViewBag.reports = connection.getReports(HttpContext.Session.GetString("SessionId"));
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult BanUser(string userId)
+        {
+            connection.banUser(HttpContext.Session.GetString("SessionId"), userId);
+            return RedirectToAction("Admin");
+        }
     }
 }

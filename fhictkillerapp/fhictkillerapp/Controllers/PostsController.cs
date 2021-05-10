@@ -41,6 +41,7 @@ namespace fhictkillerapp.Controllers
         public ActionResult ViewPost(string Id)
         {
             ViewBag.Post = Querries.GetPost(Id);
+            ViewBag.Review = Querries.GetReview(Id);
             Console.WriteLine(Id);
             return View();
         }
@@ -78,7 +79,31 @@ namespace fhictkillerapp.Controllers
 
         }
 
-        
+        [HttpPost]
+
+        public ActionResult createReview(Review review) 
+        {
+            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            {
+                review.Account = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
+                Querries.createReview(HttpContext.Session.GetString("SessionId"), review);
+            }
+            return RedirectToAction("ViewPost", new { id = review.postId });
+        }
+
+        [HttpPost]
+
+        public ActionResult createReport(int reportReasonform, string comment, string PostId)
+        {
+            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            {
+                
+                Report report = new Report() { reportReason = reportReasonform, ReportType = (int)reportTypes.post, reportComment = comment, reportId = PostId };
+                report.creatorId = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
+                Querries.createReport(HttpContext.Session.GetString("SessionId"), report);
+            }
+            return RedirectToAction("ViewPost", new { id = PostId });
+        }
 
     }
 }

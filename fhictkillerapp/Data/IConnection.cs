@@ -25,5 +25,9 @@ namespace Data
         List<order> GetOrdersIncoming(string Id);
         void AddFunds(float amount, string id);
         BackPanel GetEarnings(string id);
+        void createReview(string id, Review review);
+        void createReport(string id, Report report);
+        List<Report> getReports(string id);
+        void banUser(string adminId, string userId);
     }
 }
