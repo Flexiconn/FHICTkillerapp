@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Models;
+using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -77,15 +78,22 @@ namespace Data
         public void AddPost(PostUpload insertPost, string sesId)
         {
             open();
-            //string pathString = System.IO.Path.Combine("wwwroot/Data/IMG/", insertPost.PostId);
-            //System.IO.Directory.CreateDirectory(pathString);
-            //insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
+            string pathString = System.IO.Path.Combine("wwwroot/data/IMG/post/", insertPost.PostId );
+            System.IO.Directory.CreateDirectory(pathString);
+            insertPost.MyImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString()), FileMode.Create));
 
 
-            //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
+
+
 
             string query = $"INSERT INTO post (PostId, PostName, PostDescription, PostAuthor) VALUES('{insertPost.PostId}', '{insertPost.PostName}', '{insertPost.PostDescription}','53EFCF09-36AF-4B04-A61C-27A1625C96C1'); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+
+            //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
+            query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', '{System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", insertPost.PostId + "/") , insertPost.MyImage.FileName.ToString())}', '{insertPost.PostId}'); ";
+            cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
@@ -106,6 +114,23 @@ namespace Data
             {
                 postsList.Add(new Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() });
             }
+            dataReader.Close();
+
+            query = $"SELECT * FROM images";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            dataReader = cmd.ExecuteReader();
+            //Read the data and store them in the list
+            while (dataReader.Read())
+            {
+                foreach (var item in postsList) {
+                    if (item.PostId == dataReader["Parent"].ToString()) {
+                        item.images.Add(dataReader["Path"].ToString());
+                    }
+                }
+            }
+
+
             dataReader.Close();
             close();
             return (postsList);
@@ -131,16 +156,18 @@ namespace Data
         {
 
             open();
+            Posts post = new Posts();
             string query = $"SELECT * FROM post WHERE PostId='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             List<Posts> postsList = new List<Posts>();
             //Read the data and store them in the list
-            dataReader.Read();
+            while (dataReader.Read())
+            {
 
-            Posts post = new Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
-            
+                post = new Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
+            }
             dataReader.Close();
 
             query = $"SELECT * FROM images WHERE Parent='{id}'";
@@ -532,6 +559,103 @@ namespace Data
                 cmd.ExecuteNonQuery();
             }
             close();
+        }
+
+        public void AddPFP(PFP pfp, string Id)
+        {
+            open();
+            string query = $"SELECT * FROM account WHERE SessionId='{Id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                Id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
+            string pathString = System.IO.Path.Combine("wwwroot/data/IMG/pfp/", Id);
+            System.IO.Directory.CreateDirectory(pathString);
+            pfp.pfp.CopyTo(new FileStream(System.IO.Path.Combine(pathString, pfp.pfp.FileName.ToString()), FileMode.Create));
+
+
+
+
+            query = $"INSERT INTO pfp (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', '{System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/pfp/", Id + "/"), pfp.pfp.FileName.ToString())}', '{Id}'); ";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
+
+        public string GetPFP(string Id)
+        {
+            open();
+            string path = "";
+            string query = $"SELECT * FROM account WHERE SessionId='{Id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                Id = dataReader["Id"].ToString();
+            }
+            dataReader.Close();
+
+
+            query = $"SELECT * FROM pfp WHERE Parent='{Id}'";
+            cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            dataReader = cmd.ExecuteReader();
+            //Read the data and store them in the list
+            while (dataReader.Read())
+            {
+                path = dataReader["Path"].ToString();
+            }
+
+            dataReader.Close();
+            close();
+            return path;
+        }
+
+        public string GetPostByReviewId(string Id)
+        {
+            open();
+            string query = $"SELECT * FROM review WHERE Id='{Id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                Id = dataReader["Parent"].ToString();
+            }
+            dataReader.Close();
+
+            close();
+            return Id;
+        }
+
+        public Review GetReportReview(string reportId)
+        {
+            open();
+            Review review = new Review();
+            string query = $"SELECT * FROM review  WHERE id='{reportId}' ;";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                review =new Review()
+                {
+                    Account = new Account() { Id = dataReader["account"].ToString() },
+                    postId = dataReader["post"].ToString(),
+                    //score = Int32.Parse(dataReader["Id"].ToString()),
+                    text = dataReader["text"].ToString(),
+                    reviewId = dataReader["id"].ToString()
+                };
+            }
+            dataReader.Close();
+
+            return review;
         }
     }
 }

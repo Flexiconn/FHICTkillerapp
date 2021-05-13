@@ -29,6 +29,7 @@ namespace fhictkillerapp.Controllers
         [Route("Myaccount")]
         public IActionResult MyAccount()
         {
+            ViewBag.pfp = Querries.GetPFP(HttpContext.Session.GetString("SessionId"));
             ViewBag.OrdersIncoming = Querries.GetOrdersIncoming(HttpContext.Session.GetString("SessionId"));
             ViewBag.Orders = Querries.GetOrders(HttpContext.Session.GetString("SessionId"));
             ViewBag.Profile = Querries.GetProfileInfo(HttpContext.Session.GetString("SessionId"));
@@ -63,5 +64,15 @@ namespace fhictkillerapp.Controllers
             Querries.AddFunds(amount, HttpContext.Session.GetString("SessionId"));
             return RedirectToAction("MyAccount","Account");
         }
+
+        [HttpPost]
+        public IActionResult SetPFP(PFP pfpModel)
+        {
+            Console.WriteLine(pfpModel.pfp.FileName.ToString());
+            Querries.AddPFP(pfpModel, HttpContext.Session.GetString("SessionId"));
+            return RedirectToAction("MyAccount", "Account");
+        }
+        
+
     }
 }

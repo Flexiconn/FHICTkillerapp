@@ -14,11 +14,42 @@
 
 @{ foreach (var t in ViewBag.reports)
     {
-    <div style="height= 200px; width=200px; background-color: yellow">
-        <p>@t.creatorId.Name</p>
-        <p>@t.reportComment</p>
-        <p>type: @t.ReportType</p>
-        <p>reason: @t.reportReason</p>
-    </div>
+        if (@t.ReportType == 3)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"> Type: Post</h5>
+                    <h6 class="card-subtitle"> reason: @t.reportReason</h6>
+                    <p class="card-text">@t.reportComment</p>
+                    <a href="/post/@t.reportId" class="card-link">Go</a>
+                    <a href="#" class="card-link">Dismiss</a>
+                    <a href="#" class="card-link">Ban User</a>
+                </div>
+            </div>
+        }
+
+        if (@t.ReportType == 4)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"> Type: Chat help</h5>
+                    <h6 class="card-subtitle"> reason: @t.reportReason</h6>
+                    <p class="card-text">@t.reportComment</p>
+                    <a href="/chat/@t.reportId" class="card-link">Go</a>
+                    <a href="#" class="card-link">Dismiss</a>
+                </div>
+            </div>
+        }
+        if (@t.ReportType == 1)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"> Type: Review</h5>
+                    <h6 class="card-subtitle"> reason: @t.reportReason</h6>
+                    <p class="card-text">@t.reportComment</p>
+                    <a href="/backpanel/ViewReportPost/@t.reportId" class="card-link">Go</a>
+                </div>
+            </div>
+        }
     }
 }

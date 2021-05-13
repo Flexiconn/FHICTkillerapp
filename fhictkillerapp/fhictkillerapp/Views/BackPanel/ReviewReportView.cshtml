@@ -47,14 +47,6 @@
 </div>
 @model Common.Models.Review;
 
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    report
-</button>
-
-
-
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -97,20 +89,19 @@
         Reviews
     </div>
     <ul class="list-group list-group-flush">
-        @{ foreach (var t in ViewBag.Review)
-            {
+
                 <li class="list-group-item">
-                    <p>@t.Account.Name</p>
-                    <p>@t.score</p>
-                    <p>@t.text</p>
-                    <form asp-action="createReviewReport" asp-controller="Posts" enctype="multipart/form-data">
-                        <input type="hidden" class="btn btn-primary" name="reviewId" id="reviewId" value="@t.reviewId">
-                        <input type="hidden" class="btn btn-primary" name="postId" id="postId" value="@ViewBag.Post.PostId">
+                    <p>@ViewBag.Review.Account.Id</p>
+                    <p>@ViewBag.Review.text</p>
+                    <form asp-action="RemoveReview" asp-controller="BackPanel" enctype="multipart/form-data">
+                        <select id="reportReasonform" name="reportReasonform">
+                            <option value=1>Ban User</option>
+                            <option value=2>Delete review</option>
+                        </select>
+                        <input type="hidden" class="btn btn-primary" name="reviewId" id="reviewId" value="@ViewBag.Post.PostId">
                         <input type="submit" />
                     </form>
                 </li>
-            }
-        }
 
 
     </ul>

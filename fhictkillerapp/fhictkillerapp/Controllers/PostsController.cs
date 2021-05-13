@@ -24,16 +24,15 @@ namespace fhictkillerapp.Controllers
 
             postUpload.PostId = Guid.NewGuid().ToString();
             Querries.AddPost(postUpload, HttpContext.Session.GetString("SessionId"));
-            return Redirect("Index");
+            return RedirectToAction("Viewpost" , new { id = postUpload.PostId });
         }
 
 
 
         public ActionResult Index()
         {
-            IList<Posts> postList = Querries.GetPosts();
-            Console.WriteLine(postList.Count());
-            return View(postList);
+            ViewBag.Posts = Querries.GetPosts();
+            return View();
         }
 
         [HttpGet]
@@ -57,7 +56,6 @@ namespace fhictkillerapp.Controllers
 
         }
 
-        [Route("order/{id}")]
         public ActionResult Order(string id)
         {
             ViewBag.order = id;
@@ -92,7 +90,6 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpPost]
-
         public ActionResult createReport(int reportReasonform, string comment, string PostId)
         {
             if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
@@ -103,6 +100,18 @@ namespace fhictkillerapp.Controllers
                 Querries.createReport(HttpContext.Session.GetString("SessionId"), report);
             }
             return RedirectToAction("ViewPost", new { id = PostId });
+        }
+        [HttpPost]
+        public ActionResult createReviewReport(string reviewId, string postId)
+        {
+            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            {
+
+                Report report = new Report() { ReportType = (int)reportTypes.review,  reportId = reviewId };
+                report.creatorId = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
+                Querries.createReport(HttpContext.Session.GetString("SessionId"), report);
+            }
+            return RedirectToAction("ViewPost", new { id = postId });
         }
 
     }

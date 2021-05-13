@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model Common.Models.ClientChat
-<div style="        
+<div style="
         margin: auto;
         overflow: auto;
         width: 500px;
@@ -60,10 +60,43 @@
 
     }
 </div>
-<form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data" style="        
+<form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data" style="
         margin: auto;">
     <label asp-for="Message"></label>
     <input asp-for="Message" placeholder="Your name goes here" />
     <input type="hidden" name="ChatId" id="ChatId" value="@ViewBag.chatid">
     <input type="submit" />
 </form>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    report
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="createReport" asp-controller="Chat" enctype="multipart/form-data">
+                    <select id="reportReasonform" name="reportReasonform">
+                        <option value=1>Misleading</option>
+                        <option value=2>Scam</option>
+                    </select>
+                    <input type="text" name="comment" id="comment">
+
+                    <input type="hidden" class="btn btn-primary" name="chatId" id="chatId" value="@ViewBag.chatid">
+                    <input type="submit" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

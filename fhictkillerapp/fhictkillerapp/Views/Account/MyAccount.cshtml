@@ -2,8 +2,9 @@
 @{
     ViewData["Title"] = "MyAccount";
 }
-
+@model Common.Models.PFP
 <h1>MyAccount</h1>
+<img src="@ViewBag.pfp" >
 <div class="row">
     <div class="col-4">
         <div class="list-group" id="list-tab" role="tablist">
@@ -23,9 +24,16 @@
                     <div class="card" style="width: 45.5rem;">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">@ViewBag.Profile.Name</li>
-                            <li class="list-group-item">@ViewBag.Profile.Balance <form asp-action="AddFunds" asp-controller="Account" enctype="multipart/form-data">
+                            <li class="list-group-item">
+                                @ViewBag.Profile.Balance <form asp-action="AddFunds" asp-controller="Account" enctype="multipart/form-data">
                                 <input type="submit" />
-                            </form></li>
+                            </form>
+                        </li>
+                        <form asp-action="SetPFP" asp-controller="Account" enctype="multipart/form-data">
+                            <label asp-for="pfp"></label>
+                            <input asp-for="pfp" />
+                            <input type="submit" />
+                        </form>
 
                         </ul>
                     </div>

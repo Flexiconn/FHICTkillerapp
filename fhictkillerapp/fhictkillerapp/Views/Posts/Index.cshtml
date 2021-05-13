@@ -1,38 +1,49 @@
 ﻿@model IEnumerable<Common.Posts>
+<select class="form-select form-select-md" aria-label=".form-select-md example">
+    <option selected>Open this select menu</option>
+    <option value="1" name="sort">ABC ↑</option>
+    <option value="2" name="sort">ABC ↓</option>
+    <option value="3" name="sort">Date ↑</option>
+    <option value="4" name="sort">Date ↓</option>
+</select>
 @Html.ActionLink("Create Post", // <-- Link text
                  "CreatePost", // <-- Action Method Name
                  "Posts", // <-- Controller Name
                  null, // <-- Route value
                  null // <-- htmlArguments
                  )
-<div style="width: 900px;
-        height: 800px;">
-    @foreach (var item in Model)
+<div style="        width: 1200px;
+
+        vertical-align: middle;
+">
+    @foreach (var item in ViewBag.Posts)
     {
-        <div class="card" style="width: 14rem;">
-            <img src="data\IMG\361a8b37-a37a-4141-ae15-814c5dc3d6e4\Untitled-1.jpg" class="card-img-top" alt="...">
+        <div class="card" style="float: left; margin: 4px; width: 14rem;" onclick="location.href='/Post/@item.PostId';">
+            <img src="@item.images[0]" class="card-img-top" alt="data\IMG\361a8b37-a37a-4141-ae15-814c5dc3d6e4\Untitled-1.jpg" style="object-fit: contain;
+        width: 200px;
+        height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    ">
             <div class="card-body">
                 <h5 class="card-title">@item.PostName</h5>
-                <p class="card-text">@item.PostId</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
-        </div>
-        <div style="
-            width: 200px;
-            height: 200px;
-            float: left;
-            background-color: aqua;
-            border-style: solid;
-            margin: 5px;
-            border-radius: 5px;
-            ">
-            <p>@item.PostName</p>
-            <p>@item.PostId</p>
-            @Html.ActionLink("View more", // <-- Link text
-                 "ViewPost", // <-- Action Method Name
-                 "Posts", // <-- Controller Name
-                 new { Id = item.PostId } // <-- Route value
-                 )
         </div>
     }
 </div>
+
+
+@*<nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+
+    </nav>*@

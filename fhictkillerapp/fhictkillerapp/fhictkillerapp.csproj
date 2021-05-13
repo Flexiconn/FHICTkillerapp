@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Data\IMG\" />
+    <Folder Include="wwwroot\data\IMG\pfp\" />
   </ItemGroup>
 
   <ItemGroup>

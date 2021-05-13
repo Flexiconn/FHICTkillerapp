@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,5 +30,9 @@ namespace Data
         void createReport(string id, Report report);
         List<Report> getReports(string id);
         void banUser(string adminId, string userId);
+        void AddPFP(PFP pfp, string Id);
+        string GetPFP(string Id);
+        string GetPostByReviewId(string Id);
+        Review GetReportReview(string reportId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using Common;
+using Common.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -43,6 +44,20 @@ namespace fhictkillerapp.Controllers
             Console.WriteLine(chat.Message);
             Console.WriteLine(Querries.GetMessages(null, null).Count);
             return new EmptyResult();
+        }
+
+
+        [HttpPost]
+        public ActionResult createReport(int reportReasonform, string comment, string chatId)
+        {
+            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            {
+
+                Report report = new Report() { reportReason = reportReasonform, ReportType = (int)reportTypes.chatHelp, reportComment = comment, reportId = chatId };
+                report.creatorId = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
+                Querries.createReport(HttpContext.Session.GetString("SessionId"), report);
+            }
+            return RedirectToAction("Index", new { id = chatId });
         }
     }
 }
