@@ -16,9 +16,12 @@ namespace Common
         public List<string> images { get; set; }
         public virtual PostTags Tags { get; set; }
         public virtual Account Account { get; set; }
+        public List<Review> reviews { get; set; }
+
 
         public Posts() {
             images = new List<string>();
+            reviews = new List<Review>();
         }
     }
 }

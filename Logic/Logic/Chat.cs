@@ -1,0 +1,54 @@
+﻿using Common;
+using Common.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Logic
+{
+    public class Chat
+    {
+        public List<ClientChat> Index(string id, string SessionId)
+        {
+            if (CheckIfSignedIn(SessionId))
+            {
+                return Querries.GetMessages(id, SessionId);
+            }
+            return null;
+        }
+
+        public bool CheckIfSignedIn(string SessionId)
+        {
+            if (Querries.CheckIfSignedIn(SessionId))
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
+
+        public bool SendMessage(Chat chat, string ChatId, string SessionId)
+        {
+            if (CheckIfSignedIn(SessionId))
+            {
+                Querries.SendMessage(chat, SessionId, ChatId);
+                return true;
+            }
+            return false;
+        }
+
+        public bool createReport(int reportReasonform, string comment, string chatId, string SessionId)
+        {
+            if (CheckIfSignedIn(SessionId))
+            {
+                Report report = new Report() { reportReason = reportReasonform, ReportType = (int)reportTypes.chatHelp, reportComment = comment, reportId = chatId };
+                report.creatorId = Querries.GetAccount(SessionId);
+                Querries.createReport(SessionId, report);
+                return true;
+            }
+            return false;
+        }
+    }
+}
