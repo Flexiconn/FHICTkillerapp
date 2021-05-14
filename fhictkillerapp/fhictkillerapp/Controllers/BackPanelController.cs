@@ -33,6 +33,7 @@ namespace fhictkillerapp.Controllers
 
             }
             else {
+                return RedirectToAction("Login", "Account");
 
             }
         }

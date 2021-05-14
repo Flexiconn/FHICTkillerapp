@@ -47,7 +47,7 @@ namespace fhictkillerapp.Controllers
         {
             Posts post = Logic.ViewPost(Id);
             ViewBag.Post = post;
-            ViewBag.Review = post;
+            ViewBag.Review = post.reviews;
             return View();
         }
 

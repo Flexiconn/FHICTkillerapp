@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Connection : IConnection, IAccount, IPost, IChat, IBackPanel
+    public class Connection :  IAccount, IPost, IChat, IBackPanel
     {
         private MySqlConnection connection;
         private string server;
@@ -78,6 +78,7 @@ namespace Data
 
         public void AddPost(PostUpload insertPost, string sesId)
         {
+            string id = GetAccount(sesId).Id;
             open();
             string pathString = System.IO.Path.Combine("wwwroot/data/IMG/post/", insertPost.PostId );
             System.IO.Directory.CreateDirectory(pathString);
@@ -87,14 +88,21 @@ namespace Data
 
 
 
-            string query = $"INSERT INTO post (PostId, PostName, PostDescription, PostAuthor) VALUES('{insertPost.PostId}', '{insertPost.PostName}', '{insertPost.PostDescription}','53EFCF09-36AF-4B04-A61C-27A1625C96C1'); ";
+            string query = $"INSERT INTO post (PostId, PostName, PostDescription, PostAuthor) VALUES(@PostId, @PostName, @PostDescription, @PostAuthor); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@PostId", insertPost.PostId);
+            cmd.Parameters.AddWithValue("@PostName", insertPost.PostName);
+            cmd.Parameters.AddWithValue("@PostDescription", insertPost.PostDescription);
+            cmd.Parameters.AddWithValue("@PostAuthor", id);
+
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
 
             //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-            query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', '{System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", insertPost.PostId + "/") , insertPost.MyImage.FileName.ToString())}', '{insertPost.PostId}'); ";
+            query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', @Path, '{insertPost.PostId}'); ";
             cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", insertPost.PostId + "/") , insertPost.MyImage.FileName.ToString()));
+
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
