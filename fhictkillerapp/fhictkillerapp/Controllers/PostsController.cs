@@ -9,12 +9,13 @@ using System.Net.Http.Headers;
 using Common.Models;
 using System.IO;
 using System.Web;
+using Logic;
 
 namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
-
+        Logic.Post Logic = new Logic.Post();
         Data.Connection Querries = new Data.Connection();
         // GET: PostsController
 
@@ -22,16 +23,21 @@ namespace fhictkillerapp.Controllers
         public ActionResult AddPost(PostUpload postUpload)
         {
 
-            postUpload.PostId = Guid.NewGuid().ToString();
-            Querries.AddPost(postUpload, HttpContext.Session.GetString("SessionId"));
-            return RedirectToAction("Viewpost" , new { id = postUpload.PostId });
+            if (Logic.AddPost(postUpload, HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("Viewpost", new { id = postUpload.PostId });
+
+            }
+            else {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
 
 
         public ActionResult Index()
         {
-            ViewBag.Posts = Querries.GetPosts();
+            ViewBag.Posts = Logic.Index();
             return View();
         }
 
@@ -39,15 +45,15 @@ namespace fhictkillerapp.Controllers
         [Route("post/{id}")]
         public ActionResult ViewPost(string Id)
         {
-            ViewBag.Post = Querries.GetPost(Id);
-            ViewBag.Review = Querries.GetReview(Id);
-            Console.WriteLine(Id);
+            Posts post = Logic.ViewPost(Id);
+            ViewBag.Post = post;
+            ViewBag.Review = post;
             return View();
         }
 
         public ActionResult CreatePost()
         {
-            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Logic.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 return View();
             }
@@ -65,53 +71,52 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult OrderPost( string orderMessage, string postId)
         {
-            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Logic.OrderPost(orderMessage, postId, HttpContext.Session.GetString("SessionId")))
             {
-                order order = new order();
-                order.post.PostId = postId;
-                order.buyer.Id = Querries.GetAccount(HttpContext.Session.GetString("SessionId")).Id;
-                Querries.AddOrder(order);
+                return RedirectToAction("Myaccount", "Account");
+
             }
+            else {
+                return RedirectToAction("Login", "Account");
 
-            return RedirectToAction("Login", "Account");
-
+            }
         }
 
         [HttpPost]
 
         public ActionResult createReview(Review review) 
         {
-            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Logic.createReview(review, HttpContext.Session.GetString("SessionId")))
             {
-                review.Account = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
-                Querries.createReview(HttpContext.Session.GetString("SessionId"), review);
+                return RedirectToAction("ViewPost", new { id = review.postId });
+
+            } else {
+                return RedirectToAction("Login", "Account");
             }
-            return RedirectToAction("ViewPost", new { id = review.postId });
         }
 
         [HttpPost]
         public ActionResult createReport(int reportReasonform, string comment, string PostId)
         {
-            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Logic.createReport(reportReasonform, comment, PostId, HttpContext.Session.GetString("SessionId")))
             {
-                
-                Report report = new Report() { reportReason = reportReasonform, ReportType = (int)reportTypes.post, reportComment = comment, reportId = PostId };
-                report.creatorId = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
-                Querries.createReport(HttpContext.Session.GetString("SessionId"), report);
+                return RedirectToAction("ViewPost", new { id = PostId });
+
+            } else
+            {
+                return RedirectToAction("Login", "Account");
             }
-            return RedirectToAction("ViewPost", new { id = PostId });
         }
         [HttpPost]
         public ActionResult createReviewReport(string reviewId, string postId)
         {
-            if (Querries.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (Logic.createReviewReport(reviewId, postId, HttpContext.Session.GetString("SessionId")))
             {
-
-                Report report = new Report() { ReportType = (int)reportTypes.review,  reportId = reviewId };
-                report.creatorId = Querries.GetAccount(HttpContext.Session.GetString("SessionId"));
-                Querries.createReport(HttpContext.Session.GetString("SessionId"), report);
+                return RedirectToAction("ViewPost", new { id = postId });
+            } else
+            {
+                return RedirectToAction("Login", "Account");
             }
-            return RedirectToAction("ViewPost", new { id = postId });
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Models;
+using Data.Interfaces;
 using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Connection : IConnection
+    public class Connection : IConnection, IAccount, IPost, IChat, IBackPanel
     {
         private MySqlConnection connection;
         private string server;

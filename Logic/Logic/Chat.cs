@@ -1,5 +1,7 @@
 ﻿using Common;
 using Common.Models;
+using Data;
+using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +10,7 @@ namespace Logic
 {
     public class Chat
     {
+        IChat Querries = new Connection();
         public List<ClientChat> Index(string id, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
@@ -29,7 +32,7 @@ namespace Logic
         }
 
 
-        public bool SendMessage(Chat chat, string ChatId, string SessionId)
+        public bool SendMessage(Common.Models.Chat chat, string ChatId, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {

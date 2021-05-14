@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Data;
+using Data.Interfaces;
 namespace Logic
 {
     public class Account
     {
-
+        IAccount Querries = new Connection();
 
         public myAccountModel MyAccount(string SessionId)
         {
@@ -30,13 +31,13 @@ namespace Logic
         }
 
 
-        public void RegisterAccount(Account account)
+        public void RegisterAccount(Common.Models.Account account)
         {
             Querries.CreateAccount(account);
         }
 
 
-        public string LoginAccount(Account account)
+        public string LoginAccount(Common.Models.Account account)
         {
             return Querries.LoginAccount(account);
         }

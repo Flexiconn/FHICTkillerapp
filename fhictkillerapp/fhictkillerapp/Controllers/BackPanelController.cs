@@ -10,39 +10,52 @@ namespace fhictkillerapp.Controllers
 {
     public class backPanelController : Controller
     {
-        Connection connection = new Connection();
+        Logic.BackPanel Logic = new Logic.BackPanel();
+
         public ActionResult Index()
         {
-            ViewBag.earnings = connection.GetEarnings(HttpContext.Session.GetString("SessionId"));
+            ViewBag.earnings = Logic.Index(HttpContext.Session.GetString("SessionId"));
             return View();
         }
 
         public ActionResult Admin()
         {
-            ViewBag.reports = connection.getReports(HttpContext.Session.GetString("SessionId"));
+            ViewBag.reports = Logic.Admin(HttpContext.Session.GetString("SessionId"));
             return View();
         }
 
         [HttpPost]
         public ActionResult BanUser(string userId)
         {
-            connection.banUser(HttpContext.Session.GetString("SessionId"), userId);
-            return RedirectToAction("Admin");
+            if (Logic.BanUser(HttpContext.Session.GetString("SessionId"), userId))
+            {
+                return RedirectToAction("Admin");
+
+            }
+            else {
+
+            }
         }
 
         [HttpPost]
         public ActionResult BanUserByPost(string postId)
         {
-            
-            connection.banUser(HttpContext.Session.GetString("SessionId"), connection.GetPost(postId).PostAuthor);
-            return RedirectToAction("Admin");
+            if (Logic.BanUserByPost(postId, HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("Admin");
+
+            }
+            else {
+                return RedirectToAction("Login", "Account");
+
+            }
         }
 
         public ActionResult ViewReportPost(string reportId)
         {
-
-            ViewBag.Post = connection.GetPost(connection.GetPostByReviewId(reportId));
-            ViewBag.Review = connection.GetReportReview(reportId);
+            
+            ViewBag.Post = Logic.ViewReportPost(reportId,  HttpContext.Session.GetString("SessionId"));
+            ViewBag.Review = Logic.ViewReportPost(reportId, HttpContext.Session.GetString("SessionId")).reviews;
             return View("ReviewReportView");
         }
     }

@@ -10,7 +10,7 @@ namespace fhictkillerapp.Controllers
 {
     public class AccountController : Controller
     {
-        Data.Connection Querries = new Data.Connection();
+        Logic.Account Logic = new Logic.Account();
         public IActionResult Index()
         {
             return View();
@@ -29,10 +29,10 @@ namespace fhictkillerapp.Controllers
         [Route("Myaccount")]
         public IActionResult MyAccount()
         {
-            ViewBag.pfp = Querries.GetPFP(HttpContext.Session.GetString("SessionId"));
-            ViewBag.OrdersIncoming = Querries.GetOrdersIncoming(HttpContext.Session.GetString("SessionId"));
-            ViewBag.Orders = Querries.GetOrders(HttpContext.Session.GetString("SessionId"));
-            ViewBag.Profile = Querries.GetProfileInfo(HttpContext.Session.GetString("SessionId"));
+            ViewBag.pfp = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).PFP;
+            ViewBag.OrdersIncoming = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).ordersIncoming;
+            ViewBag.Orders = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).ordersOutgoing;
+            ViewBag.Profile = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).account;
             return View();
         }
 
@@ -44,35 +44,42 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public IActionResult RegisterAccount(Account account)
         {
-            Querries.CreateAccount(account);
-            Console.WriteLine(account.Name);
+            Logic.RegisterAccount(account);
             return View("Index");
         }
 
         [HttpPost]
         public IActionResult LoginAccount(Account account)
         {
-            HttpContext.Session.SetString("SessionId", Querries.LoginAccount(account));
-            Console.WriteLine(HttpContext.Session.GetString("SessionId"));
+            HttpContext.Session.SetString("SessionId", Logic.LoginAccount(account));
             return View("Index");
         }
 
         [HttpPost]
         public IActionResult AddfundsToAccount(int amount)
         {
-            Console.WriteLine(amount);
-            Querries.AddFunds(amount, HttpContext.Session.GetString("SessionId"));
-            return RedirectToAction("MyAccount","Account");
+            if (Logic.AddfundsToAccount(amount, HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("MyAccount", "Account");
+
+            }
+            else {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         [HttpPost]
         public IActionResult SetPFP(PFP pfpModel)
         {
-            Console.WriteLine(pfpModel.pfp.FileName.ToString());
-            Querries.AddPFP(pfpModel, HttpContext.Session.GetString("SessionId"));
-            return RedirectToAction("MyAccount", "Account");
-        }
-        
+            if (Logic.SetPFP(pfpModel, HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("MyAccount", "Account");
 
+            }
+            else {
+                return RedirectToAction("Login", "Account");
+
+            }
+        }
     }
 }

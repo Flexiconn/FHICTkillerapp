@@ -1,5 +1,7 @@
 ﻿using Common;
 using Common.Models;
+using Data;
+using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,10 +10,11 @@ namespace Logic
 {
     public class BackPanel
     {
-        public string Index(string SessionId)
+        IBackPanel Querries = new Connection();
+        public Common.Models.BackPanel Index(string SessionId)
         {
             if (CheckIfSignedIn(SessionId)) { 
-            return connection.GetEarnings(SessionId);
+                return Querries.GetEarnings(SessionId);
             }
             return null;
         }
@@ -31,7 +34,7 @@ namespace Logic
         public List<Report> Admin(string SessionId)
         {
             if (CheckIfSignedIn(SessionId)) {
-                return connection.getReports(SessionId);
+                return Querries.getReports(SessionId);
             }
             return null;
         }
@@ -40,7 +43,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                connection.banUser(SessionId, userId);
+                Querries.banUser(SessionId, userId);
                 return true;
             }
 
@@ -51,7 +54,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                connection.banUser(SessionId, connection.GetPost(postId).PostAuthor);
+                Querries.banUser(SessionId, Querries.GetPost(postId).PostAuthor);
                 return true;
             }
             
@@ -63,8 +66,8 @@ namespace Logic
             Posts post = new Posts();
             if (CheckIfSignedIn(SessionId))
             {
-                post = connection.GetPost(connection.GetPostByReviewId(reportId));
-                post.reviews.Add(connection.GetReportReview(reportId));
+                post = Querries.GetPost(Querries.GetPostByReviewId(reportId));
+                post.reviews.Add(Querries.GetReportReview(reportId));
                 return post;
             }
 
