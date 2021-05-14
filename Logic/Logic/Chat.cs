@@ -32,7 +32,7 @@ namespace Logic
         }
 
 
-        public bool SendMessage(Common.Models.Chat chat, string ChatId, string SessionId)
+        public bool SendMessage(Common.Models.ClientChat chat, string ChatId, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {

@@ -9,7 +9,6 @@ namespace Common.Models
 {
     public class PostUpload
     {
-        [Key]
         public string PostId { get; set; }
         public IFormFile MyImage { set; get; }
         public string PostName { get; set; }

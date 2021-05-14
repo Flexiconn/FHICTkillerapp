@@ -269,7 +269,7 @@ namespace Data
             return false;
         }
 
-        public void SendMessage(Chat Message, string id, string chatid)
+        public void SendMessage(ClientChat Message, string id, string chatid)
         {
             Console.WriteLine(chatid);
             open();

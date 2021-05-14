@@ -7,11 +7,10 @@ namespace Common.Models
 {
     public class order
     {
-        [Key]
         public Guid orderId { get; set; }
         public Account buyer { get; set; }
         public Posts post { get; set; }
-        public Chat chat { get; set; }
+        public ClientChat chat { get; set; }
         public string orderMessage { get; set; }
         public string postId { get; set; }
         public string chatId { get; set; }
