@@ -5,12 +5,13 @@ using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Factory.Factory;
 
 namespace Logic
 {
     public class Post
     {
-        IPost Querries = new Connection();
+        IPost Querries = GetClassPost();
         public bool AddPost(PostUpload postUpload, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))

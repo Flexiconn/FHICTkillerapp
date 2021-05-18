@@ -5,12 +5,13 @@ using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Factory.Factory;
 
 namespace Logic
 {
     public class BackPanel
     {
-        IBackPanel Querries = new Connection();
+        IBackPanel Querries = GetClassBackpanel();
         public Common.Models.BackPanel Index(string SessionId)
         {
             if (CheckIfSignedIn(SessionId)) { 

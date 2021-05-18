@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Text;
 using Data;
 using Data.Interfaces;
+using static Factory.Factory;
+
+
 namespace Logic
 {
-    public class Account
+    public class Account 
     {
-        IAccount Querries = new Connection();
+
+        IAccount Querries = GetClassAccount();
 
         public myAccountModel MyAccount(string SessionId)
         {

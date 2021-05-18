@@ -5,12 +5,14 @@ using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Factory.Factory;
+
 
 namespace Logic
 {
     public class Chat
     {
-        IChat Querries = new Connection();
+        IChat Querries = GetClassChat();
         public List<ClientChat> Index(string id, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
