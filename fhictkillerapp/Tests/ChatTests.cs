@@ -14,7 +14,7 @@ namespace Tests
         public void SendMessage()
         {
             IChat account = GetClassChat();
-            account.SendMessage(new ClientChat() {AccountName="Test",  })
+           // account.SendMessage(new ClientChat() {AccountName="Test",  })
         }
 
         
