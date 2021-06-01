@@ -23,7 +23,7 @@ namespace fhictkillerapp.Controllers
         public ActionResult AddPost(PostUpload postUpload)
         {
 
-            if (Logic.AddPost(postUpload, HttpContext.Session.GetString("SessionId")))
+            if (Logic.AddPost(postUpload.MyImage, postUpload.PostName, postUpload.PostDescription, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("Viewpost", new { id = postUpload.PostId });
 
@@ -37,7 +37,11 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Posts = Logic.Index();
+            List<fhictkillerapp.Models.Posts> post = new List<fhictkillerapp.Models.Posts>();
+            foreach (var t in Logic.Index()) {
+                post.Add(new Models.Posts(t));
+            }
+            ViewBag.Posts = post;
             return View();
         }
 
@@ -45,7 +49,7 @@ namespace fhictkillerapp.Controllers
         [Route("post/{id}")]
         public ActionResult ViewPost(string Id)
         {
-            Posts post = Logic.ViewPost(Id);
+            Models.Posts post = new Models.Posts(Logic.ViewPost(Id));
             ViewBag.Post = post;
             ViewBag.Review = post.reviews;
             return View();
@@ -86,7 +90,7 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult createReview(Review review) 
         {
-            if (Logic.createReview(review, HttpContext.Session.GetString("SessionId")))
+            if (Logic.createReview(review.text, review.score,review.postId, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("ViewPost", new { id = review.postId });
 

@@ -1,7 +1,6 @@
 ﻿using Common;
 using Common.Models;
 using Data;
-using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,11 +10,11 @@ namespace Logic
 {
     public class BackPanel
     {
-        IBackPanel Querries = GetClassBackpanel();
-        public Common.Models.BackPanel Index(string SessionId)
+        Contract.IBackPanel Querries = GetClassBackpanel();
+        public Logic.Models.LogicBackPanel Index(string SessionId)
         {
             if (CheckIfSignedIn(SessionId)) { 
-                return Querries.GetEarnings(SessionId);
+                return new Logic.Models.LogicBackPanel(Querries.GetEarnings(SessionId));
             }
             return null;
         }
@@ -30,12 +29,14 @@ namespace Logic
             return false;
 
         }
+        
 
-
-        public List<Report> Admin(string SessionId)
+        public List<Logic.Models.LogicReport> Admin(string SessionId)
         {
+
             if (CheckIfSignedIn(SessionId)) {
-                return Querries.getReports(SessionId);
+
+                return LogicListDto.Reports(Querries.getReports(SessionId));
             }
             return null;
         }
@@ -62,13 +63,13 @@ namespace Logic
             return false;
         }
 
-        public Posts ViewReportPost(string reportId, string SessionId)
+        public Logic.Models.LogicPosts ViewReportPost(string reportId, string SessionId)
         {
-            Posts post = new Posts();
+            Logic.Models.LogicPosts post = new Logic.Models.LogicPosts();
             if (CheckIfSignedIn(SessionId))
             {
-                post = Querries.GetPost(Querries.GetPostByReviewId(reportId));
-                post.reviews.Add(Querries.GetReportReview(reportId));
+                post = new Logic.Models.LogicPosts(Querries.GetPost(Querries.GetPostByReviewId(reportId)));
+                post.reviews.Add(new Logic.Models.LogicReview(Querries.GetReportReview(reportId)));
                 return post;
             }
 

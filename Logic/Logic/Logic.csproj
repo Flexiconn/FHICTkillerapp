@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common\Common.csproj" />
-    <ProjectReference Include="..\..\fhictkillerapp\Data\Data.csproj" />
+    <ProjectReference Include="..\..\fhictkillerapp\Contract\Contract.csproj" />
     <ProjectReference Include="..\..\fhictkillerapp\Factory\Factory.csproj" />
   </ItemGroup>
 

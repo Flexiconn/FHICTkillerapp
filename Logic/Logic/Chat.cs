@@ -1,7 +1,6 @@
 ﻿using Common;
 using Common.Models;
 using Data;
-using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,12 +11,12 @@ namespace Logic
 {
     public class Chat
     {
-        IChat Querries = GetClassChat();
-        public List<ClientChat> Index(string id, string SessionId)
+        Contract.IChat Querries = GetClassChat();
+        public List<Logic.Models.LogicClientChat> Index(string id, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {
-                return Querries.GetMessages(id, SessionId);
+                return LogicListDto.Messages(Querries.GetMessages(id, SessionId));
             }
             return null;
         }
@@ -34,11 +33,11 @@ namespace Logic
         }
 
 
-        public bool SendMessage(Common.Models.ClientChat chat, string ChatId, string SessionId)
+        public bool SendMessage(string message, string ChatId, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.SendMessage(chat, SessionId, ChatId);
+                Querries.SendMessage(message, SessionId, ChatId);
                 return true;
             }
             return false;
@@ -48,9 +47,8 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Report report = new Report() { reportReason = reportReasonform, ReportType = (int)reportTypes.chatHelp, reportComment = comment, reportId = chatId };
-                report.creatorId = Querries.GetAccount(SessionId);
-                Querries.createReport(SessionId, report);
+                Querries.createReport(SessionId, Contract.reportTypes.post, Contract.reportReasons.scam, comment, chatId);
+
                 return true;
             }
             return false;

@@ -30,7 +30,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult SendMessage(ClientChat chat, string ChatId)
         {
-            if (Logic.SendMessage(chat, HttpContext.Session.GetString("SessionId"), ChatId))
+            if (Logic.SendMessage(chat.Message, HttpContext.Session.GetString("SessionId"), ChatId))
             {
                 return LocalRedirect("/chat/" + ChatId);
             }

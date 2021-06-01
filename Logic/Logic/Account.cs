@@ -3,22 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Data;
-using Data.Interfaces;
 using static Factory.Factory;
-
-
+using Microsoft.AspNetCore.Http;
+using Contract;
 namespace Logic
 {
     public class Account 
     {
 
-        IAccount Querries = GetClassAccount();
+        Contract.IAccount Querries = GetClassAccount();
 
-        public myAccountModel MyAccount(string SessionId)
+        public Logic.Models.LogicmyAccountModel MyAccount(string SessionId)
         {
             
             if(CheckIfSignedIn(SessionId)){
-                return new myAccountModel() { PFP = Querries.GetPFP(SessionId), ordersIncoming = Querries.GetOrdersIncoming(SessionId), ordersOutgoing = Querries.GetOrders(SessionId), account = Querries.GetProfileInfo(SessionId) };
+                return new Logic.Models.LogicmyAccountModel( new Contract.Models.myAccountModel() { PFP = Querries.GetPFP(SessionId), ordersIncoming = Querries.GetOrdersIncoming(SessionId), ordersOutgoing = Querries.GetOrders(SessionId), account = Querries.GetProfileInfo(SessionId) }) ;
             }
             return null;
         }
@@ -35,15 +34,15 @@ namespace Logic
         }
 
 
-        public void RegisterAccount(Common.Models.Account account)
+        public void RegisterAccount(string Password, string Name)
         {
-            Querries.CreateAccount(account);
+            Querries.CreateAccount(Password, Name);
         }
 
 
-        public string LoginAccount(Common.Models.Account account)
+        public string LoginAccount(string Password, string Name)
         {
-            return Querries.LoginAccount(account);
+            return Querries.LoginAccount(Password, Name);
         }
 
 
@@ -57,11 +56,11 @@ namespace Logic
             return false;
         }
 
-        public bool SetPFP(PFP pfpModel,string SessionId)
+        public bool SetPFP(IFormFile pfp,string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.AddPFP(pfpModel, SessionId);
+                Querries.AddPFP(pfp, SessionId);
                 return true;
             }
             return false;

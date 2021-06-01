@@ -44,14 +44,15 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public IActionResult RegisterAccount(Account account)
         {
-            Logic.RegisterAccount(account);
+            Logic.RegisterAccount(account.Name, account.Password);
             return View("Index");
         }
 
         [HttpPost]
         public IActionResult LoginAccount(Account account)
         {
-            HttpContext.Session.SetString("SessionId", Logic.LoginAccount(account));
+            Console.WriteLine(Logic.LoginAccount(account.Name, account.Password));
+            HttpContext.Session.SetString("SessionId", Logic.LoginAccount(account.Name, account.Password));
             return View("Index");
         }
 
@@ -69,9 +70,9 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetPFP(PFP pfpModel)
+        public IActionResult SetPFP(Common.Models.PFP pfpModel)
         {
-            if (Logic.SetPFP(pfpModel, HttpContext.Session.GetString("SessionId")))
+            if (Logic.SetPFP(pfpModel.pfp, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("MyAccount", "Account");
 

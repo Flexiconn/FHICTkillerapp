@@ -20,7 +20,11 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult Admin()
         {
-            ViewBag.reports = Logic.Admin(HttpContext.Session.GetString("SessionId"));
+            List<fhictkillerapp.Models.Report> reports = new List<fhictkillerapp.Models.Report>();
+            foreach (var t in Logic.Admin(HttpContext.Session.GetString("SessionId"))) {
+                reports.Add(new fhictkillerapp.Models.Report(t));
+            }
+            ViewBag.reports = reports;
             return View();
         }
 

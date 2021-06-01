@@ -1,29 +1,29 @@
 ﻿using Data;
-using Data.Interfaces;
 using System;
+using Contract;
 
 namespace Factory
 {
     public static class Factory
     {
-        public static IChat GetClassChat()
+        public static Contract.IChat GetClassChat()
         {
-            IChat chat = new Connection();
+            Contract.IChat chat = new Connection();
             return chat;
         }
-        public static IBackPanel GetClassBackpanel()
+        public static Contract.IBackPanel GetClassBackpanel()
         {
-            IBackPanel BackPanel = new Connection();
+            Contract.IBackPanel BackPanel = new Connection();
             return BackPanel;
         }
-        public static IPost GetClassPost()
+        public static Contract.IPost GetClassPost()
         {
-            IPost Post = new Connection();
+            Contract.IPost Post = new Connection();
             return Post;
         }
-        public static IAccount GetClassAccount()
+        public static Contract.IAccount GetClassAccount()
         {
-            IAccount Account = new Connection();
+            Contract.IAccount Account = new Connection();
             return Account;
         }
     }

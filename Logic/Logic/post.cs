@@ -1,7 +1,7 @@
 ﻿using Common;
 using Common.Models;
 using Data;
-using Data.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,13 +11,12 @@ namespace Logic
 {
     public class Post
     {
-        IPost Querries = GetClassPost();
-        public bool AddPost(PostUpload postUpload, string SessionId)
+        Contract.IPost Querries = GetClassPost();
+        public bool AddPost(IFormFile myImage, string postName, string postDescription, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {
-                postUpload.PostId = Guid.NewGuid().ToString();
-                Querries.AddPost(postUpload, SessionId);
+                Querries.AddPost(myImage, postName, postDescription, SessionId);
                 return true;
             }
             else {
@@ -28,17 +27,16 @@ namespace Logic
 
 
 
-        public List<Posts> Index()
+        public List<Logic.Models.LogicPosts> Index()
         {
-            return Querries.GetPosts();
+            return LogicListDto.Posts(Querries.GetPosts());
         }
 
 
-        public Posts ViewPost(string Id)
+        public Logic.Models.LogicPosts ViewPost(string Id)
         {
-            Posts post = new Posts();
-            post = Querries.GetPost(Id);
-            post.reviews = Querries.GetReview(Id);
+            Logic.Models.LogicPosts post = new Logic.Models.LogicPosts(Querries.GetPost(Id));
+            post.reviews = LogicListDto.Reviews(Querries.GetReview(Id));
             return post;
         }
 
@@ -58,10 +56,11 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                order order = new order();
+                Data.Models.order order = new Data.Models.order();
                 order.post.PostId = postId;
                 order.buyer.Id = Querries.GetAccount(SessionId).Id;
-                Querries.AddOrder(order);
+                Querries.AddOrder(SessionId, postId);
+
                 return true;
             }
 
@@ -70,12 +69,11 @@ namespace Logic
         }
 
 
-        public bool createReview(Common.Models.Review review, string SessionId)
+        public bool createReview(string text, int score, string postId, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {
-                review.Account = Querries.GetAccount(SessionId);
-                Querries.createReview(SessionId, review);
+                Querries.createReview(Querries.GetAccount(SessionId).Id, text,  score,  postId);
                 return true;
             }
             return false;
@@ -86,10 +84,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-
-                Report report = new Report() { reportReason = reportReasonform, ReportType = (int)reportTypes.post, reportComment = comment, reportId = PostId };
-                report.creatorId = Querries.GetAccount(SessionId);
-                Querries.createReport(SessionId, report);
+                Querries.createReport(SessionId, Contract.reportTypes.post, Contract.reportReasons.scam, comment, PostId);
                 return true;
             }
             return false;
@@ -100,9 +95,7 @@ namespace Logic
             if (CheckIfSignedIn(SessionId))
             {
 
-                Report report = new Report() { ReportType = (int)reportTypes.review, reportId = reviewId };
-                report.creatorId = Querries.GetAccount(SessionId);
-                Querries.createReport(SessionId, report);
+                Querries.createReport(SessionId, Contract.reportTypes.review, Contract.reportReasons.scam, "test" , reviewId);
                 return true;
             }
             return false;
