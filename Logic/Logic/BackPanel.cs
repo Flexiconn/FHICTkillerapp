@@ -1,6 +1,4 @@
-﻿using Common;
-using Common.Models;
-using Data;
+﻿using Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +14,7 @@ namespace Logic
             if (CheckIfSignedIn(SessionId)) { 
                 return new Logic.Models.LogicBackPanel(Querries.GetEarnings(SessionId));
             }
-            return null;
+            return new Logic.Models.LogicBackPanel();
         }
 
         public bool CheckIfSignedIn(string SessionId)
@@ -38,7 +36,7 @@ namespace Logic
 
                 return LogicListDto.Reports(Querries.getReports(SessionId));
             }
-            return null;
+            return new List<Logic.Models.LogicReport>();
         }
 
         public bool BanUser(string userId, string SessionId)
@@ -73,7 +71,9 @@ namespace Logic
                 return post;
             }
 
-            return null;
+            return new Logic.Models.LogicPosts();
         }
+
+        
     }
 }

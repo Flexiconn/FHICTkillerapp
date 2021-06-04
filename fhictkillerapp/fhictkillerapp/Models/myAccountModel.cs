@@ -19,14 +19,20 @@ namespace fhictkillerapp.Models
         public myAccountModel(Logic.Models.LogicmyAccountModel dto) {
             this.ordersIncoming = new List<Order>();
             this.ordersOutgoing = new List<Order>();
-            foreach (var t in dto.ordersIncoming)
+            if (dto.ordersIncoming.Count > 0)
             {
-                this.ordersIncoming.Add(new Order() { buyer = new Account(t.buyer), buyerId = t.buyerId, chat = new ClientChat() { AccountName = t.chat.AccountName, ChatId = t.chatId, DateTime = t.chat.DateTime, Message = t.chat.Message, MessageId = t.chat.MessageId, Sender = t.chat.Sender }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new Posts() { } });
+                foreach (var t in dto.ordersIncoming)
+                {
+                    this.ordersIncoming.Add(new Order() { buyer = new Account(t.buyer), buyerId = t.buyerId, chat = new ClientChat() { AccountName = t.chat.AccountName, ChatId = t.chatId, DateTime = t.chat.DateTime, Message = t.chat.Message, MessageId = t.chat.MessageId, Sender = t.chat.Sender }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new Posts() { } });
+                }
             }
 
-            foreach (var t in dto.ordersOutgoing)
+            if (dto.ordersOutgoing.Count > 0)
             {
-                this.ordersOutgoing.Add(new Order() { buyer = new Account(t.buyer), buyerId = t.buyerId, chat = new ClientChat() { AccountName = t.chat.AccountName, ChatId = t.chatId, DateTime = t.chat.DateTime, Message = t.chat.Message, MessageId = t.chat.MessageId, Sender = t.chat.Sender }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new Posts() { } });
+                foreach (var t in dto.ordersOutgoing)
+                {
+                    this.ordersOutgoing.Add(new Order() { buyer = new Account(t.buyer), buyerId = t.buyerId, chat = new ClientChat() { AccountName = t.chat.AccountName, ChatId = t.chatId, DateTime = t.chat.DateTime, Message = t.chat.Message, MessageId = t.chat.MessageId, Sender = t.chat.Sender }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new Posts() { } });
+                }
             }
             this.PFP = dto.PFP;
             this.account = new Account(dto.account);

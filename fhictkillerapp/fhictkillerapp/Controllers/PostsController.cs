@@ -37,6 +37,7 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult Index()
         {
+            Console.WriteLine("sessionId" + HttpContext.Session.GetString("SessionId"));
             List<fhictkillerapp.Models.Posts> post = new List<fhictkillerapp.Models.Posts>();
             foreach (var t in Logic.Index()) {
                 post.Add(new Models.Posts(t));
@@ -122,6 +123,7 @@ namespace fhictkillerapp.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
 
     }
 }

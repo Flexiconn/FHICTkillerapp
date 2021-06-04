@@ -9,6 +9,7 @@ namespace Contract
     public interface IAccount
     {
         void start();
+        void CreateTestDB();
         Contract.Models.Account GetAccount(string id);
         void CreateAccount(string Password, string Name);
         string LoginAccount(string Password, string Name);
@@ -19,5 +20,8 @@ namespace Contract
         void AddFunds(float amount, string id);
         void AddPFP(IFormFile pfp, string Id);
         string GetPFP(string Id);
+        string GetOrderStatus(string OrderId);
+        string ChangeOrderStatus(string OrderId, string Status);
+        string GetOwner(string OrderId);
     }
 }

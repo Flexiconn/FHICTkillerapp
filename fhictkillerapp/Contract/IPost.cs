@@ -9,6 +9,7 @@ namespace Contract
     public interface IPost
     {
         void start();
+        void CreateTestDB();
         Contract.Models.Account GetAccount(string id);
         void AddPost(IFormFile myImage, string postName, string postDescription, string sesId);
         List<Contract.Models.Posts> GetPosts();
@@ -20,5 +21,8 @@ namespace Contract
         void createReview(string id, string text, int score, string postId);
         void createReport(string id, reportTypes reportType, reportReasons reportReason, string comment, string reportedId);
         List<Contract.Models.Review> GetReview(string postId);
+        bool PostLimitReached(string id);
+
+        
     }
 }

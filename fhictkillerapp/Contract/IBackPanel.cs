@@ -6,6 +6,7 @@ namespace Contract
 {
     public interface IBackPanel
     {
+        void CreateTestDB();
         Contract.Models.Posts GetPost(string id);
         bool CheckIfSignedIn(string Id);
         Contract.Models.BackPanel GetEarnings(string id);
@@ -13,5 +14,6 @@ namespace Contract
         void banUser(string adminId, string userId);
         string GetPostByReviewId(string Id);
         Contract.Models.Review GetReportReview(string reportId);
+
     }
 }

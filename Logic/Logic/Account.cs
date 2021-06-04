@@ -1,5 +1,4 @@
-﻿using Common.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Data;
@@ -17,9 +16,10 @@ namespace Logic
         {
             
             if(CheckIfSignedIn(SessionId)){
+                Console.WriteLine("Data: " + Querries.GetOrdersIncoming(SessionId).Count + Querries.GetOrders(SessionId).Count);
                 return new Logic.Models.LogicmyAccountModel( new Contract.Models.myAccountModel() { PFP = Querries.GetPFP(SessionId), ordersIncoming = Querries.GetOrdersIncoming(SessionId), ordersOutgoing = Querries.GetOrders(SessionId), account = Querries.GetProfileInfo(SessionId) }) ;
             }
-            return null;
+            return new Models.LogicmyAccountModel();
         }
 
         public bool CheckIfSignedIn(string SessionId)
@@ -62,6 +62,54 @@ namespace Logic
             {
                 Querries.AddPFP(pfp, SessionId);
                 return true;
+            }
+            return false;
+        }
+
+        public bool cancelOrder(string OrderId, string SessionId)
+        {
+            if (CheckIfSignedIn(SessionId))
+            {
+                if (Querries.GetOwner(OrderId) == Querries.GetAccount(SessionId).SessionId)
+                {
+                    if (Querries.GetOrderStatus(OrderId) == "ordered")
+                    {
+                        Querries.ChangeOrderStatus(OrderId, "cancelled");
+                        return true;
+                    }
+
+                    if (Querries.GetOrderStatus(OrderId) == "accepted")
+                    {
+                        Querries.ChangeOrderStatus(OrderId, "cancelled");
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (Querries.GetOrderStatus(OrderId) == "ordered")
+                    {
+                        Querries.ChangeOrderStatus(OrderId, "cancelled");
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public bool AcceptOrder(string OrderId, string SessionId)
+        {
+            if (CheckIfSignedIn(SessionId))
+            {
+                if (Querries.GetOwner(OrderId) == Querries.GetAccount(SessionId).SessionId)
+                {
+                    if (Querries.GetOrderStatus(OrderId) == "ordered")
+                    {
+                        Querries.ChangeOrderStatus(OrderId, "accepted");
+                        return true;
+                    }
+                }
+                return false;
             }
             return false;
         }

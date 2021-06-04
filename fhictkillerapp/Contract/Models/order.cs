@@ -7,7 +7,7 @@ namespace Contract.Models
 {
     public class order
     {
-        public Guid orderId { get; set; }
+        public string orderId { get; set; }
         public Account buyer { get; set; }
         public Posts post { get; set; }
         public ClientChat chat { get; set; }

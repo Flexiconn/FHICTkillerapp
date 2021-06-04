@@ -61,7 +61,9 @@ namespace fhictkillerapp.Controllers
             
             ViewBag.Post = Logic.ViewReportPost(reportId,  HttpContext.Session.GetString("SessionId"));
             ViewBag.Review = Logic.ViewReportPost(reportId, HttpContext.Session.GetString("SessionId")).reviews;
-            return View("ReviewReportView");
+            return View("ReportView");
         }
+
+        
     }
 }

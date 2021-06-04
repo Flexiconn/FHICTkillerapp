@@ -1,6 +1,4 @@
-﻿using Common;
-using Common.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Contract;
+using ThrowawayDb;
 
 namespace Data
 {
@@ -34,10 +33,10 @@ namespace Data
         private void Initialize()
         {
 
-            server = "localhost";
-            database = "KillerApp";
-            uid = "root";
-            password = "root";
+            server = "studmysql01.fhict.local";
+            database = "dbi456098";
+            uid = "dbi456098";
+            password = "cliver";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
@@ -45,10 +44,10 @@ namespace Data
             connection = new MySqlConnection(connectionString);
         }
 
-        private void CreateTestDB()
+        public void CreateTestDB()
         {
             server = "localhost";
-            database = "KillerApp";
+            database = "testDB";
             uid = "root";
             password = "root";
             string connectionString;
@@ -57,6 +56,7 @@ namespace Data
 
             connection = new MySqlConnection(connectionString);
         }
+
         private void open()
         {
             connection.Open();
@@ -88,15 +88,33 @@ namespace Data
             return thisAccount;
         }
 
+        public bool PostLimitReached(string id)
+        {
+            open();
+            string query = $"SELECT COUNT(PostId) FROM `post`INNER JOIN `account` ON post.PostAuthor=account.Id WHERE SessionId='{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            //Read the data and store them in the list
+            System.Int64 test = (System.Int64)cmd.ExecuteScalar();
+            close();
+            if (test < 3) 
+            {
+                return true;
+            }
+            return false;
+        }
+
         public void AddPost(IFormFile myImage, string postName, string postDescription, string sesId)
         {
             string postId = Guid.NewGuid().ToString();
             string id = GetAccount(sesId).Id;
             open();
-            string pathString = System.IO.Path.Combine("wwwroot/data/IMG/post/", postId);
-            System.IO.Directory.CreateDirectory(pathString);
-            myImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, myImage.FileName.ToString()), FileMode.Create));
-
+            if (myImage != null)
+            {
+                string pathString = System.IO.Path.Combine("wwwroot/data/IMG/post/", postId);
+                System.IO.Directory.CreateDirectory(pathString);
+                myImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, myImage.FileName.ToString()), FileMode.Create));
+            }
 
 
 
@@ -111,13 +129,16 @@ namespace Data
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
 
-            //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-            query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', @Path, '{postId}'); ";
-            cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", postId + "/") , myImage.FileName.ToString()));
+            if (myImage != null)
+            {
+                //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
+                query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', @Path, '{postId}'); ";
+                cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", postId + "/"), myImage.FileName.ToString()));
 
-            //Create a data reader and Execute the command
-            cmd.ExecuteNonQuery();
+                //Create a data reader and Execute the command
+                cmd.ExecuteNonQuery();
+            }
             close();
         }
 
@@ -163,7 +184,7 @@ namespace Data
         public string GetAccountName(string id)
         {
             open();
-            string query = $"SELECT * FROM post WHERE PostId='{id}'";
+            string query = $"SELECT * FROM account WHERE SessionId='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
@@ -171,6 +192,9 @@ namespace Data
             var name = dataReader["Name"].ToString();
             dataReader.Close();
             close();
+            if (name == null) {
+                return "Not Found";
+            }
             return (name);
         }
 
@@ -183,7 +207,7 @@ namespace Data
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            List<Posts> postsList = new List<Posts>();
+            List<Contract.Models.Posts> postsList = new List<Contract.Models.Posts>();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
@@ -221,8 +245,21 @@ namespace Data
         public void AddOrder(string id, string postId)
         {
             open();
-            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES ('{Guid.NewGuid().ToString()}', '{id}', '{postId}','{Guid.NewGuid().ToString()}','false');";
+            string query = $"SELECT * FROM account WHERE SessionId='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            //Create a data reader and Execute the command
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            while (dataReader.Read())
+            {
+                if (id != null && id == dataReader["SessionId"].ToString())
+                {
+                    id = dataReader["Id"].ToString();
+                    
+                }
+            }
+            dataReader.Close();
+            query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES ('{Guid.NewGuid().ToString()}', '{id}', '{postId}','{Guid.NewGuid().ToString()}','ordered');";
+            cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
@@ -343,6 +380,7 @@ namespace Data
             }
             dataReader.Close();
             close();
+            Console.WriteLine("name    " + acc.Name);
             return acc;
         }
 
@@ -366,7 +404,7 @@ namespace Data
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                orders.Add(new Contract.Models.order() { postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
+                orders.Add(new Contract.Models.order() { orderId = dataReader["OrderId"].ToString(), postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
             }
             dataReader.Close();
             close();
@@ -535,7 +573,7 @@ namespace Data
             dataReader.Close();
             if (admin == false)
             {
-                return null;
+                return new List<Contract.Models.Report>();
             }
 
             query = $"SELECT * FROM report INNER JOIN account ON report.creator = account.Id WHERE status='open'";
@@ -633,6 +671,8 @@ namespace Data
 
             dataReader.Close();
             close();
+            if (path == null)
+                return "Not Found";
             return path;
         }
 
@@ -675,6 +715,53 @@ namespace Data
             dataReader.Close();
 
             return review;
+        }
+
+        public string GetOrderStatus(string OrderId)
+        {
+            open();
+            Console.WriteLine("OrderID" + OrderId);
+            string status = "";
+            string query = $"SELECT * FROM `order` WHERE OrderId='{OrderId}' ;";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                status = dataReader["Status"].ToString();
+            }
+            dataReader.Close();
+            close();
+            return status;
+        }
+
+        public string ChangeOrderStatus(string OrderId, string Status)
+        {
+            open();
+            string query = $"UPDATE `order` SET Status='{Status}' WHERE OrderId='{OrderId}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.ExecuteNonQuery();
+            close();
+            return Status;
+        }
+
+        public string GetOwner(string OrderId)
+        {
+            open();
+            //Create a data reader and Execute the command
+            string owner = "";
+            string query = $"SELECT * FROM `order` INNER JOIN `post` ON order.PostId=post.PostId WHERE OrderId='{OrderId}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                owner = dataReader["PostAuthor"].ToString();
+            }
+            dataReader.Close();
+            close();
+            return owner;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Common;
-using Common.Models;
-using Data;
+﻿using Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +16,7 @@ namespace Logic
             {
                 return LogicListDto.Messages(Querries.GetMessages(id, SessionId));
             }
-            return null;
+            return new List<Logic.Models.LogicClientChat>();
         }
 
         public bool CheckIfSignedIn(string SessionId)

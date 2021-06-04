@@ -3,6 +3,7 @@ using static Factory.Factory;
 using Data;
 using Common;
 using Contract;
+using System;
 
 namespace Tests
 {
@@ -13,63 +14,51 @@ namespace Tests
         public void TestLogin()
         {
             IAccount account = GetClassAccount();
-            account.LoginAccount("test","test" );
+            Data.TestQuerries test = new TestQuerries();
+
+            account.CreateAccount("ja", "ja");
+            new Logic.Account().LoginAccount("ja", "ja");
+            test.cleanAccount(account.LoginAccount("ja", "ja"));
         }
 
         [TestMethod]
         public void CreateAccount()
         {
             IAccount account = GetClassAccount();
-            account.CreateAccount("test","test");
+            Data.TestQuerries test = new TestQuerries();
+
+            new Logic.Account().RegisterAccount("ja", "ja");
+            test.cleanAccount(account.LoginAccount("ja", "ja"));
         }
 
         [TestMethod]
-        public void GetPFP()
+        public void AddFunds()
         {
             IAccount account = GetClassAccount();
-            account.GetPFP(account.LoginAccount("test", "test"));
+            Data.TestQuerries test = new TestQuerries();
+            account.CreateAccount("ja", "ja");
+            new Logic.Account().AddfundsToAccount(10, account.LoginAccount("ja","ja"));
+            test.cleanAccount(account.LoginAccount("ja", "ja"));
         }
 
         [TestMethod]
-        public void GetProfileInfo()
+        public void Myaccount()
         {
             IAccount account = GetClassAccount();
-            account.GetProfileInfo(account.LoginAccount("test", "test"));
+            Data.TestQuerries test = new TestQuerries();
+            account.CreateAccount("ja", "ja");
+            new Logic.Account().MyAccount(account.LoginAccount("ja", "ja"));
+            test.cleanAccount(account.LoginAccount("ja", "ja"));
         }
 
         [TestMethod]
-        public void GetIncomingOrders()
+        public void SetPfp()
         {
             IAccount account = GetClassAccount();
-            account.GetOrdersIncoming(account.LoginAccount("test", "test"));
-        }
-
-        [TestMethod]
-        public void GetOutgoingOrders()
-        {
-            IAccount account = GetClassAccount();
-            account.GetOrders(account.LoginAccount("test", "test"));
-        }
-
-        [TestMethod]
-        public void AddfundsTest()
-        {
-            IAccount account = GetClassAccount();
-            account.AddFunds(10.0f, account.LoginAccount("test", "test"));
-        }
-
-        [TestMethod]
-        public void CheckIfSignedIn()
-        {
-            IAccount account = GetClassAccount();
-            account.CheckIfSignedIn(account.LoginAccount("test", "test"));
-        }
-
-        [TestMethod]
-        public void GetAccountTest()
-        {
-            IAccount account = GetClassAccount();
-            account.GetAccount(account.LoginAccount("test", "test"));
+            Data.TestQuerries test = new TestQuerries();
+            account.CreateAccount("ja", "ja");
+            new Logic.Account().SetPFP(null, account.LoginAccount("ja", "ja"));
+            test.cleanAccount(account.LoginAccount("ja", "ja"));
         }
     }
 }

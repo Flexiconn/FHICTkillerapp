@@ -7,7 +7,7 @@ namespace Logic.Models
 {
     public class LogicOrder
     {
-        public Guid orderId { get; set; }
+        public string orderId { get; set; }
         public LogicAccount buyer { get; set; }
         public LogicPosts post { get; set; }
         public LogicClientChat chat { get; set; }

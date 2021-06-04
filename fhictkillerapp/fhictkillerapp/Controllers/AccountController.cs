@@ -29,10 +29,12 @@ namespace fhictkillerapp.Controllers
         [Route("Myaccount")]
         public IActionResult MyAccount()
         {
-            ViewBag.pfp = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).PFP;
-            ViewBag.OrdersIncoming = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).ordersIncoming;
-            ViewBag.Orders = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).ordersOutgoing;
-            ViewBag.Profile = Logic.MyAccount(HttpContext.Session.GetString("SessionId")).account;
+            Models.myAccountModel myAccountModel = new Models.myAccountModel(Logic.MyAccount(HttpContext.Session.GetString("SessionId")));
+
+            ViewBag.pfp = myAccountModel.PFP;
+            ViewBag.OrdersIncoming = myAccountModel.ordersIncoming;
+            ViewBag.Orders = myAccountModel.ordersOutgoing;
+            ViewBag.Profile = myAccountModel.account;
             return View();
         }
 
@@ -80,6 +82,31 @@ namespace fhictkillerapp.Controllers
             else {
                 return RedirectToAction("Login", "Account");
 
+            }
+        }
+        [HttpPost]
+        public ActionResult CancelOrder(string orderId)
+        {
+            if (Logic.cancelOrder(orderId, HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("MyAccount", "Account");
+            }
+            else
+            {
+                return RedirectToAction("MyAccount", "Account");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AcceptOrder(string orderId)
+        {
+            if (Logic.AcceptOrder(orderId, HttpContext.Session.GetString("SessionId")))
+            {
+                return RedirectToAction("MyAccount", "Account");
+            }
+            else
+            {
+                return RedirectToAction("MyAccount", "Account");
             }
         }
     }

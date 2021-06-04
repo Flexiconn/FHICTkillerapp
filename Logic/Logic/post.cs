@@ -1,6 +1,4 @@
-﻿using Common;
-using Common.Models;
-using Data;
+﻿using Data;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -16,7 +14,10 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.AddPost(myImage, postName, postDescription, SessionId);
+                if (Querries.PostLimitReached(SessionId))
+                {
+                    Querries.AddPost(myImage, postName, postDescription, SessionId);
+                }
                 return true;
             }
             else {
@@ -100,5 +101,7 @@ namespace Logic
             }
             return false;
         }
+
+        
     }
 }
