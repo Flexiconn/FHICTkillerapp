@@ -4,11 +4,20 @@
 @{
 }
 @model Common.Models.Account
+    <div class="card" style="width: 40%; margin: auto;">
+        <div class="card-body">
+            <h1>Login</h1>
 
-<form asp-action="LoginAccount" asp-controller="Account" enctype="multipart/form-data">
-    <label asp-for="Name"></label>
-    <input asp-for="Name" placeholder="Your name goes here" />
-    <label asp-for="Password"></label>
-    <input asp-for="Password" placeholder="Your name goes here" />
-    <input type="submit" />
-</form>
+            <form asp-action="LoginAccount" asp-controller="Account" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="Name">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="Password">
+                </div>
+                <input type="submit" />
+            </form>
+        </div>
+    </div>

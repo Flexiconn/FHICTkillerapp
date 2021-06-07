@@ -1,25 +1,21 @@
 ﻿@model IEnumerable<fhictkillerapp.Models.Posts>
-<select class="form-select form-select-md" aria-label=".form-select-md example">
-    <option selected>Open this select menu</option>
-    <option value="1" name="sort">ABC ↑</option>
-    <option value="2" name="sort">ABC ↓</option>
-    <option value="3" name="sort">Date ↑</option>
-    <option value="4" name="sort">Date ↓</option>
-</select>
-@Html.ActionLink("Create Post", // <-- Link text
-                 "CreatePost", // <-- Action Method Name
-                 "Posts", // <-- Controller Name
-                 null, // <-- Route value
-                 null // <-- htmlArguments
-                 )
-<div style="        width: 1200px;
+<div style="height: 40px;">
+    <select class="form-select form-select-md" aria-label=".form-select-md example" style="margin-left: 30px;">
+        <option value="1" name="sort">ABC ↑</option>
+        <option value="2" name="sort">ABC ↓</option>
+        <option value="3" name="sort">Date ↑</option>
+        <option value="4" name="sort">Date ↓</option>
+    </select>
+    <a style="float: right; margin-right: 30px;" class="btn btn-primary" href="/posts/createpost">Create Post</a>
+</div>
 
+<div style="        width: 100%;
         vertical-align: middle;
 ">
     @foreach (var item in ViewBag.Posts)
-    {
-        <div class="card" style="float: left; margin: 4px; width: 14rem;" onclick="location.href='/Post/@item.PostId';">
-            <img src="@item.images[0]" class="card-img-top" alt="data\IMG\361a8b37-a37a-4141-ae15-814c5dc3d6e4\Untitled-1.jpg" style="object-fit: contain;
+           {
+        <div class="card" style="float: left; margin: 0.5%; width: 24%;" onclick="location.href='/Post/@item.PostId';">
+            <img src="@item.images[0]" class="card-img-top" alt="data\IMG\361a8b37-a37a-4141-ae15-814c5dc3d6e4\Untitled-1.jpg" style="        object-fit: contain;
         width: 200px;
         height: 200px;
         margin-left: auto;

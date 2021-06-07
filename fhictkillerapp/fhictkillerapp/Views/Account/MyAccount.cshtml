@@ -3,87 +3,108 @@
     ViewData["Title"] = "MyAccount";
 }
 @model Common.Models.PFP
-<h1>MyAccount</h1>
- <img src="@ViewBag.pfp" >
-<div class="row">
-    <div class="col-4">
-        <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Profile</a>
-            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Your Orders</a>
-            <a class="list-group-item list-group-item-action" id="list-incomingOrder-list" data-toggle="list" href="#list-incomingOrder" role="tab" aria-controls="incomingOrder">Incoming Orders</a>
 
+<h1>Hello, @ViewBag.Profile.Name</h1>
+
+    
+    <div class="row">
+        <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Profile</a>
+                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Your Orders</a>
+                <a class="list-group-item list-group-item-action" id="list-incomingOrder-list" data-toggle="list" href="#list-incomingOrder" role="tab" aria-controls="incomingOrder">Incoming Orders</a>
+
+            </div>
         </div>
-    </div>
-    <div class="col-8">
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                <div class="card">
-                    <div class="card-body">
-                        Profile
-                    </div>
-                    <div class="card" style="width: 45.5rem;">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">@ViewBag.Profile.Name</li>
-                            <li class="list-group-item">
-                                @ViewBag.Profile.Balance <form asp-action="AddFunds" asp-controller="Account" enctype="multipart/form-data">
-                                <input type="submit" />
-                            </form>
-                        </li>
-                        <form asp-action="SetPFP" asp-controller="Account" enctype="multipart/form-data">
-                            <label asp-for="pfp"></label>
-                            <input asp-for="pfp" />
-                            <input type="submit" />
-                        </form>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-                <div class="card">
-                    <div class="card-header">
-                        Your Orders
-                    </div>
-                    @{ foreach (var t in ViewBag.Orders) {
-                                        <div class="card-body">
-                                            <h5 class="card-title">@t.status</h5>
-                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                            <a href="chat/@t.chatId" class="btn btn-primary">Chat</a>
-                                            <form asp-action="CancelOrder" asp-controller="Account" enctype="multipart/form-data">
-                                                <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
-                                                <input type="submit" value="Cancel"/>
-                                            </form>
-                                        </div>
-                        }
-                    }
-                    
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="list-incomingOrder" role="tabpanel" aria-labelledby="list-incomingOrder-list">
-                <div class="card">
-                    <div class="card-header">
-                        Incoming Orders
-                    </div>
-                    @{ foreach (var t in ViewBag.OrdersIncoming)
-                        {
+        <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                    <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">@t.status</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="chat/@t.chatId" class="btn btn-primary">Chat</a>
-                            <form asp-action="CancelOrder" asp-controller="Account" enctype="multipart/form-data">
-                                <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
-                                <input type="submit" value="Cancel"/>
-                            </form>
-                            <form asp-action="AcceptOrder" asp-controller="Account" enctype="multipart/form-data">
-                                <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
-                                <input type="submit" value="Accept"/>
-                            </form>
+                            Profile
+                            <div style="float: right; border-radius: 50%; width: 80px; height: 80px;">
+                                <div style="        border-radius: 50%;
+                                    position: absolute;
+                                    width: inherit;
+                                    height: inherit;
+                                    background-color: black;"></div>
+
+                                <img style="        position: absolute;
+                                    float: left;
+                                    border-radius: 50%;
+                                    object-fit: contain;
+                                    width: inherit;
+                                    height: inherit;
+                                    margin-left: auto;
+                                    margin-right: auto;"
+                                     src="@ViewBag.pfp">
+                            </div>
                         </div>
+                        <div class="card" style="width: 45.5rem;">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><p style="float: left">Name</p><p style="float: right">@ViewBag.Profile.Name</p></li>
+                                <li class="list-group-item"><p style="float: left">Balance</p><p style="float: right">@ViewBag.Profile.Balance</p></li>
+                                <form asp-action="AddFunds" asp-controller="Account" enctype="multipart/form-data">
+                                    <input type="submit" />
+                                </form>
+                                </li>
+                                <form asp-action="SetPFP" asp-controller="Account" enctype="multipart/form-data">
+                                    <label asp-for="pfp"></label>
+                                    <input asp-for="pfp" />
+                                    <input type="submit" />
+                                </form>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                    <div class="card">
+                        <div class="card-header">
+                            Your Orders
+                        </div>
+                        @{ foreach (var t in ViewBag.Orders)
+                            {
+                                <div class="card-body">
+                                    <h5 class="card-title">@t.status</h5>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                    <a style="float: left;" href="chat/@t.chatId" class="btn btn-primary">Chat</a>
+                                    <form style="float: right;" asp-action="CancelOrder" asp-controller="Account" enctype="multipart/form-data">
+                                        <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
+                                        <input class="btn btn-danger" type="submit" value="Cancel" />
+                                    </form>
+                                </div>
+                            }
                         }
-                    }
+
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="list-incomingOrder" role="tabpanel" aria-labelledby="list-incomingOrder-list">
+                    <div class="card">
+                        <div class="card-header">
+                            Incoming Orders
+                        </div>
+                        @{ foreach (var t in ViewBag.OrdersIncoming)
+                            {
+                                                <div class="card-body">
+                                                    <h5 class="card-title">@t.status</h5>
+                                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                                    <a style="float: left;" href="chat/@t.chatId" class="btn btn-primary">Chat</a>
+                                                    <form style="margin-left: 6px; float: right;" asp-action="CancelOrder" asp-controller="Account" enctype="multipart/form-data">
+                                                        <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
+                                                        <input class="btn btn-danger" type="submit" value="Cancel" />
+                                                    </form>
+                                                    <form style="float: right;" asp-action="AcceptOrder" asp-controller="Account" enctype="multipart/form-data">
+                                                        <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
+                                                        <input class="btn btn-success" type="submit" value="Accept" />
+                                                    </form>
+                                                </div>
+                            }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
-</div>

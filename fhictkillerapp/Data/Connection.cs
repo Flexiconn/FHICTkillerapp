@@ -33,10 +33,10 @@ namespace Data
         private void Initialize()
         {
 
-            server = "studmysql01.fhict.local";
-            database = "dbi456098";
-            uid = "dbi456098";
-            password = "cliver";
+            server = "localhost";
+            database = "killerapp";
+            uid = "root";
+            password = "root";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";

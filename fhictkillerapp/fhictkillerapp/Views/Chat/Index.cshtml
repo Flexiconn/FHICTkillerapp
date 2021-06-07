@@ -2,63 +2,46 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model Common.Models.ClientChat
-<div style="
-        margin: auto;
+<div style="height: 50%">
+<div style="        margin: auto;
         overflow: auto;
         width: 500px;
-        height: 700px;
+        height: 400px;
     ">
     @foreach (var item in ViewBag.Chat)
     {
         if (item.Sender)
         {
-            <div style="
-            width: 200px;
-            height: 60px;
-            float: right;
-            background-color: lightgreen;
-            border-style: solid;
-            margin: 5px;
-            border-radius: 5px;
-            border-width: 2px;
-            position: relative;
-            clear: both;
-            ">
-                <p style="font-size: 8px;
+            <div class="card" style="background-color: #427dff">
+                <div class="card-body">
+                    <p style="font-size: 8px;
                 float: left;
                 ">@item.AccountName</p>
 
                 <p style="font-size: 12px;
                 float: left;
                 ">@item.Message</p>
-
-            </div> }
-        else
-        {
-            <div style="
-            width: 200px;
-            height: 60px;
-            float: left;
-            background-color: white;
-            border-style: solid;
-            margin: 5px;
-            border-radius: 5px;
-            border-width: 2px;
-            position: relative;
-            clear: both;
-            ">
-                <p style="font-size: 8px;
-                float: left;
-                ">@item.AccountName</p>
-
-                <p style="font-size: 12px;
-                float: left;
-                ">@item.Message</p>
-
             </div>
-        }
+        </div>
 
     }
+
+    else
+    {
+        <div class="card" style="background-color: white">
+            <div class="card-body">
+                <p style="font-size: 8px;
+                float: left;
+                ">@item.AccountName</p>
+
+                <p style="font-size: 12px;
+                float: left;
+                ">@item.Message</p>
+            </div>
+        </div>
+    }
+
+}
 </div>
 <form asp-action="SendMessage" asp-controller="Chat" enctype="multipart/form-data" style="
         margin: auto;">
@@ -67,7 +50,7 @@
     <input type="hidden" name="ChatId" id="ChatId" value="@ViewBag.chatid">
     <input type="submit" />
 </form>
-
+</div>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
     report
 </button>

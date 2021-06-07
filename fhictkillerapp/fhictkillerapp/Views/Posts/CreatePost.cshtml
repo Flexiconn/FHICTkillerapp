@@ -2,14 +2,22 @@
 
 *@
 @model Common.Models.PostUpload
-<form asp-action="AddPost" asp-controller="Posts" enctype="multipart/form-data">
-    <label asp-for="PostName"></label>
-    <input asp-for="PostName" placeholder="Your name goes here" />
-    <label asp-for="PostDescription"></label>
-    <input asp-for="PostDescription" placeholder="Your name goes here" />
-    <label asp-for="MyImage"></label>
-    <input asp-for="MyImage" />
-    <input type="submit"/>
-</form>
+<a class="btn btn-primary" href="/" role="button">Back</a>
+<br>
+<div class="card" style="width: 80%; margin: auto;">
+    <div class="card-body">
+        <form asp-action="AddPost" asp-controller="Posts" enctype="multipart/form-data">
+            <h1>Create Post</h1>                
+            <label for="PostName" class="form-label">Post Name</label>
+            <input type="text" aria-label="First name" name="PostName" class="form-control">
+            <div class="mb-3" style="padding-top: 10px; margin: auto;">
+                <label for="exampleFormControlTextarea1" class="form-label">Post Description</label>
+                <textarea class="form-control" id="PostDescription" name="PostDescription" rows="3"></textarea>
+            </div>
+                <input type="file" class="form-control" name="MyImage" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload" style="margin-bottom: 20px; padding-bottom: 20px;">
+            <input type="submit" class="btn btn-primary" value="Create" />
+        </form>
+    </div>
+</div>
 @{
 }

@@ -5,9 +5,16 @@
 }
 @model Common.Models.OrderFormat;
 
-<form asp-action="OrderPost" asp-controller="Posts" enctype="multipart/form-data">
-    <label asp-for="orderMessage"></label>
-    <input asp-for="orderMessage" placeholder="Your name goes here" />
-    <input type="hidden" name="PostId" id="PostId" value="@ViewBag.order">
-    <input type="submit" />
-</form>
+
+    <a class="btn btn-primary" href="/post/@ViewBag.order" role="button">Back</a>
+    <br>
+    <form asp-action="OrderPost" asp-controller="Posts" enctype="multipart/form-data">
+        <div class="mb-3" style="padding-top: 10px; width: 98%; margin: auto;">
+            <label for="exampleFormControlTextarea1" class="form-label">Order Message</label>
+            <textarea class="form-control" id="orderMessage" name="orderMessage" rows="3"></textarea>
+        </div>
+        <input type="hidden" name="PostId" id="PostId" value="@ViewBag.order">
+        <input type="submit" class="btn btn-primary"/>
+    </form>
+
+

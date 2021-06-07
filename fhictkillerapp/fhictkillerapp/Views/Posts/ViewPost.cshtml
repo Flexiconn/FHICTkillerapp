@@ -1,8 +1,4 @@
-﻿
-
-
-
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="background-color: black">
+﻿<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="background-color: black">
     <div class="carousel-inner">
         @foreach (var t in ViewBag.Post.images)
         {
@@ -83,14 +79,18 @@
         </div>
     </div>
 </div>
-
-<form asp-action="createReview" asp-controller="Posts" enctype="multipart/form-data">
-    <input class="star star-5" id="star-5" type="radio" value="1" name="score" /> <label class="star star-5" for="star-5"></label> <input class="star star-4" id="star-4" type="radio" value="2" name="score" /> <label class="star star-4" for="star-4"></label> <input class="star star-3" id="star-3" type="radio" value="3" name="score" /> <label class="star star-3" for="star-3"></label> <input class="star star-2" id="star-2" type="radio" value="4" name="score" /> <label class="star star-2" for="star-2"></label> <input class="star star-1" id="star-1" type="radio" value="5" name="score" /> <label class="star star-1" for="star-1"></label>
-    <textarea class="form-control" name="text" aria-label="With textarea"></textarea>
-    <input type="hidden" name="PostId" id="PostId" value="@ViewBag.Post.PostId">
-    <input type="submit" />
-</form>
-
+<div class="card">
+    <div class="card-body">
+        <form asp-action="createReview" asp-controller="Posts" enctype="multipart/form-data">
+            <label for="customRange2" class="form-label"></label>
+            <input type="range" class="form-range" min="0" max="5" id="score" name="score">
+            @*<input class="star star-5" id="star-5" type="radio" value="1" name="score" /> <label class="star star-5" for="star-5"></label> <input class="star star-4" id="star-4" type="radio" value="2" name="score" /> <label class="star star-4" for="star-4"></label> <input class="star star-3" id="star-3" type="radio" value="3" name="score" /> <label class="star star-3" for="star-3"></label> <input class="star star-2" id="star-2" type="radio" value="4" name="score" /> <label class="star star-2" for="star-2"></label> <input class="star star-1" id="star-1" type="radio" value="5" name="score" /> <label class="star star-1" for="star-1"></label>*@
+            <textarea class="form-control" name="text" aria-label="With textarea"></textarea>
+            <input type="hidden" name="PostId" id="PostId" value="@ViewBag.Post.PostId">
+            <input type="submit" />
+        </form>
+    </div>
+</div>
 
 <div class="card" style="width: 18rem;">
     <div class="card-header">

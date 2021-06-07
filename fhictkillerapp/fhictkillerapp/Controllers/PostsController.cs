@@ -43,6 +43,7 @@ namespace fhictkillerapp.Controllers
                 post.Add(new Models.Posts(t));
             }
             ViewBag.Posts = post;
+            ViewBag.postheight = 300 * Math.Ceiling((decimal)post.Count/4);
             return View();
         }
 
