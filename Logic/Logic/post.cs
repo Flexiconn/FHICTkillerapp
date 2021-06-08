@@ -9,14 +9,14 @@ namespace Logic
 {
     public class Post
     {
-        Contract.IPost Querries = GetClassPost();
+        Contract.IPost Querries;
         public bool AddPost(IFormFile myImage, string postName, string postDescription, string SessionId)
         {
-            if (CheckIfSignedIn(SessionId))
+            if (CheckIfSignedIn(Querries.GetAccountId(SessionId)))
             {
                 if (Querries.PostLimitReached(SessionId))
                 {
-                    Querries.AddPost(myImage, postName, postDescription, SessionId);
+                    Querries.AddPost(myImage, postName, postDescription, Querries.GetAccountId(SessionId));
                 }
                 return true;
             }
@@ -59,8 +59,8 @@ namespace Logic
             {
                 Data.Models.order order = new Data.Models.order();
                 order.post.PostId = postId;
-                order.buyer.Id = Querries.GetAccount(SessionId).Id;
-                Querries.AddOrder(SessionId, postId);
+                order.buyer.Id = Querries.GetAccount(Querries.GetAccountId(SessionId)).Id;
+                Querries.AddOrder(Querries.GetAccountId(SessionId), postId);
 
                 return true;
             }
@@ -74,7 +74,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.createReview(Querries.GetAccount(SessionId).Id, text,  score,  postId);
+                Querries.createReview(Querries.GetAccountId(SessionId), text,  score,  postId);
                 return true;
             }
             return false;
@@ -85,7 +85,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.createReport(SessionId, Contract.reportTypes.post, Contract.reportReasons.scam, comment, PostId);
+                Querries.createReport(Querries.GetAccountId(SessionId), Contract.reportTypes.post, Contract.reportReasons.scam, comment, PostId);
                 return true;
             }
             return false;
@@ -96,12 +96,20 @@ namespace Logic
             if (CheckIfSignedIn(SessionId))
             {
 
-                Querries.createReport(SessionId, Contract.reportTypes.review, Contract.reportReasons.scam, "test" , reviewId);
+                Querries.createReport(Querries.GetAccountId(SessionId), Contract.reportTypes.review, Contract.reportReasons.scam, "test" , reviewId);
                 return true;
             }
             return false;
         }
 
-        
+        public Post() {
+            Querries = GetClassPost();
+        }
+        public Post(string mode) {
+            if (mode == "mock") {
+                Querries = Factory.MockFactory.GetClassPost();
+            }
+        }
+
     }
 }

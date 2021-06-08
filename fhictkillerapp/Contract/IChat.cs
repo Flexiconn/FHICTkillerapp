@@ -6,7 +6,7 @@ namespace Contract
 {
     public interface IChat
     {
-        void CreateTestDB();
+        string GetAccountId(string sessionId);
         Contract.Models.Account GetAccount(string id);
         bool CheckIfSignedIn(string Id);
         void SendMessage(string Message, string id, string chatid);

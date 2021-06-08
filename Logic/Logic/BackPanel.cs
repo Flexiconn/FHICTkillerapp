@@ -8,11 +8,11 @@ namespace Logic
 {
     public class BackPanel
     {
-        Contract.IBackPanel Querries = GetClassBackpanel();
+        Contract.IBackPanel Querries;
         public Logic.Models.LogicBackPanel Index(string SessionId)
         {
             if (CheckIfSignedIn(SessionId)) { 
-                return new Logic.Models.LogicBackPanel(Querries.GetEarnings(SessionId));
+                return new Logic.Models.LogicBackPanel(Querries.GetEarnings(Querries.GetAccountId(SessionId)));
             }
             return new Logic.Models.LogicBackPanel();
         }
@@ -33,8 +33,10 @@ namespace Logic
         {
 
             if (CheckIfSignedIn(SessionId)) {
-
-                return LogicListDto.Reports(Querries.getReports(SessionId));
+                if (Querries.CheckIfAdmin(Querries.GetAccountId(SessionId)))
+                {
+                    return LogicListDto.Reports(Querries.getReports(SessionId));
+                }
             }
             return new List<Logic.Models.LogicReport>();
         }
@@ -43,8 +45,11 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.banUser(SessionId, userId);
-                return true;
+                if (Querries.CheckIfAdmin(Querries.GetAccountId(SessionId)))
+                {
+                    Querries.banUser(Querries.GetAccountId(SessionId), userId);
+                    return true;
+                }
             }
 
             return false;
@@ -54,8 +59,11 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.banUser(SessionId, Querries.GetPost(postId).PostAuthor);
-                return true;
+                if (Querries.CheckIfAdmin(Querries.GetAccountId(SessionId)))
+                {
+                    Querries.banUser(Querries.GetAccountId(SessionId), Querries.GetPost(postId).PostAuthor);
+                    return true;
+                }
             }
             
             return false;
@@ -66,14 +74,25 @@ namespace Logic
             Logic.Models.LogicPosts post = new Logic.Models.LogicPosts();
             if (CheckIfSignedIn(SessionId))
             {
-                post = new Logic.Models.LogicPosts(Querries.GetPost(Querries.GetPostByReviewId(reportId)));
-                post.reviews.Add(new Logic.Models.LogicReview(Querries.GetReportReview(reportId)));
-                return post;
+                if (Querries.CheckIfAdmin(Querries.GetAccountId(SessionId)))
+                {
+                    post = new Logic.Models.LogicPosts(Querries.GetPost(Querries.GetPostByReviewId(reportId)));
+                    post.reviews.Add(new Logic.Models.LogicReview(Querries.GetReportReview(reportId)));
+                    return post;
+                }
             }
 
             return new Logic.Models.LogicPosts();
         }
 
-        
+        public BackPanel() {
+            Querries = GetClassBackpanel();
+        }
+        public BackPanel(string mode) {
+            if (mode == "mock") {
+                Querries = Factory.MockFactory.GetClassBackpanel();
+            }
+        }
+
     }
 }

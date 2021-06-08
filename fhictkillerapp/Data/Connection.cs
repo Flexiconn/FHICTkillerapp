@@ -12,7 +12,7 @@ using ThrowawayDb;
 
 namespace Data
 {
-    public class Connection : Contract.IAccount, Contract.IPost, Contract.IChat, Contract.IBackPanel
+    public class Connection 
     {
         public bool testMode;
         private MySqlConnection connection;

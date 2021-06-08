@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static Factory.Factory;
+using static Factory.MockFactory;
 using Data;
 using Common;
 using Contract;
@@ -13,52 +13,32 @@ namespace Tests
         [TestMethod]
         public void TestLogin()
         {
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-
-            account.CreateAccount("ja", "ja");
-            new Logic.Account().LoginAccount("ja", "ja");
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Account("mock").LoginAccount("Name","Password");
         }
 
         [TestMethod]
         public void CreateAccount()
         {
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
+            new Logic.Account("mock").RegisterAccount("Name", "Password");
 
-            new Logic.Account().RegisterAccount("ja", "ja");
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
         }
 
         [TestMethod]
         public void AddFunds()
         {
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            new Logic.Account().AddfundsToAccount(10, account.LoginAccount("ja","ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Account("mock").AddfundsToAccount(20, "TestId");
         }
 
         [TestMethod]
         public void Myaccount()
         {
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            new Logic.Account().MyAccount(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Account("mock").MyAccount("TestId");
         }
 
         [TestMethod]
         public void SetPfp()
         {
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            new Logic.Account().SetPFP(null, account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Account("mock").SetPFP(null, "TestId");
         }
     }
 }

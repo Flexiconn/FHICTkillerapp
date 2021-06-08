@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.25" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Contract\Contract.csproj" />
-    <ProjectReference Include="..\Data\Data.csproj" />
-    <ProjectReference Include="..\MockData\MockData.csproj" />
   </ItemGroup>
 
 </Project>

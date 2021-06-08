@@ -9,15 +9,13 @@ namespace Logic
 {
     public class Account 
     {
-
-        Contract.IAccount Querries = GetClassAccount();
+        Contract.IAccount Querries;
 
         public Logic.Models.LogicmyAccountModel MyAccount(string SessionId)
         {
             
             if(CheckIfSignedIn(SessionId)){
-                Console.WriteLine("Data: " + Querries.GetOrdersIncoming(SessionId).Count + Querries.GetOrders(SessionId).Count);
-                return new Logic.Models.LogicmyAccountModel( new Contract.Models.myAccountModel() { PFP = Querries.GetPFP(SessionId), ordersIncoming = Querries.GetOrdersIncoming(SessionId), ordersOutgoing = Querries.GetOrders(SessionId), account = Querries.GetProfileInfo(SessionId) }) ;
+                return new Logic.Models.LogicmyAccountModel( new Contract.Models.myAccountModel() { PFP = Querries.GetPFP(Querries.GetAccountId(SessionId)), ordersIncoming = Querries.GetOrdersIncoming(Querries.GetAccountId(SessionId)), ordersOutgoing = Querries.GetOrders(Querries.GetAccountId(SessionId)), account = Querries.GetProfileInfo(Querries.GetAccountId(SessionId)) }) ;
             }
             return new Models.LogicmyAccountModel();
         }
@@ -48,9 +46,9 @@ namespace Logic
 
         public bool AddfundsToAccount(int amount, string SessionId)
         {
-            if (CheckIfSignedIn(SessionId))
+            if (CheckIfSignedIn(Querries.GetAccountId(SessionId)))
             {
-                Querries.AddFunds(amount, SessionId);
+                Querries.AddFunds(amount, Querries.GetAccountId(SessionId));
                 return true;
             }
             return false;
@@ -60,7 +58,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Querries.AddPFP(pfp, SessionId);
+                Querries.AddPFP(pfp, Querries.GetAccountId(SessionId));
                 return true;
             }
             return false;
@@ -70,7 +68,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (Querries.GetOwner(OrderId) == Querries.GetAccount(SessionId).SessionId)
+                if (Querries.GetOwner(OrderId) == Querries.GetAccount(Querries.GetAccountId(SessionId)).SessionId)
                 {
                     if (Querries.GetOrderStatus(OrderId) == "ordered")
                     {
@@ -101,7 +99,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (Querries.GetOwner(OrderId) == Querries.GetAccount(SessionId).SessionId)
+                if (Querries.GetOwner(OrderId) == Querries.GetAccount(Querries.GetAccountId(SessionId)).SessionId)
                 {
                     if (Querries.GetOrderStatus(OrderId) == "ordered")
                     {
@@ -114,5 +112,14 @@ namespace Logic
             return false;
         }
 
+        public Account() {
+            Querries = GetClassAccount();
+        }
+
+        public Account(string mode) {
+            if (mode == "mock") {
+                Querries = Factory.MockFactory.GetClassAccount();
+            }
+        }
     }
 }

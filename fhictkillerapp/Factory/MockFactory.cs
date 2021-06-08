@@ -1,10 +1,11 @@
-﻿using Data;
-using System;
-using Contract;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using MockData;
 
 namespace Factory
 {
-    public static class Factory
+    public class MockFactory
     {
         public static Contract.IChat GetClassChat()
         {

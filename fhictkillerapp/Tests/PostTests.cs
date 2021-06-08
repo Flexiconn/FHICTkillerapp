@@ -13,61 +13,21 @@ namespace Tests
         [TestMethod]
         public void GetPosts()
         {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            new Logic.Post().Index();
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Post("mock").Index();
 
         }
 
         [TestMethod]
         public void GetPost()
         {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            new Logic.Post().ViewPost(test.getPostFromSesId(account.LoginAccount("ja", "ja")));
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
-
-        }
-
-        [TestMethod]
-        public void GetReviews()
-        {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            post.createReview(account.LoginAccount("ja", "ja"), "test text", 5, test.getPostFromSesId(account.LoginAccount("ja", "ja")));
-            post.GetReview(account.LoginAccount("ja", "ja"));
-            test.cleanReview(account.LoginAccount("ja", "ja"));
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
-
-
+            new Logic.Post("mock").ViewPost("TestPostId");
         }
 
 
 
         [TestMethod]
         public void OrderPost() {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            new Logic.Post().OrderPost("Order", test.getOrderFromSesId(account.LoginAccount("ja", "ja")), account.LoginAccount("ja", "ja"));
-            test.cleanOrder(test.getOrderFromSesId(account.LoginAccount("ja", "ja")));
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Post("mock").OrderPost("TestMessage", "TestPostId", "TestId");
         }
 
 
@@ -75,43 +35,19 @@ namespace Tests
         [TestMethod]
         public void CreateReview()
         {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            post.AddOrder(account.LoginAccount("ja", "ja"), test.getPostFromSesId(account.LoginAccount("ja", "ja")));
-            new Logic.Post().createReview("test",5, test.getOrderFromSesId(account.LoginAccount("ja", "ja")), account.LoginAccount("ja", "ja"));
-            test.cleanReview(account.LoginAccount("ja", "ja"));
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Post("mock").createReview("TestText", 5, "TestPostId", "TestId");
         }
 
         [TestMethod]
         public void CreateReport()
         {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            new Logic.Post().createReport(1, "test", test.getPostFromSesId(account.LoginAccount("ja", "ja")), account.LoginAccount("ja", "ja"));
-            test.cleanReport(account.LoginAccount("ja", "ja"));
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
-
+            new Logic.Post("mock").createReport(1, "TestComment", "TestPostId", "TestId");
         }
 
         [TestMethod]
         public void Addpost()
         {
-            IPost post = GetClassPost();
-            IAccount account = GetClassAccount();
-            Data.TestQuerries test = new TestQuerries();
-            account.CreateAccount("ja", "ja");
-            post.AddPost(null, "postName", "postDescription ", account.LoginAccount("ja", "ja"));
-            test.cleanPost(account.LoginAccount("ja", "ja"));
-            test.cleanAccount(account.LoginAccount("ja", "ja"));
+            new Logic.Post("mock").AddPost(null,"TestPostName", "TestDescription", "TestId");
         }
     }
 }

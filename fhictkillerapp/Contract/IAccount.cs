@@ -8,8 +8,8 @@ namespace Contract
 {
     public interface IAccount
     {
-        void start();
-        void CreateTestDB();
+        string GetAccountId(string SessionId);
+
         Contract.Models.Account GetAccount(string id);
         void CreateAccount(string Password, string Name);
         string LoginAccount(string Password, string Name);

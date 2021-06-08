@@ -8,8 +8,7 @@ namespace Contract
 {
     public interface IPost
     {
-        void start();
-        void CreateTestDB();
+        string GetAccountId(string SessionId);
         Contract.Models.Account GetAccount(string id);
         void AddPost(IFormFile myImage, string postName, string postDescription, string sesId);
         List<Contract.Models.Posts> GetPosts();
