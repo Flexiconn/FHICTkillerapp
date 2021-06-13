@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MockData
 {
-    public class ChatDbConnection : Contract.IChat
+    public class MockChatDbConnection : Contract.IChat
     {
         public bool testMode;
         private MySqlConnection connection;
@@ -15,7 +15,7 @@ namespace MockData
         private string uid;
         private string password;
 
-        public ChatDbConnection()
+        public MockChatDbConnection()
         {
             Initialize();
         }

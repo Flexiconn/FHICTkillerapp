@@ -10,7 +10,7 @@ namespace fhictkillerapp.Controllers
 {
     public class backPanelController : Controller
     {
-        Logic.BackPanelLogic Logic = new Logic.BackPanelLogic();
+        Logic.BackPanelContainer Logic = new Logic.BackPanelContainer();
 
         public ActionResult Index()
         {

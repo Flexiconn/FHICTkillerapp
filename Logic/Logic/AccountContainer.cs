@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Contract;
 namespace Logic
 {
-    public class AccountLogic 
+    public class AccountContainer 
     {
         Contract.IAccount IAccount;
 
@@ -115,11 +115,11 @@ namespace Logic
             return false;
         }
 
-        public AccountLogic() {
+        public AccountContainer() {
             IAccount = Factory.Factory.GetAccountDAL();
         }
 
-        public AccountLogic(string mode) {
+        public AccountContainer(string mode) {
             if (mode == "mock") {
                 IAccount = Factory.MockFactory.GetClassAccount();
             }

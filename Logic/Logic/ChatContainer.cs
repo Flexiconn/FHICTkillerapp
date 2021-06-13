@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Logic
 {
-    public class ChatLogic
+    public class ChatContainer
     {
         Contract.IChat IChat;
         public List<Logic.Models.LogicClientChat> GetChat(string id, string sessionId)
@@ -67,10 +67,10 @@ namespace Logic
             return false;
         }
 
-        public ChatLogic() {
+        public ChatContainer() {
             IChat = Factory.Factory.GetChatDAL();
         }
-        public ChatLogic(string mode)
+        public ChatContainer(string mode)
         {
             if (mode == "mock") {
                 IChat = Factory.MockFactory.GetClassChat();

@@ -13,19 +13,19 @@ namespace Tests
         [TestMethod]
         public void SendMessage()
         {
-            new Logic.ChatLogic("mock").SendMessage("TestMessage", "TestChatId", "TestId");
+            new Logic.ChatContainer("mock").SendMessage("TestMessage", "TestChatId", "TestId");
         }
 
         [TestMethod]
         public void GetMessages()
         {
-            new Logic.ChatLogic("mock").Index("TestChatId", "TestId");
+            new Logic.ChatContainer("mock").Index("TestChatId", "TestId");
         }
 
         [TestMethod]
         public void CreateReport()
         {
-            new Logic.ChatLogic("mock").createReport(1, "TestComment", "TestChatId", "TestId");
+            new Logic.ChatContainer("mock").createReport(1, "TestComment", "TestChatId", "TestId");
         }
     }
 }

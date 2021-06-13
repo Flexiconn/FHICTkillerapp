@@ -13,33 +13,33 @@ namespace Tests
         [TestMethod]
         public void Index()
         {
-            new Logic.BackPanelLogic("mock").Index("TestId");
+            new Logic.BackPanelContainer("mock").Index("TestId");
         }
 
         [TestMethod]
         public void Admin()
         {
-            new Logic.BackPanelLogic("mock").Admin("TestId");
+            new Logic.BackPanelContainer("mock").Admin("TestId");
         }
 
         [TestMethod]
         public void BanUser()
         {
-            new Logic.BackPanelLogic("mock").BanUser("BanId", "TestID");
+            new Logic.BackPanelContainer("mock").BanUser("BanId", "TestID");
 
         }
 
         [TestMethod]
         public void BanUserByPost()
         {
-            new Logic.BackPanelLogic("mock").BanUserByPost("PostId", "TestId");
+            new Logic.BackPanelContainer("mock").BanUserByPost("PostId", "TestId");
 
         }
 
         [TestMethod]
         public void ViewReportPost()
         {
-            new Logic.BackPanelLogic("mock").ViewReportPost("ReportId", "TestId");
+            new Logic.BackPanelContainer("mock").ViewReportPost("ReportId", "TestId");
         }
     }
 }

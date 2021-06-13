@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MockData
 {
-    public class BackPanelDbConnection : Contract.IBackPanel
+    public class MockBackPanelDbConnection : Contract.IBackPanel
     {
         public bool testMode;
         private MySqlConnection connection;
@@ -14,7 +14,7 @@ namespace MockData
         private string uid;
         private string password;
 
-        public BackPanelDbConnection()
+        public MockBackPanelDbConnection()
         {
             Initialize();
         }

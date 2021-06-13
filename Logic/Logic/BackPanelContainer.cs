@@ -6,7 +6,7 @@ using static Factory.Factory;
 
 namespace Logic
 {
-    public class BackPanelLogic
+    public class BackPanelContainer
     {
         Contract.IBackPanel IBackPanel;
         public Logic.Models.LogicBackPanel GetBackPanelInfo(string SessionId)
@@ -85,10 +85,10 @@ namespace Logic
             return new Logic.Models.LogicPosts();
         }
 
-        public BackPanelLogic() {
+        public BackPanelContainer() {
             IBackPanel = Factory.Factory.GetBackpanelDAL();
         }
-        public BackPanelLogic(string mode) {
+        public BackPanelContainer(string mode) {
             if (mode == "mock") {
                 IBackPanel = Factory.MockFactory.GetClassBackpanel();
             }

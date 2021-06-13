@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MockData
 {
-    public class PostDbConnection : Contract.IPost
+    public class MockPostDbConnection : Contract.IPost
     {
         private MySqlConnection connection;
         private string server;
@@ -15,7 +15,7 @@ namespace MockData
         private string uid;
         private string password;
 
-        public PostDbConnection()
+        public MockPostDbConnection()
         {
             Initialize();
         }

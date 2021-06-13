@@ -14,7 +14,7 @@ namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
-        Logic.PostLogic Logic = new Logic.PostLogic();
+        Logic.PostContainer Logic = new Logic.PostContainer();
         // GET: PostsController
 
         [HttpPost]

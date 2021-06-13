@@ -10,7 +10,7 @@ namespace fhictkillerapp.Controllers
 {
     public class AccountController : Controller
     {
-        Logic.AccountLogic Logic = new Logic.AccountLogic();
+        Logic.AccountContainer Logic = new Logic.AccountContainer();
         public IActionResult Index()
         {
             return View();

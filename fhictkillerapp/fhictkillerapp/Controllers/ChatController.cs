@@ -10,7 +10,7 @@ namespace fhictkillerapp.Controllers
 {
     public class ChatController : Controller
     {
-        Logic.ChatLogic Logic = new Logic.ChatLogic();
+        Logic.ChatContainer Logic = new Logic.ChatContainer();
         [Route("chat/{id}")]
         public IActionResult Index(string id)
         {

@@ -7,7 +7,7 @@ using static Factory.Factory;
 
 namespace Logic
 {
-    public class PostLogic
+    public class PostContainer
     {
         Contract.IPost IPost;
         public bool AddPost(IFormFile myImage, string postName, string postDescription, string SessionId)
@@ -102,10 +102,10 @@ namespace Logic
             return false;
         }
 
-        public PostLogic() {
+        public PostContainer() {
             IPost = Factory.Factory.GetPostDAL();
         }
-        public PostLogic(string mode) {
+        public PostContainer(string mode) {
             if (mode == "mock") {
                 IPost = Factory.MockFactory.GetClassPost();
             }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MockData
 {
-    public class AccountDbConnection : Contract.IAccount
+    public class MockAccountDbConnection : Contract.IAccount
     {
         public bool testMode;
         private MySqlConnection connection;
@@ -17,7 +17,7 @@ namespace MockData
         private string uid;
         private string password;
 
-        public AccountDbConnection()
+        public MockAccountDbConnection()
         {
             Initialize();
         }
