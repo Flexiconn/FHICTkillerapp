@@ -10,30 +10,11 @@ namespace Data
 {
     public class AccountDbConnection : Contract.IAccount
     {
-        public bool testMode;
         private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
 
         public AccountDbConnection()
         {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-
-            server = "localhost";
-            database = "killerapp";
-            uid = "root";
-            password = "root";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-            database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            connection = new MySqlConnection(connectionString);
+            connection = new MySqlConnection(ConnenctionString.GetConnectionString());
         }
 
         private void open()
@@ -260,28 +241,20 @@ namespace Data
             close();
         }
 
-        public void AddPFP(IFormFile pfp, string Id)
+        public void AddPFP(string Path, string ParentId, string Id)
         {
             open();
-
-
-            string pathString = System.IO.Path.Combine("wwwroot/data/IMG/pfp/", Id);
-            System.IO.Directory.CreateDirectory(pathString);
-            pfp.CopyTo(new FileStream(System.IO.Path.Combine(pathString, pfp.FileName.ToString()), FileMode.Create));
-
-
-
             string query = $"INSERT INTO pfp (Id, Path, Parent) VALUES(Id, @Path, @Parent); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Id", Guid.NewGuid().ToString());
-            cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/pfp/", Id + "/"), pfp.FileName.ToString()));
+            cmd.Parameters.AddWithValue("@Id", Id);
+            cmd.Parameters.AddWithValue("@Path", Path);
             cmd.Parameters.AddWithValue("@Parent", Id);
-
-
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
         }
+
+
 
         public string GetPFP(string Id)
         {
@@ -336,7 +309,7 @@ namespace Data
             return Status;
         }
 
-        public string GetOwner(string OrderId)
+        public string GetOrderOwner(string OrderId)
         {
             open();
             //Create a data reader and Execute the command

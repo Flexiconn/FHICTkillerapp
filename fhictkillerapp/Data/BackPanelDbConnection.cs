@@ -7,33 +7,15 @@ namespace Data
 {
     public class BackPanelDbConnection : Contract.IBackPanel
     {
-        public bool testMode;
+
         private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
+
 
         public BackPanelDbConnection()
         {
-            Initialize();
+            connection = new MySqlConnection(ConnenctionString.GetConnectionString());
         }
-       
-        private void Initialize()
-        {
-
-            server = "localhost";
-            database = "killerapp";
-            uid = "root";
-            password = "root";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-            database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            connection = new MySqlConnection(connectionString);
-        }
-
-        
+               
         private void open()
         {
             connection.Open();

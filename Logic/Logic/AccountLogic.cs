@@ -61,7 +61,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                IAccount.AddPFP(pfp, IAccount.GetAccountId(SessionId));
+                IAccount.AddPFP(FileControl.AddFileToSystem(pfp,$"pfp/{IAccount.GetAccountId(SessionId)}/"), IAccount.GetAccountId(SessionId), Guid.NewGuid().ToString());
                 return true;
             }
             return false;
@@ -71,7 +71,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (IAccount.GetOwner(OrderId) == IAccount.GetAccount(IAccount.GetAccountId(SessionId)).SessionId)
+                if (IAccount.GetOrderOwner(OrderId) == IAccount.GetAccount(IAccount.GetAccountId(SessionId)).SessionId)
                 {
                     if (IAccount.GetOrderStatus(OrderId) == "ordered")
                     {
@@ -102,7 +102,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (IAccount.GetOwner(OrderId) == IAccount.GetAccount(IAccount.GetAccountId(SessionId)).SessionId)
+                if (IAccount.GetOrderOwner(OrderId) == IAccount.GetAccount(IAccount.GetAccountId(SessionId)).SessionId)
                 {
                     if (IAccount.GetOrderStatus(OrderId) == "ordered")
                     {

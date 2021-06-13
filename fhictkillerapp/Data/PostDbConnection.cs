@@ -10,30 +10,12 @@ namespace Data
     public class PostDbConnection : Contract.IPost
     {
         private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
+
 
         public PostDbConnection()
         {
-            Initialize();
+            connection = new MySqlConnection(ConnenctionString.GetConnectionString());
         }
-        
-        private void Initialize()
-        {
-
-            server = "localhost";
-            database = "killerapp";
-            uid = "root";
-            password = "root";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-            database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            connection = new MySqlConnection(connectionString);
-        }
-
         private void open()
         {
             connection.Open();
@@ -83,7 +65,19 @@ namespace Data
             return thisAccount;
         }
 
-        public bool PostLimitReached(string id)
+        public void AddImageToDB(string path, string parent, string id) {
+            open();
+            string query = $"INSERT INTO Images (Id, Path, Parent) VALUES(@Id, @Path, @Parent); ";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Parameters.AddWithValue("@Path", path);
+            cmd.Parameters.AddWithValue("@Parent", parent);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
+
+        public System.Int64 PostAmount(string id)
         {
             open();
             string query = $"SELECT COUNT(PostId) FROM `post`INNER JOIN `account` ON post.PostAuthor=account.Id WHERE Id=@Id;";
@@ -93,47 +87,21 @@ namespace Data
             //Read the data and store them in the list
             System.Int64 test = (System.Int64)cmd.ExecuteScalar();
             close();
-            if (test < 3)
-            {
-                return true;
-            }
-            return false;
+
+            return test;
         }
 
-        public void AddPost(IFormFile myImage, string postName, string postDescription, string Id)
-        {
-            string postId = Guid.NewGuid().ToString();
+        public void AddPost( string postId, string postName, string postDescription, string Id)
+        {        
             open();
-            if (myImage != null)
-            {
-                string pathString = System.IO.Path.Combine("wwwroot/data/IMG/post/", postId);
-                System.IO.Directory.CreateDirectory(pathString);
-                myImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, myImage.FileName.ToString()), FileMode.Create));
-            }
-
-
-
-
             string query = $"INSERT INTO post (PostId, PostName, PostDescription, PostAuthor) VALUES(@PostId, @PostName, @PostDescription, @PostAuthor); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@PostId", postId);
             cmd.Parameters.AddWithValue("@PostName", postName);
             cmd.Parameters.AddWithValue("@PostDescription", postDescription);
             cmd.Parameters.AddWithValue("@PostAuthor", Id);
-
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
-
-            if (myImage != null)
-            {
-                //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-                query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', @Path, '{postId}'); ";
-                cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", postId + "/"), myImage.FileName.ToString()));
-
-                //Create a data reader and Execute the command
-                cmd.ExecuteNonQuery();
-            }
             close();
         }
 
@@ -236,7 +204,7 @@ namespace Data
             return (post);
         }
 
-        public void AddOrder(string id, string postId)
+        public void AddOrder(string OrderId, string id, string postId, string ChatId)
         {
             open();
             string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES (@OrderId, @BuyerUd, @PostId, @ChatId,'ordered');";

@@ -81,36 +81,14 @@ namespace MockData
             return thisAccount;
         }
 
-        public bool PostLimitReached(string id)
+        public Int64 PostAmount(string id)
         {
-            open();
-            string query = $"SELECT COUNT(PostId) FROM `post`INNER JOIN `account` ON post.PostAuthor=account.Id WHERE Id='{id}';";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
-            //Read the data and store them in the list
-            System.Int64 test = (System.Int64)cmd.ExecuteScalar();
-            close();
-            if (test < 3)
-            {
-                return true;
-            }
-            return false;
+            return 1;
         }
 
-        public void AddPost(IFormFile myImage, string postName, string postDescription, string Id)
+        public void AddPost(string postId, string postName, string postDescription, string Id)
         {
-            string postId = Guid.NewGuid().ToString();
             open();
-            if (myImage != null)
-            {
-                string pathString = System.IO.Path.Combine("wwwroot/data/IMG/post/", postId);
-                System.IO.Directory.CreateDirectory(pathString);
-                myImage.CopyTo(new FileStream(System.IO.Path.Combine(pathString, myImage.FileName.ToString()), FileMode.Create));
-            }
-
-
-
-
             string query = $"INSERT INTO post (PostId, PostName, PostDescription, PostAuthor) VALUES(@PostId, @PostName, @PostDescription, @PostAuthor); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@PostId", postId);
@@ -120,20 +98,21 @@ namespace MockData
 
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
-
-            if (myImage != null)
-            {
-                //posts.PostFileName = System.IO.Path.Combine(pathString, insertPost.MyImage.FileName.ToString());
-                query = $"INSERT INTO images (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', @Path, '{postId}'); ";
-                cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/post/", postId + "/"), myImage.FileName.ToString()));
-
-                //Create a data reader and Execute the command
-                cmd.ExecuteNonQuery();
-            }
             close();
         }
 
+        public void AddImageToDB(string postId, string path, string Id)
+        {
+            open();
+            string query = $"INSERT INTO images (Id, Path, Parent) VALUES(@Id, @Path, @Parent); ";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
+            cmd.Parameters.AddWithValue("@Path", path);
+            cmd.Parameters.AddWithValue("@Parent", postId);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
 
 
         public List<Contract.Models.ContractPosts> GetPosts()
@@ -228,10 +207,10 @@ namespace MockData
             return (post);
         }
 
-        public void AddOrder(string id, string postId)
+        public void AddOrder(string orderId, string id, string postId, string chatId)
         {
             open();
-            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES ('{Guid.NewGuid().ToString()}', '{id}', '{postId}','{Guid.NewGuid().ToString()}','ordered');";
+            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES ('{orderId}', '{id}', '{postId}','{chatId}','ordered');";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();

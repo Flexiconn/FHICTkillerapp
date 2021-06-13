@@ -104,14 +104,11 @@ namespace MockData
             return false;
         }
 
-        public void SendMessage(string Message, string Id, string chatid)
+        public void SendMessage(DateTime dateTime, string messageId, string Message, string Id, string chatid)
         {
-            Console.WriteLine(chatid);
+
             open();
-            DateTime dateTime = DateTime.Now;
-
-
-            string query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES('{Guid.NewGuid().ToString()}','{chatid}','{Id}','{Message}','{dateTime}')";
+            string query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES('{messageId}','{chatid}','{Id}','{Message}','{dateTime}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
@@ -138,12 +135,12 @@ namespace MockData
         }
 
 
-        public void createReport(string id, Contract.reportTypes reportType, Contract.reportReasons reportReason, string comment, string reportedId)
+        public void createReport(string reportId, string id, Contract.reportTypes reportType, Contract.reportReasons reportReason, string comment, string reportedId)
         {
             open();
 
 
-            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES('{Guid.NewGuid().ToString()}','{(int)reportType}','{(int)reportReason}','{comment}','{reportedId}','{id}');";
+            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES('{reportId}','{(int)reportType}','{(int)reportReason}','{comment}','{reportedId}','{id}');";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();

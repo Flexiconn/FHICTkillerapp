@@ -8,30 +8,12 @@ namespace Data
 {
     public class ChatDbConnection : Contract.IChat
     {
-        public bool testMode;
+
         private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
 
         public ChatDbConnection()
         {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-
-            server = "localhost";
-            database = "killerapp";
-            uid = "root";
-            password = "root";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-            database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            connection = new MySqlConnection(connectionString);
+            connection = new MySqlConnection(ConnenctionString.GetConnectionString());
         }
 
         private void open()
@@ -108,16 +90,13 @@ namespace Data
             return false;
         }
 
-        public void SendMessage(string Message, string Id, string chatid)
+        public void SendMessage(DateTime dateTime, string MessageId, string Message, string Id, string chatid)
         {
-            Console.WriteLine(chatid);
             open();
-            DateTime dateTime = DateTime.Now;
-
 
             string query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES(@MessageId, @chatId, @AccountId, @Message, @DateTime)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@MessageId", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@MessageId", MessageId);
             cmd.Parameters.AddWithValue("@chatId", chatid);
             cmd.Parameters.AddWithValue("@AccountId", Id);
             cmd.Parameters.AddWithValue("@Message", Message);
@@ -149,14 +128,14 @@ namespace Data
         }
 
 
-        public void createReport(string id, Contract.reportTypes reportType, Contract.reportReasons reportReason, string comment, string reportedId)
+        public void createReport(string reportId, string id, Contract.reportTypes reportType, Contract.reportReasons reportReason, string comment, string reportedId)
         {
             open();
 
 
             string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES(@id, @type, @reason, @comment, @reportId, @creator);";
             MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@id", reportId);
             cmd.Parameters.AddWithValue("@type", (int)reportType);
             cmd.Parameters.AddWithValue("@reason", (int)reportReason);
             cmd.Parameters.AddWithValue("@comment", comment);

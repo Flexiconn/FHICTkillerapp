@@ -50,7 +50,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                IChat.SendMessage(message, IChat.GetAccountId(SessionId), ChatId);
+                IChat.SendMessage(DateTime.Now, Guid.NewGuid().ToString() ,message, IChat.GetAccountId(SessionId), ChatId);
                 return true;
             }
             return false;
@@ -60,7 +60,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                IChat.createReport(IChat.GetAccountId(SessionId), Contract.reportTypes.post, Contract.reportReasons.scam, comment, chatId);
+                IChat.createReport(Guid.NewGuid().ToString(), IChat.GetAccountId(SessionId), Contract.reportTypes.post, Contract.reportReasons.scam, comment, chatId);
 
                 return true;
             }

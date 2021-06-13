@@ -14,9 +14,11 @@ namespace Logic
         {
             if (CheckIfSignedIn(IPost.GetAccountId(SessionId)))
             {
-                if (IPost.PostLimitReached(SessionId))
+                if (IPost.PostAmount(SessionId) < 3)
                 {
-                    IPost.AddPost(myImage, postName, postDescription, IPost.GetAccountId(SessionId));
+                    string postId = Guid.NewGuid().ToString();
+                    IPost.AddPost(postId, postName, postDescription, IPost.GetAccountId(SessionId));
+                    IPost.AddImageToDB(postId, FileControl.AddFileToSystem(myImage, $"post/{postId}"), IPost.GetAccountId(SessionId));
                 }
                 return true;
             }
@@ -57,10 +59,8 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                Data.Models.DataOrder order = new Data.Models.DataOrder();
-                order.post.PostId = postId;
-                order.buyer.Id = IPost.GetAccount(IPost.GetAccountId(SessionId)).Id;
-                IPost.AddOrder(IPost.GetAccountId(SessionId), postId);
+                
+                IPost.AddOrder(Guid.NewGuid().ToString(), IPost.GetAccountId(SessionId), postId, Guid.NewGuid().ToString());
 
                 return true;
             }

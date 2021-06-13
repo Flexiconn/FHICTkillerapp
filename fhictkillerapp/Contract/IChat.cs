@@ -9,8 +9,8 @@ namespace Contract
         string GetAccountId(string sessionId);
         Contract.Models.ContractAccount GetAccount(string id);
         bool CheckIfSignedIn(string Id);
-        void SendMessage(string Message, string id, string chatid);
+        void SendMessage(DateTime dateTime, string messageId, string Message, string Id, string chatid);
         List<Contract.Models.ContractClientChat> GetMessages(string chatId, string id);
-        void createReport(string id, Contract.reportTypes reportType, reportReasons reportReason, string comment, string reportedId);
+        void createReport(string reportId, string id, Contract.reportTypes reportType, reportReasons reportReason, string comment, string reportedId);
     }
 }
