@@ -1,21 +1,20 @@
-﻿using Common;
-using Common.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using fhictkillerapp.Models;
 
 namespace fhictkillerapp.Controllers
 {
     public class ChatController : Controller
     {
-        Logic.Chat Logic = new Logic.Chat();
+        Logic.ChatLogic Logic = new Logic.ChatLogic();
         [Route("chat/{id}")]
         public IActionResult Index(string id)
         {
-            ViewBag.chat = Logic.Index(id, HttpContext.Session.GetString("SessionId"));
+            ViewBag.chat = Logic.GetChat(id, HttpContext.Session.GetString("SessionId"));
             ViewBag.chatid = id;
             return View();
         }
@@ -28,7 +27,7 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMessage(ClientChat chat, string ChatId)
+        public ActionResult SendMessage(ViewClientChat chat, string ChatId)
         {
             if (Logic.SendMessage(chat.Message, HttpContext.Session.GetString("SessionId"), ChatId))
             {

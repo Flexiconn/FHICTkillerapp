@@ -4,23 +4,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Common;
 using System.Net.Http.Headers;
-using Common.Models;
 using System.IO;
 using System.Web;
 using Logic;
+using fhictkillerapp.Models;
 
 namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
-        Logic.Post Logic = new Logic.Post();
-        Data.Connection Querries = new Data.Connection();
+        Logic.PostLogic Logic = new Logic.PostLogic();
         // GET: PostsController
 
         [HttpPost]
-        public ActionResult AddPost(PostUpload postUpload)
+        public ActionResult AddPost(ViewPostUpload postUpload)
         {
 
             if (Logic.AddPost(postUpload.MyImage, postUpload.PostName, postUpload.PostDescription, HttpContext.Session.GetString("SessionId")))
@@ -38,9 +36,9 @@ namespace fhictkillerapp.Controllers
         public ActionResult Index()
         {
             Console.WriteLine("sessionId" + HttpContext.Session.GetString("SessionId"));
-            List<fhictkillerapp.Models.Posts> post = new List<fhictkillerapp.Models.Posts>();
-            foreach (var t in Logic.Index()) {
-                post.Add(new Models.Posts(t));
+            List<fhictkillerapp.Models.ViewPosts> post = new List<fhictkillerapp.Models.ViewPosts>();
+            foreach (var t in Logic.GetPostsList()) {
+                post.Add(new Models.ViewPosts(t));
             }
             ViewBag.Posts = post;
             ViewBag.postheight = 300 * Math.Ceiling((decimal)post.Count/4);
@@ -51,7 +49,7 @@ namespace fhictkillerapp.Controllers
         [Route("post/{id}")]
         public ActionResult ViewPost(string Id)
         {
-            Models.Posts post = new Models.Posts(Logic.ViewPost(Id));
+            Models.ViewPosts post = new Models.ViewPosts(Logic.ViewPost(Id));
             ViewBag.Post = post;
             ViewBag.Review = post.reviews;
             return View();
@@ -90,7 +88,7 @@ namespace fhictkillerapp.Controllers
 
         [HttpPost]
 
-        public ActionResult createReview(Review review) 
+        public ActionResult createReview(ViewReview review) 
         {
             if (Logic.createReview(review.text, review.score,review.postId, HttpContext.Session.GetString("SessionId")))
             {

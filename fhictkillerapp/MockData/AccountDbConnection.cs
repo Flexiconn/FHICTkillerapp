@@ -51,10 +51,10 @@ namespace MockData
             return "testId";
         }
 
-        public Contract.Models.Account GetAccount(string id)
+        public Contract.Models.ContractAccount GetAccount(string id)
         {
 
-            return new Contract.Models.Account() { Id = "TestId", Balance = "69", Name= "TestName", Password = "TestPassword", SessionId = "TestSessionId" };
+            return new Contract.Models.ContractAccount() { Id = "TestId", Balance = "69", Name= "TestName", Password = "TestPassword", SessionId = "TestSessionId" };
         }
 
         public string GetAccountName(string id)
@@ -82,24 +82,24 @@ namespace MockData
             return true;
         }
 
-        public Contract.Models.Account GetProfileInfo(string Id)
+        public Contract.Models.ContractAccount GetProfileInfo(string Id)
         {
-            return new Contract.Models.Account() {Name = "TestName", Balance = "69" };
+            return new Contract.Models.ContractAccount() {Name = "TestName", Balance = "69" };
         }
 
-        public List<Contract.Models.order> GetOrders(string Id)
+        public List<Contract.Models.Contractorder> GetOrders(string Id)
         {
-            List<Contract.Models.order> orders = new List<Contract.Models.order>();
+            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
             //Create a data reader and Execute the command
-            orders.Add(new Contract.Models.order() { orderId = "TestOrderId", postId = "TestPostId", status = "Ordered", chatId = "TestChatId" });
+            orders.Add(new Contract.Models.Contractorder() { orderId = "TestOrderId", postId = "TestPostId", status = "Ordered", chatId = "TestChatId" });
             return orders;
         }
 
-        public List<Contract.Models.order> GetOrdersIncoming(string Id)
+        public List<Contract.Models.Contractorder> GetOrdersIncoming(string Id)
         {
-            List<Contract.Models.order> orders = new List<Contract.Models.order>();
+            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
             //Create a data reader and Execute the command
-            orders.Add(new Contract.Models.order() { orderId = "TestOrderId", postId = "TestPostId", status = "Ordered", chatId = "TestChatId" });
+            orders.Add(new Contract.Models.Contractorder() { orderId = "TestOrderId", postId = "TestPostId", status = "Ordered", chatId = "TestChatId" });
             return orders;
         }
 

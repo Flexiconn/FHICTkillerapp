@@ -18,7 +18,7 @@ namespace Logic.Models
         
         }
 
-        public LogicPostUpload(Contract.Models.PostUpload dto)
+        public LogicPostUpload(Contract.Models.ContractPostUpload dto)
         {
             this.PostId = dto.PostId;
             this.MyImage = dto.MyImage;

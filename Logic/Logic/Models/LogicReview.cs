@@ -17,7 +17,7 @@ namespace Logic.Models
         
         }
 
-        public LogicReview(Contract.Models.Review dto)
+        public LogicReview(Contract.Models.ContractReview dto)
         {
             this.Account = new LogicAccount() { Balance = dto.Account.Balance, Id = dto.Account.Balance, Name = dto.Account.Name, Password = dto.Account.Password, SessionId = dto.Account.SessionId };
             this.postId = dto.postId;

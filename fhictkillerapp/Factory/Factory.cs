@@ -6,22 +6,22 @@ namespace Factory
 {
     public static class Factory
     {
-        public static Contract.IChat GetClassChat()
+        public static Contract.IChat GetChatDAL()
         {
             Contract.IChat chat = new ChatDbConnection();
             return chat;
         }
-        public static Contract.IBackPanel GetClassBackpanel()
+        public static Contract.IBackPanel GetBackpanelDAL()
         {
             Contract.IBackPanel BackPanel = new BackPanelDbConnection();
             return BackPanel;
         }
-        public static Contract.IPost GetClassPost()
+        public static Contract.IPost GetPostDAL()
         {
             Contract.IPost Post = new PostDbConnection();
             return Post;
         }
-        public static Contract.IAccount GetClassAccount()
+        public static Contract.IAccount GetAccountDAL()
         {
             Contract.IAccount Account = new AccountDbConnection();
             return Account;

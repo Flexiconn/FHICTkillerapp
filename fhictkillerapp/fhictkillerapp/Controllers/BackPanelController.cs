@@ -10,19 +10,19 @@ namespace fhictkillerapp.Controllers
 {
     public class backPanelController : Controller
     {
-        Logic.BackPanel Logic = new Logic.BackPanel();
+        Logic.BackPanelLogic Logic = new Logic.BackPanelLogic();
 
         public ActionResult Index()
         {
-            ViewBag.earnings = Logic.Index(HttpContext.Session.GetString("SessionId"));
+            ViewBag.earnings = Logic.GetBackPanelInfo(HttpContext.Session.GetString("SessionId"));
             return View();
         }
 
         public ActionResult Admin()
         {
-            List<fhictkillerapp.Models.Report> reports = new List<fhictkillerapp.Models.Report>();
-            foreach (var t in Logic.Admin(HttpContext.Session.GetString("SessionId"))) {
-                reports.Add(new fhictkillerapp.Models.Report(t));
+            List<fhictkillerapp.Models.ViewReport> reports = new List<fhictkillerapp.Models.ViewReport>();
+            foreach (var t in Logic.GetAdminPanelInfo(HttpContext.Session.GetString("SessionId"))) {
+                reports.Add(new fhictkillerapp.Models.ViewReport(t));
             }
             ViewBag.reports = reports;
             return View();

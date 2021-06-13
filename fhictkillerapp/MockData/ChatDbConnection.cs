@@ -60,14 +60,14 @@ namespace MockData
             return SessionId;
         }
 
-        public Contract.Models.Account GetAccount(string id)
+        public Contract.Models.ContractAccount GetAccount(string id)
         {
             open();
             string query = $"SELECT * FROM account WHERE Id='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            Contract.Models.Account thisAccount = new Contract.Models.Account();
+            Contract.Models.ContractAccount thisAccount = new Contract.Models.ContractAccount();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
@@ -118,10 +118,10 @@ namespace MockData
             close();
         }
 
-        public List<Contract.Models.ClientChat> GetMessages(string chatId, string id)
+        public List<Contract.Models.ContractClientChat> GetMessages(string chatId, string id)
         {
             open();
-            List<Contract.Models.ClientChat> msgs = new List<Contract.Models.ClientChat>();
+            List<Contract.Models.ContractClientChat> msgs = new List<Contract.Models.ContractClientChat>();
             string query = $"SELECT * FROM `chat` INNER JOIN account ON chat.AccountId = account.Id WHERE chatId ='{chatId}';";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dataReader = cmd.ExecuteReader();
@@ -129,7 +129,7 @@ namespace MockData
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                msgs.Add(new Contract.Models.ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString(), DateTime = DateTime.Parse(dataReader["DateTime"].ToString()),});
+                msgs.Add(new Contract.Models.ContractClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString(), DateTime = DateTime.Parse(dataReader["DateTime"].ToString()),});
             }
             dataReader.Close();
             close();

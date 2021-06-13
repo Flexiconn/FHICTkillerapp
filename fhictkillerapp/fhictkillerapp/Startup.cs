@@ -13,11 +13,9 @@ namespace fhictkillerapp
 {
     public class Startup
     {
-        Connection con = new Connection();
         
         public Startup(IConfiguration configuration)
         {
-            con.start();
             Configuration = configuration;
         }
             

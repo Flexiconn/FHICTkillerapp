@@ -7,10 +7,10 @@ namespace Contract
     public interface IChat
     {
         string GetAccountId(string sessionId);
-        Contract.Models.Account GetAccount(string id);
+        Contract.Models.ContractAccount GetAccount(string id);
         bool CheckIfSignedIn(string Id);
         void SendMessage(string Message, string id, string chatid);
-        List<Contract.Models.ClientChat> GetMessages(string chatId, string id);
+        List<Contract.Models.ContractClientChat> GetMessages(string chatId, string id);
         void createReport(string id, Contract.reportTypes reportType, reportReasons reportReason, string comment, string reportedId);
     }
 }

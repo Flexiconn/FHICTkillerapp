@@ -13,21 +13,21 @@ namespace Tests
         [TestMethod]
         public void GetPosts()
         {
-            new Logic.Post("mock").Index();
+            new Logic.PostLogic("mock").Index();
 
         }
 
         [TestMethod]
         public void GetPost()
         {
-            new Logic.Post("mock").ViewPost("TestPostId");
+            new Logic.PostLogic("mock").ViewPost("TestPostId");
         }
 
 
 
         [TestMethod]
         public void OrderPost() {
-            new Logic.Post("mock").OrderPost("TestMessage", "TestPostId", "TestId");
+            new Logic.PostLogic("mock").OrderPost("TestMessage", "TestPostId", "TestId");
         }
 
 
@@ -35,19 +35,19 @@ namespace Tests
         [TestMethod]
         public void CreateReview()
         {
-            new Logic.Post("mock").createReview("TestText", 5, "TestPostId", "TestId");
+            new Logic.PostLogic("mock").createReview("TestText", 5, "TestPostId", "TestId");
         }
 
         [TestMethod]
         public void CreateReport()
         {
-            new Logic.Post("mock").createReport(1, "TestComment", "TestPostId", "TestId");
+            new Logic.PostLogic("mock").createReport(1, "TestComment", "TestPostId", "TestId");
         }
 
         [TestMethod]
         public void Addpost()
         {
-            new Logic.Post("mock").AddPost(null,"TestPostName", "TestDescription", "TestId");
+            new Logic.PostLogic("mock").AddPost(null,"TestPostName", "TestDescription", "TestId");
         }
     }
 }

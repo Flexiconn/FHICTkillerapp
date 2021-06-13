@@ -13,32 +13,32 @@ namespace Tests
         [TestMethod]
         public void TestLogin()
         {
-            new Logic.Account("mock").LoginAccount("Name","Password");
+            new Logic.AccountLogic("mock").LoginAccount("Name","Password");
         }
 
         [TestMethod]
         public void CreateAccount()
         {
-            new Logic.Account("mock").RegisterAccount("Name", "Password");
+            new Logic.AccountLogic("mock").RegisterAccount("Name", "Password");
 
         }
 
         [TestMethod]
         public void AddFunds()
         {
-            new Logic.Account("mock").AddfundsToAccount(20, "TestId");
+            new Logic.AccountLogic("mock").AddfundsToAccount(20, "TestId");
         }
 
         [TestMethod]
         public void Myaccount()
         {
-            new Logic.Account("mock").MyAccount("TestId");
+            new Logic.AccountLogic("mock").MyAccount("TestId");
         }
 
         [TestMethod]
         public void SetPfp()
         {
-            new Logic.Account("mock").SetPFP(null, "TestId");
+            new Logic.AccountLogic("mock").SetPFP(null, "TestId");
         }
     }
 }

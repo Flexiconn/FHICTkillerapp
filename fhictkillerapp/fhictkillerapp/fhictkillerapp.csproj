@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common\Common.csproj" />
     <ProjectReference Include="..\..\Logic\Logic\Logic.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
   </ItemGroup>

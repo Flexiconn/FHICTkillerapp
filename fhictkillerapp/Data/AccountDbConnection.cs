@@ -49,8 +49,10 @@ namespace Data
         public string GetAccountId(string SessionId)
         {
             open();
-            string query = $"SELECT Id FROM account WHERE SessionId='{SessionId}'";
+            string query = $"SELECT Id FROM account WHERE SessionId=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", SessionId);
+
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
@@ -62,14 +64,16 @@ namespace Data
             return SessionId;
         }
 
-        public Contract.Models.Account GetAccount(string id)
+        public Contract.Models.ContractAccount GetAccount(string id)
         {
             open();
-            string query = $"SELECT * FROM account WHERE Id='{id}'";
+            string query = $"SELECT * FROM account WHERE Id=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            Contract.Models.Account thisAccount = new Contract.Models.Account();
+            Contract.Models.ContractAccount thisAccount = new Contract.Models.ContractAccount();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
@@ -86,8 +90,9 @@ namespace Data
         public string GetAccountName(string id)
         {
             open();
-            string query = $"SELECT * FROM account WHERE Id='{id}'";
+            string query = $"SELECT * FROM account WHERE Id=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             dataReader.Read();
@@ -102,52 +107,60 @@ namespace Data
         }
 
  
-        public void CreateAccount(string Password, string Name)
+        public void CreateAccount(string Password, string Name, string Id)
         {
             open();
-            string query = $"INSERT INTO account (Id, SessionId, Name, Password) VALUES('{Guid.NewGuid().ToString().ToUpper()}', '{null}', '{Name}','{Password}'); ";
+            string query = $"INSERT INTO account (Id, Name, Password) VALUES(@Id, @Name, @Password); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
+            cmd.Parameters.AddWithValue("@Name", Name);
+            cmd.Parameters.AddWithValue("@Password", Password);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
         }
 
        
-        public string LoginAccount(string Password, string Name)
+        public Contract.Models.ContractAccount LoginAccountCheck(string Password, string Name)
         {
             open();
-            string query = $"SELECT * FROM account WHERE Password='{Password}' AND Name='{Name}'";
+            string query = $"SELECT * FROM account WHERE Password=@Password AND Name=@Name";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Name", Name);
+            cmd.Parameters.AddWithValue("@Password", Password);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            Contract.Models.Account acc = new Contract.Models.Account();
+            Contract.Models.ContractAccount acc = new Contract.Models.ContractAccount();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
-                acc.Name = dataReader["Name"].ToString();
-                acc.Password = dataReader["Password"].ToString();
                 acc.Id = dataReader["Id"].ToString();
             }
             dataReader.Close();
-            if (acc.Name == Name && acc.Password == Password)
-            {
-                acc.SessionId = Guid.NewGuid().ToString();
-                query = $"UPDATE account SET SessionId='{acc.SessionId}' WHERE Id='{acc.Id}'";
-                cmd = new MySqlCommand(query, connection);
-                //Create a data reader and Execute the command
-                cmd.ExecuteNonQuery();
-                close();
-                return (acc.SessionId);
-            }
+            
             close();
-            return ("nope");
+            return acc;
+        }
+
+        public string SetSessionId(string Id, string newSessionId) {
+
+                
+            string query = $"UPDATE account SET SessionId=@SessionId WHERE Id=@Id";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@SessionId", newSessionId);
+            cmd.Parameters.AddWithValue("@Id", Id);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+            return (newSessionId);
         }
 
         public bool CheckIfSignedIn(string Id)
         {
             open();
-            string query = $"SELECT SessionId FROM account WHERE SessionId='{Id}'";
+            string query = $"SELECT SessionId FROM account WHERE SessionId=@SessionId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@SessionId", Id);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
@@ -164,15 +177,15 @@ namespace Data
             return false;
         }
 
-        public Contract.Models.Account GetProfileInfo(string Id)
+        public Contract.Models.ContractAccount GetProfileInfo(string Id)
         {
             open();
-
-            string query = $"SELECT * FROM account WHERE Id='{Id}';";
+            string query = $"SELECT * FROM account WHERE Id=@Id;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
-            Contract.Models.Account acc = new Contract.Models.Account();
+            Contract.Models.ContractAccount acc = new Contract.Models.ContractAccount();
             while (dataReader.Read())
             {
                 acc.Name = dataReader["Name"].ToString();
@@ -183,35 +196,37 @@ namespace Data
             return acc;
         }
 
-        public List<Contract.Models.order> GetOrders(string Id)
+        public List<Contract.Models.Contractorder> GetOrders(string Id)
         {
             open();
-            string query = $"SELECT * FROM `order` WHERE BuyerId='{Id}';";
+            string query = $"SELECT * FROM `order` WHERE BuyerId=@Id;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            List<Contract.Models.order> orders = new List<Contract.Models.order>();
+            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                orders.Add(new Contract.Models.order() { orderId = dataReader["OrderId"].ToString(), postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
+                orders.Add(new Contract.Models.Contractorder() { orderId = dataReader["OrderId"].ToString(), postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
             }
             dataReader.Close();
             close();
             return orders;
         }
 
-        public List<Contract.Models.order> GetOrdersIncoming(string Id)
+        public List<Contract.Models.Contractorder> GetOrdersIncoming(string Id)
         {
             open();
-            string query = $"SELECT * FROM `order` INNER JOIN post ON order.PostId = post.PostId WHERE post.PostAuthor = '{Id}';";
+            string query = $"SELECT * FROM `order` INNER JOIN post ON order.PostId = post.PostId WHERE post.PostAuthor=@Id;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
             MySqlDataReader dataReader = cmd.ExecuteReader();
 
-            List<Contract.Models.order> orders = new List<Contract.Models.order>();
+            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                orders.Add(new Contract.Models.order() { postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
+                orders.Add(new Contract.Models.Contractorder() { postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
             }
             dataReader.Close();
             close();
@@ -222,8 +237,9 @@ namespace Data
         {
             open();
             float funds;
-            string query = $"SELECT * FROM account WHERE Id='{id}';";
+            string query = $"SELECT * FROM account WHERE Id=@Id;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
             dataReader.Read();
@@ -234,8 +250,11 @@ namespace Data
             dataReader.Close();
             funds = funds + amount;
             Console.WriteLine("funds: " + funds);
-            query = $"UPDATE account SET Balance='{funds}' WHERE Id='{id}';";
+            query = $"UPDATE account SET Balance=@Funds WHERE Id=@Id;";
             cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Parameters.AddWithValue("@Funds", funds);
+
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
@@ -252,9 +271,13 @@ namespace Data
 
 
 
-            string query = $"INSERT INTO pfp (Id, Path, Parent) VALUES('{Guid.NewGuid().ToString()}', '{System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/pfp/", Id + "/"), pfp.FileName.ToString())}', '{Id}'); ";
+            string query = $"INSERT INTO pfp (Id, Path, Parent) VALUES(Id, @Path, @Parent); ";
             MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@Path", System.IO.Path.Combine(System.IO.Path.Combine("/data/IMG/pfp/", Id + "/"), pfp.FileName.ToString()));
+            cmd.Parameters.AddWithValue("@Parent", Id);
+
+
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
@@ -264,8 +287,10 @@ namespace Data
         {
             open();
             string path = "";
-            string query = $"SELECT * FROM pfp WHERE Parent='{Id}'";
+            string query = $"SELECT * FROM pfp WHERE Parent=@Parent";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Parent", Id);
+
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Read the data and store them in the list
             while (dataReader.Read())
@@ -284,8 +309,9 @@ namespace Data
         {
             open();
             string status = "";
-            string query = $"SELECT * FROM `order` WHERE OrderId='{OrderId}' ;";
+            string query = $"SELECT * FROM `order` WHERE OrderId=@OrderId ;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@OrderId", OrderId);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
             while (dataReader.Read())
@@ -300,8 +326,11 @@ namespace Data
         public string ChangeOrderStatus(string OrderId, string Status)
         {
             open();
-            string query = $"UPDATE `order` SET Status='{Status}' WHERE OrderId='{OrderId}';";
+            string query = $"UPDATE `order` SET Status=@Status WHERE OrderId=@OrderId;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@OrderId", OrderId);
+            cmd.Parameters.AddWithValue("@Status", Status);
+
             cmd.ExecuteNonQuery();
             close();
             return Status;
@@ -312,8 +341,9 @@ namespace Data
             open();
             //Create a data reader and Execute the command
             string owner = "";
-            string query = $"SELECT * FROM `order` INNER JOIN `post` ON order.PostId=post.PostId WHERE OrderId='{OrderId}';";
+            string query = $"SELECT * FROM `order` INNER JOIN `post` ON order.PostId=post.PostId WHERE OrderId=@OrderId;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@OrderId", OrderId);
             MySqlDataReader dataReader = cmd.ExecuteReader();
 
             //Create a data reader and Execute the command

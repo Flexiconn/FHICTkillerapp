@@ -16,7 +16,7 @@ namespace Logic.Models
             ordersOutgoing = new List<LogicOrder>();
         }
 
-        public LogicmyAccountModel(Contract.Models.myAccountModel dto) {
+        public LogicmyAccountModel(Contract.Models.ContractmyAccountModel dto) {
             this.ordersIncoming = new List<LogicOrder>();
             this.ordersOutgoing = new List<LogicOrder>();
             foreach (var t in dto.ordersIncoming)

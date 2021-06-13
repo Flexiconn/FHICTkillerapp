@@ -23,7 +23,7 @@ namespace Logic.Models
             post = new LogicPosts();
         }
 
-        public LogicOrder(Contract.Models.order dto)
+        public LogicOrder(Contract.Models.Contractorder dto)
         {
             this.orderId = dto.orderId;
             this.orderMessage = dto.orderMessage;

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\fhictkillerapp\Contract\Contract.csproj" />
     <ProjectReference Include="..\..\fhictkillerapp\Factory\Factory.csproj" />
   </ItemGroup>
 

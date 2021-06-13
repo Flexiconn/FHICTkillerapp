@@ -14,7 +14,7 @@ namespace Logic.Models
             orders = new List<LogicOrder>();
         }
 
-        public LogicBackPanel(Contract.Models.BackPanel dto)
+        public LogicBackPanel(Contract.Models.ContractBackPanel dto)
         {
             this.orders = new List<LogicOrder>();
             foreach (var t in dto.orders) {

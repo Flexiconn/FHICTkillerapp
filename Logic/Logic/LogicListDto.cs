@@ -6,7 +6,7 @@ namespace Logic
 {
     static public class LogicListDto
     {
-        static public List<Logic.Models.LogicReview> Reviews(List<Contract.Models.Review> review) {
+        static public List<Logic.Models.LogicReview> Reviews(List<Contract.Models.ContractReview> review) {
             List<Logic.Models.LogicReview> reviews = new List<Logic.Models.LogicReview>();
             foreach (var t in review) {
                 reviews.Add(new Logic.Models.LogicReview(t));
@@ -14,7 +14,7 @@ namespace Logic
             return reviews;
         }
 
-        static public List<Logic.Models.LogicOrder> Orders(List<Contract.Models.order> order)
+        static public List<Logic.Models.LogicOrder> Orders(List<Contract.Models.Contractorder> order)
         {
             List<Logic.Models.LogicOrder> orders = new List<Logic.Models.LogicOrder>();
             foreach (var t in order)
@@ -24,7 +24,7 @@ namespace Logic
             return orders;
         }
 
-        static public List<Logic.Models.LogicReport> Reports(List<Contract.Models.Report> report)
+        static public List<Logic.Models.LogicReport> Reports(List<Contract.Models.ContractReport> report)
         {
             List<Logic.Models.LogicReport> reports = new List<Logic.Models.LogicReport>();
             foreach (var t in report)
@@ -34,7 +34,7 @@ namespace Logic
             return reports;
         }
 
-        static public List<Logic.Models.LogicClientChat> Messages(List<Contract.Models.ClientChat> message)
+        static public List<Logic.Models.LogicClientChat> Messages(List<Contract.Models.ContractClientChat> message)
         {
             List<Logic.Models.LogicClientChat> messages = new List<Logic.Models.LogicClientChat>();
             foreach (var t in message)
@@ -44,7 +44,7 @@ namespace Logic
             return messages;
         }
 
-        static public List<Logic.Models.LogicPosts> Posts(List<Contract.Models.Posts> message)
+        static public List<Logic.Models.LogicPosts> Posts(List<Contract.Models.ContractPosts> message)
         {
             List<Logic.Models.LogicPosts> messages = new List<Logic.Models.LogicPosts>();
             foreach (var t in message)

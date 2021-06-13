@@ -47,8 +47,9 @@ namespace Data
         public string GetAccountId(string SessionId)
         {
             open();
-            string query = $"SELECT Id FROM account WHERE SessionId='{SessionId}'";
+            string query = $"SELECT Id FROM account WHERE SessionId=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("Id", SessionId);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
@@ -60,14 +61,15 @@ namespace Data
             return SessionId;
         }
 
-        public Contract.Models.Account GetAccount(string id)
+        public Contract.Models.ContractAccount GetAccount(string id)
         {
             open();
-            string query = $"SELECT * FROM account WHERE Id='{id}'";
+            string query = $"SELECT * FROM account WHERE Id=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("Id", id);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            Contract.Models.Account thisAccount = new Contract.Models.Account();
+            Contract.Models.ContractAccount thisAccount = new Contract.Models.ContractAccount();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
@@ -84,8 +86,9 @@ namespace Data
         public bool PostLimitReached(string id)
         {
             open();
-            string query = $"SELECT COUNT(PostId) FROM `post`INNER JOIN `account` ON post.PostAuthor=account.Id WHERE Id='{id}';";
+            string query = $"SELECT COUNT(PostId) FROM `post`INNER JOIN `account` ON post.PostAuthor=account.Id WHERE Id=@Id;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("Id", id);
             //Create a data reader and Execute the command
             //Read the data and store them in the list
             System.Int64 test = (System.Int64)cmd.ExecuteScalar();
@@ -136,18 +139,18 @@ namespace Data
 
 
 
-        public List<Contract.Models.Posts> GetPosts()
+        public List<Contract.Models.ContractPosts> GetPosts()
         {
             open();
             string query = $"SELECT * FROM post";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            List<Contract.Models.Posts> postsList = new List<Contract.Models.Posts>();
+            List<Contract.Models.ContractPosts> postsList = new List<Contract.Models.ContractPosts>();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
-                postsList.Add(new Contract.Models.Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() });
+                postsList.Add(new Contract.Models.ContractPosts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() });
             }
             dataReader.Close();
 
@@ -178,8 +181,9 @@ namespace Data
         public string GetAccountName(string id)
         {
             open();
-            string query = $"SELECT * FROM account WHERE Id='{id}'";
+            string query = $"SELECT * FROM account WHERE Id=@PostId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@PostId", id);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             dataReader.Read();
@@ -193,26 +197,30 @@ namespace Data
             return (name);
         }
 
-        public Contract.Models.Posts GetPost(string id)
+        public Contract.Models.ContractPosts GetPost(string id)
         {
 
             open();
-            Contract.Models.Posts post = new Contract.Models.Posts();
-            string query = $"SELECT * FROM post WHERE PostId='{id}'";
+            Contract.Models.ContractPosts post = new Contract.Models.ContractPosts();
+            string query = $"SELECT * FROM post WHERE PostId=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            List<Contract.Models.Posts> postsList = new List<Contract.Models.Posts>();
+            List<Contract.Models.ContractPosts> postsList = new List<Contract.Models.ContractPosts>();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
 
-                post = new Contract.Models.Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
+                post = new Contract.Models.ContractPosts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
             }
             dataReader.Close();
 
-            query = $"SELECT * FROM images WHERE Parent='{id}'";
+            query = $"SELECT * FROM images WHERE Parent=@Id";
             cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
+
             //Create a data reader and Execute the command
             dataReader = cmd.ExecuteReader();
             //Read the data and store them in the list
@@ -231,8 +239,13 @@ namespace Data
         public void AddOrder(string id, string postId)
         {
             open();
-            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES ('{Guid.NewGuid().ToString()}', '{id}', '{postId}','{Guid.NewGuid().ToString()}','ordered');";
+            string query = $"INSERT INTO `order` (OrderId, BuyerId, PostId, ChatId, Status) VALUES (@OrderId, @BuyerUd, @PostId, @ChatId,'ordered');";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@BuyerUd", id);
+            cmd.Parameters.AddWithValue("@OrderId", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@PostId", postId);
+            cmd.Parameters.AddWithValue("@ChatId", Guid.NewGuid().ToString());
+
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
@@ -243,8 +256,9 @@ namespace Data
         public bool CheckIfSignedIn(string Id)
         {
             open();
-            string query = $"SELECT SessionId FROM account WHERE SessionId='{Id}'";
+            string query = $"SELECT SessionId FROM account WHERE SessionId=@SessionId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@SessionId", Id);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
@@ -262,15 +276,16 @@ namespace Data
         }
 
        
-        public Contract.Models.Account GetProfileInfo(string Id)
+        public Contract.Models.ContractAccount GetProfileInfo(string Id)
         {
             open();
 
-            string query = $"SELECT * FROM account WHERE Id='{Id}';";
+            string query = $"SELECT * FROM account WHERE Id=@Id;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
-            Contract.Models.Account acc = new Contract.Models.Account();
+            Contract.Models.ContractAccount acc = new Contract.Models.ContractAccount();
             while (dataReader.Read())
             {
                 acc.Name = dataReader["Name"].ToString();
@@ -290,26 +305,32 @@ namespace Data
             open();
 
 
-            string query = $"INSERT INTO review (id, score, text, account, post) VALUES('{Guid.NewGuid().ToString()}','{score}','{text}','{id}','{postId}');";
+            string query = $"INSERT INTO review (id, score, text, account, post) VALUES(@id, @score, @text, @account, @post);";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@score", score);
+            cmd.Parameters.AddWithValue("@text", text);
+            cmd.Parameters.AddWithValue("@account", id);
+            cmd.Parameters.AddWithValue("@post", postId);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
         }
 
-        public List<Contract.Models.Review> GetReview(string postId)
+        public List<Contract.Models.ContractReview> GetReview(string postId)
         {
             open();
-            List<Contract.Models.Review> reviews = new List<Contract.Models.Review>();
-            string query = $"SELECT * FROM review INNER JOIN account ON review.account = account.Id WHERE post='{postId}' ;";
+            List<Contract.Models.ContractReview> reviews = new List<Contract.Models.ContractReview>();
+            string query = $"SELECT * FROM review INNER JOIN account ON review.account = account.Id WHERE post=@id ;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", postId);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                reviews.Add(new Contract.Models.Review()
+                reviews.Add(new Contract.Models.ContractReview()
                 {
-                    Account = new Contract.Models.Account() { Name = dataReader["Name"].ToString() },
+                    Account = new Contract.Models.ContractAccount() { Name = dataReader["Name"].ToString() },
                     postId = dataReader["post"].ToString(),
                     //score = Int32.Parse(dataReader["Id"].ToString()),
                     text = dataReader["text"].ToString(),
@@ -326,8 +347,14 @@ namespace Data
             open();
 
 
-            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES('{Guid.NewGuid().ToString()}','{(int)reportType}','{(int)reportReason}','{comment}','{reportedId}','{id}');";
+            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES(@id, @type, @reason, @comment, @reportId, @creator);";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@type", reportType);
+            cmd.Parameters.AddWithValue("@reason", reportReason);
+            cmd.Parameters.AddWithValue("@comment", comment);
+            cmd.Parameters.AddWithValue("@reportId", reportedId);
+            cmd.Parameters.AddWithValue("@creator", id);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();

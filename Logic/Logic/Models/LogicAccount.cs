@@ -19,7 +19,7 @@ namespace Logic.Models
 
         }
 
-        public LogicAccount(Contract.Models.Account dto)
+        public LogicAccount(Contract.Models.ContractAccount dto)
         {
             this.Balance = dto.Balance;
             this.Id = dto.Id;

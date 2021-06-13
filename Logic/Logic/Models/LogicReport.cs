@@ -17,7 +17,7 @@ namespace Logic.Models
         public LogicReport() { 
         
         }
-        public LogicReport(Contract.Models.Report dto)
+        public LogicReport(Contract.Models.ContractReport dto)
         {
             this.creatorId = new LogicAccount() { Balance = dto.creatorId.Balance, Id = dto.creatorId.Balance, Name = dto.creatorId.Name, Password = dto.creatorId.Password, SessionId = dto.creatorId.SessionId };
             this.id = dto.id;

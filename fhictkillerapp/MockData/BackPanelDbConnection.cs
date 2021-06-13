@@ -60,21 +60,21 @@ namespace MockData
             return SessionId;
         }
 
-        public Contract.Models.Posts GetPost(string id)
+        public Contract.Models.ContractPosts GetPost(string id)
         {
 
             open();
-            Contract.Models.Posts post = new Contract.Models.Posts();
+            Contract.Models.ContractPosts post = new Contract.Models.ContractPosts();
             string query = $"SELECT * FROM post WHERE PostId='{id}'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            List<Contract.Models.Posts> postsList = new List<Contract.Models.Posts>();
+            List<Contract.Models.ContractPosts> postsList = new List<Contract.Models.ContractPosts>();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
 
-                post = new Contract.Models.Posts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
+                post = new Contract.Models.ContractPosts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
             }
             dataReader.Close();
 
@@ -118,10 +118,10 @@ namespace MockData
         }
 
         
-        public Contract.Models.BackPanel GetEarnings(string id)
+        public Contract.Models.ContractBackPanel GetEarnings(string id)
         {
             open();
-            Contract.Models.BackPanel backPanel = new Contract.Models.BackPanel();
+            Contract.Models.ContractBackPanel backPanel = new Contract.Models.ContractBackPanel();
             string query = $"SELECT * FROM `order` INNER JOIN post ON order.PostId = post.PostId WHERE post.PostAuthor = '{id}';";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dataReader = cmd.ExecuteReader();
@@ -131,7 +131,7 @@ namespace MockData
             {
                 if (dataReader["Status"].ToString() == "Delivered")
                 {
-                    backPanel.orders.Add(new Contract.Models.order() { postId = dataReader["PostId"].ToString(), buyerId = dataReader["BuyerId"].ToString() });
+                    backPanel.orders.Add(new Contract.Models.Contractorder() { postId = dataReader["PostId"].ToString(), buyerId = dataReader["BuyerId"].ToString() });
                     backPanel.earnings = backPanel.earnings + (int)dataReader["PostPrice"];
                 }
             }
@@ -158,18 +158,18 @@ namespace MockData
             return admin;
         }
         
-        public List<Contract.Models.Report> getReports(string id)
+        public List<Contract.Models.ContractReport> getReports(string id)
         {
-            List<Contract.Models.Report> reports = new List<Contract.Models.Report>();
+            List<Contract.Models.ContractReport> reports = new List<Contract.Models.ContractReport>();
             string query = $"SELECT * FROM report INNER JOIN account ON report.creator = account.Id WHERE status='open'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                reports.Add(new Contract.Models.Report()
+                reports.Add(new Contract.Models.ContractReport()
                 {
-                    creatorId = new Contract.Models.Account() { Name = dataReader["Name"].ToString() },
+                    creatorId = new Contract.Models.ContractAccount() { Name = dataReader["Name"].ToString() },
                     reportComment = dataReader["comment"].ToString(),
                     reportId = dataReader["reportId"].ToString(),
                     ReportType = Int32.Parse(dataReader["type"].ToString()),
@@ -209,19 +209,19 @@ namespace MockData
             return Id;
         }
 
-        public Contract.Models.Review GetReportReview(string reportId)
+        public Contract.Models.ContractReview GetReportReview(string reportId)
         {
             open();
-            Contract.Models.Review review = new Contract.Models.Review();
+            Contract.Models.ContractReview review = new Contract.Models.ContractReview();
             string query = $"SELECT * FROM review  WHERE id='{reportId}' ;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                review = new Contract.Models.Review()
+                review = new Contract.Models.ContractReview()
                 {
-                    Account = new Contract.Models.Account() { Id = dataReader["account"].ToString() },
+                    Account = new Contract.Models.ContractAccount() { Id = dataReader["account"].ToString() },
                     postId = dataReader["post"].ToString(),
                     //score = Int32.Parse(dataReader["Id"].ToString()),
                     text = dataReader["text"].ToString(),

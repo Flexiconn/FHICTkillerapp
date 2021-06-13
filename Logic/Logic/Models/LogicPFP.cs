@@ -12,7 +12,7 @@ namespace Logic.Models
         public LogicPFP() {
 
         }
-        public LogicPFP(Contract.Models.PFP dto)
+        public LogicPFP(Contract.Models.ContractPFP dto)
         {
             this.pfp = dto.pfp;
         }

@@ -21,7 +21,7 @@ namespace Logic.Models
             reviews = new List<LogicReview>();
         }
 
-        public LogicPosts(Contract.Models.Posts dto)
+        public LogicPosts(Contract.Models.ContractPosts dto)
         {
             this.PostId = dto.PostId;
             this.PostName = dto.PostName;

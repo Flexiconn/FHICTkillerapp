@@ -47,8 +47,9 @@ namespace Data
         public string GetAccountId(string SessionId)
         {
             open();
-            string query = $"SELECT Id FROM account WHERE SessionId='{SessionId}'";
+            string query = $"SELECT Id FROM account WHERE SessionId=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", SessionId);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
@@ -60,14 +61,15 @@ namespace Data
             return SessionId;
         }
 
-        public Contract.Models.Account GetAccount(string id)
+        public Contract.Models.ContractAccount GetAccount(string id)
         {
             open();
-            string query = $"SELECT * FROM account WHERE Id='{id}'";
+            string query = $"SELECT * FROM account WHERE Id=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", id);
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
-            Contract.Models.Account thisAccount = new Contract.Models.Account();
+            Contract.Models.ContractAccount thisAccount = new Contract.Models.ContractAccount();
             //Read the data and store them in the list
             while (dataReader.Read())
             {
@@ -86,8 +88,10 @@ namespace Data
         public bool CheckIfSignedIn(string Id)
         {
             open();
-            string query = $"SELECT SessionId FROM account WHERE SessionId='{Id}'";
+            string query = $"SELECT SessionId FROM account WHERE SessionId=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Id", Id);
+
             //Create a data reader and Execute the command
             MySqlDataReader dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
@@ -111,25 +115,32 @@ namespace Data
             DateTime dateTime = DateTime.Now;
 
 
-            string query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES('{Guid.NewGuid().ToString()}','{chatid}','{Id}','{Message}','{dateTime}')";
+            string query = $"INSERT INTO chat (MessageId, chatId, AccountId, Message, DateTime) VALUES(@MessageId, @chatId, @AccountId, @Message, @DateTime)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@MessageId", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@chatId", chatid);
+            cmd.Parameters.AddWithValue("@AccountId", Id);
+            cmd.Parameters.AddWithValue("@Message", Message);
+            cmd.Parameters.AddWithValue("@DateTime", dateTime);
+
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();
         }
 
-        public List<Contract.Models.ClientChat> GetMessages(string chatId, string id)
+        public List<Contract.Models.ContractClientChat> GetMessages(string chatId, string id)
         {
             open();
-            List<Contract.Models.ClientChat> msgs = new List<Contract.Models.ClientChat>();
-            string query = $"SELECT * FROM `chat` INNER JOIN account ON chat.AccountId = account.Id WHERE chatId ='{chatId}';";
+            List<Contract.Models.ContractClientChat> msgs = new List<Contract.Models.ContractClientChat>();
+            string query = $"SELECT * FROM `chat` INNER JOIN account ON chat.AccountId = account.Id WHERE chatId=@chatId;";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@chatId", chatId);
             MySqlDataReader dataReader = cmd.ExecuteReader();
 
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                msgs.Add(new Contract.Models.ClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString(), DateTime = DateTime.Parse(dataReader["DateTime"].ToString()),});
+                msgs.Add(new Contract.Models.ContractClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString(), DateTime = DateTime.Parse(dataReader["DateTime"].ToString()),});
             }
             dataReader.Close();
             close();
@@ -143,8 +154,14 @@ namespace Data
             open();
 
 
-            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES('{Guid.NewGuid().ToString()}','{(int)reportType}','{(int)reportReason}','{comment}','{reportedId}','{id}');";
+            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES(@id, @type, @reason, @comment, @reportId, @creator);";
             MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+            cmd.Parameters.AddWithValue("@type", (int)reportType);
+            cmd.Parameters.AddWithValue("@reason", (int)reportReason);
+            cmd.Parameters.AddWithValue("@comment", comment);
+            cmd.Parameters.AddWithValue("@reportId", reportedId);
+            cmd.Parameters.AddWithValue("@creator", id);
             //Create a data reader and Execute the command
             cmd.ExecuteNonQuery();
             close();

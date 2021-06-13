@@ -1,16 +1,16 @@
-﻿using Common.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using fhictkillerapp.Models;
 
 namespace fhictkillerapp.Controllers
 {
     public class AccountController : Controller
     {
-        Logic.Account Logic = new Logic.Account();
+        Logic.AccountLogic Logic = new Logic.AccountLogic();
         public IActionResult Index()
         {
             return View();
@@ -29,7 +29,7 @@ namespace fhictkillerapp.Controllers
         [Route("Myaccount")]
         public IActionResult MyAccount()
         {
-            Models.myAccountModel myAccountModel = new Models.myAccountModel(Logic.MyAccount(HttpContext.Session.GetString("SessionId")));
+            Models.ViewmyAccountModel myAccountModel = new Models.ViewmyAccountModel(Logic.GetMyAccountInfo(HttpContext.Session.GetString("SessionId")));
 
             ViewBag.pfp = myAccountModel.PFP;
             ViewBag.OrdersIncoming = myAccountModel.ordersIncoming;
@@ -44,14 +44,14 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterAccount(Account account)
+        public IActionResult RegisterAccount(ViewAccount account)
         {
             Logic.RegisterAccount(account.Name, account.Password);
             return View("Index");
         }
 
         [HttpPost]
-        public IActionResult LoginAccount(Account account)
+        public IActionResult LoginAccount(ViewAccount account)
         {
             Console.WriteLine(Logic.LoginAccount(account.Name, account.Password));
             HttpContext.Session.SetString("SessionId", Logic.LoginAccount(account.Name, account.Password));
@@ -72,7 +72,7 @@ namespace fhictkillerapp.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetPFP(Common.Models.PFP pfpModel)
+        public IActionResult SetPFP(ViewPFP pfpModel)
         {
             if (Logic.SetPFP(pfpModel.pfp, HttpContext.Session.GetString("SessionId")))
             {

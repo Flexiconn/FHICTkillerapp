@@ -22,8 +22,7 @@ namespace fhictkillerapp.Controllers
         public IActionResult Index()
         {
             // Test test = new Test();
-            Connection connection = new Connection();
-            connection.start();
+
             return View();
         }
 
