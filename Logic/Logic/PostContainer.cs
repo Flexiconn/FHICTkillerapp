@@ -107,7 +107,7 @@ namespace Logic
         }
         public PostContainer(string mode) {
             if (mode == "mock") {
-                IPost = Factory.MockFactory.GetClassPost();
+                IPost = Factory.MockFactory.GetPostDAL();
             }
         }
 

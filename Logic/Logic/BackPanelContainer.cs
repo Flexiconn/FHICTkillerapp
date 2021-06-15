@@ -90,7 +90,7 @@ namespace Logic
         }
         public BackPanelContainer(string mode) {
             if (mode == "mock") {
-                IBackPanel = Factory.MockFactory.GetClassBackpanel();
+                IBackPanel = Factory.MockFactory.GetBackpanelDAL();
             }
         }
 

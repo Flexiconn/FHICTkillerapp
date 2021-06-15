@@ -121,7 +121,7 @@ namespace Logic
 
         public AccountContainer(string mode) {
             if (mode == "mock") {
-                IAccount = Factory.MockFactory.GetClassAccount();
+                IAccount = Factory.MockFactory.GetAccountDAL();
             }
         }
     }

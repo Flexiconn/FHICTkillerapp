@@ -18,7 +18,7 @@ namespace Contract
         List<Contract.Models.Contractorder> GetOrders(string Id);
         List<Contract.Models.Contractorder> GetOrdersIncoming(string Id);
         void AddFunds(float amount, string id);
-        void AddPFP(string Path,string ParenId, string Id);
+        void AddPFP(string Path,string ParentId, string Id);
         string GetPFP(string Id);
         string GetOrderStatus(string OrderId);
         string ChangeOrderStatus(string OrderId, string Status);

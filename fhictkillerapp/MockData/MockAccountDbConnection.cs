@@ -64,16 +64,20 @@ namespace MockData
         }
 
  
-        public void CreateAccount(string Password, string Name)
+        public void CreateAccount(string Password, string Name, string Id)
         {
 
         }
 
-       
-        public string LoginAccount(string Password, string Name)
+        public string SetSessionId(string Id, string newSessionId)
+        {
+            return "SessionId";
+        }
+
+        public Contract.Models.ContractAccount LoginAccountCheck(string Password, string Name)
         {
             
-            return "TestSessionId";
+            return new Contract.Models.ContractAccount();
         }
 
         public bool CheckIfSignedIn(string Id)
@@ -108,7 +112,7 @@ namespace MockData
            
         }
 
-        public void AddPFP(IFormFile pfp, string Id)
+        public void AddPFP(string Path, string ParentId, string Id)
         {
             
         }
@@ -128,9 +132,10 @@ namespace MockData
             return "Ordered";
         }
 
-        public string GetOwner(string OrderId)
+        public string GetOrderOwner(string OrderId)
         {
             return "TestId";
         }
+
     }
 }

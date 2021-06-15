@@ -10,15 +10,15 @@ namespace Logic
     public class ChatContainer
     {
         Contract.IChat IChat;
-        public List<Logic.Models.LogicClientChat> GetChat(string id, string sessionId)
+        public List<Logic.Models.LogicClientChat> GetChat(string ChatId, string sessionId)
         {
             List<Logic.Models.LogicClientChat> list = null;
             if (CheckIfSignedIn(sessionId))
             {
-                list = LogicListDto.Messages(IChat.GetMessages(id, IChat.GetAccountId(sessionId)));
+                list = LogicListDto.Messages(IChat.GetMessages(ChatId, IChat.GetAccountId(sessionId)));
                 foreach (var t in list)
                 {
-                    if (IChat.GetAccount(IChat.GetAccountId(sessionId)).Id == id)
+                    if (IChat.GetAccount(IChat.GetAccountId(sessionId)).Id == ChatId)
                     {
                         t.Sender = true;
                     }
@@ -73,7 +73,7 @@ namespace Logic
         public ChatContainer(string mode)
         {
             if (mode == "mock") {
-                IChat = Factory.MockFactory.GetClassChat();
+                IChat = Factory.MockFactory.GetChatDAL();
             }
         }
     }

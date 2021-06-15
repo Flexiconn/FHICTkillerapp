@@ -11,11 +11,11 @@ namespace Data
     {
         private MySqlConnection connection;
 
-
         public PostDbConnection()
         {
             connection = new MySqlConnection(ConnenctionString.GetConnectionString());
         }
+
         private void open()
         {
             connection.Open();
