@@ -8,11 +8,10 @@ namespace fhictkillerapp.Models
     public class ViewPosts
     {
         public string PostId { get; set; }
-        public string PostAuthor { get; set; }
+        public ViewAccount PostAuthor { get; set; }
         public string PostName { get; set; }
         public string PostDescription { get; set; }
         public List<string> images { get; set; }
-        public virtual ViewAccount Account { get; set; }
         public List<ViewReview> reviews { get; set; }
 
 
@@ -26,7 +25,7 @@ namespace fhictkillerapp.Models
             this.PostId = dto.PostId;
             this.PostName = dto.PostName;
             this.PostDescription = dto.PostDescription;
-            this.PostAuthor = dto.PostAuthor;
+            this.PostAuthor = new ViewAccount(dto.PostAuthor);
             this.images = new List<string>();
             this.reviews = new List<ViewReview>();
             //this.Account = new Account(dto.Account);

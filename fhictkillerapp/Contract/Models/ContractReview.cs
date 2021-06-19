@@ -10,6 +10,6 @@ namespace Contract.Models
         public int score { get; set; }
         public string text { get; set; }
         public ContractAccount Account { get; set; }
-        public string postId {get;set;}
+        public ContractPosts post {get;set;}
     }
 }

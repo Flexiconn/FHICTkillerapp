@@ -10,8 +10,8 @@ namespace fhictkillerapp.Models
         public int score { get; set; }
         public string text { get; set; }
         public ViewAccount Account { get; set; }
-        public string postId {get;set;}
-
+        public ViewPosts Post {get;set;}
+        public string postId { get; set; }
         public ViewReview() {
         
         
@@ -20,7 +20,6 @@ namespace fhictkillerapp.Models
         public ViewReview(Logic.Models.LogicReview dto)
         {
             this.Account = new ViewAccount() { Balance = dto.Account.Balance, Id = dto.Account.Balance, Name = dto.Account.Name, Password = dto.Account.Password, SessionId = dto.Account.SessionId };
-            this.postId = dto.postId;
             this.reviewId = dto.reviewId;
             this.score = dto.score;
             this.text = dto.text;

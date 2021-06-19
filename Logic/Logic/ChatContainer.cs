@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using static Factory.Factory;
 using System.Linq;
+using Logic.Models;
 
 namespace Logic
 {
@@ -18,13 +19,13 @@ namespace Logic
                 list = LogicListDto.Messages(IChat.GetMessages(ChatId, IChat.GetAccountId(sessionId)));
                 foreach (var t in list)
                 {
-                    if (IChat.GetAccount(IChat.GetAccountId(sessionId)).Id == ChatId)
+                    if (new LogicAccount(IChat.GetAccount(IChat.GetAccountId(sessionId))).GetId() == t.Account.GetId())
                     {
-                        t.Sender = true;
+                        t.SetSender(true);
                     }
                     else
                     {
-                        t.Sender = false;
+                        t.SetSender(false);
                     }
                 }
             }

@@ -8,7 +8,7 @@ namespace Contract.Models
     {
         public List<Contractorder> orders { get; set; }
         public int earnings  { get; set; }
-        public string userName { get; set; }
+        public ContractAccount account { get; set; }
 
         public ContractBackPanel() {
             orders = new List<Contractorder>();

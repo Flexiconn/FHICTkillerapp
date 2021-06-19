@@ -61,7 +61,7 @@ namespace Logic
             {
                 if (IBackPanel.CheckIfAdmin(IBackPanel.GetAccountId(SessionId)))
                 {
-                    IBackPanel.banUser(IBackPanel.GetAccountId(SessionId), IBackPanel.GetPost(postId).PostAuthor);
+                    IBackPanel.banUser(IBackPanel.GetAccountId(SessionId), IBackPanel.GetPost(postId).PostAuthor.Id);
                     return true;
                 }
             }

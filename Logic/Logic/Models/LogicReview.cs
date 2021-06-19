@@ -10,7 +10,6 @@ namespace Logic.Models
         public int score { get; set; }
         public string text { get; set; }
         public LogicAccount Account { get; set; }
-        public string postId {get;set;}
 
         public LogicReview() {
         
@@ -19,11 +18,31 @@ namespace Logic.Models
 
         public LogicReview(Contract.Models.ContractReview dto)
         {
-            this.Account = new LogicAccount() { Balance = dto.Account.Balance, Id = dto.Account.Balance, Name = dto.Account.Name, Password = dto.Account.Password, SessionId = dto.Account.SessionId };
-            this.postId = dto.postId;
+            this.Account = new LogicAccount(dto.Account.Balance, dto.Account.Balance, dto.Account.SessionId, dto.Account.Name, dto.Account.Password);
             this.reviewId = dto.reviewId;
             this.score = dto.score;
             this.text = dto.text;
+        }
+
+        public LogicAccount GetAccount() {
+            return Account;
+        }
+
+
+
+        public int GetScore()
+        {
+            return score;
+        }
+
+        public string GetId()
+        {
+            return reviewId;
+        }
+
+        public string GetText()
+        {
+            return text;
         }
     }
 }

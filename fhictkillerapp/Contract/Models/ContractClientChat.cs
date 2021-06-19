@@ -6,7 +6,7 @@ namespace Contract.Models
 {
     public class ContractClientChat
     {
-        public string AccountName { get; set; }
+        public ContractAccount account { get; set; }
         public string MessageId { get; set; }
         public string ChatId { get; set; }
         public string Message { get; set; }

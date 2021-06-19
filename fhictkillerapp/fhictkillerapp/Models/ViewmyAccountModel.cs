@@ -23,7 +23,7 @@ namespace fhictkillerapp.Models
             {
                 foreach (var t in dto.ordersIncoming)
                 {
-                    this.ordersIncoming.Add(new ViewOrder() { buyer = new ViewAccount(t.buyer), buyerId = t.buyerId, chat = new ViewClientChat() { AccountName = t.chat.AccountName, ChatId = t.chatId, DateTime = t.chat.DateTime, Message = t.chat.Message, MessageId = t.chat.MessageId, Sender = t.chat.Sender }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new ViewPosts() { } });
+                    this.ordersIncoming.Add(new ViewOrder() { buyer = new ViewAccount(t.buyer), chat = new ViewClientChat() { ChatId = t.chatId}, status = t.status, post = new ViewPosts() { PostId = t.postId} , orderMessage = t.orderMessage});
                 }
             }
 
@@ -31,7 +31,7 @@ namespace fhictkillerapp.Models
             {
                 foreach (var t in dto.ordersOutgoing)
                 {
-                    this.ordersOutgoing.Add(new ViewOrder() { buyer = new ViewAccount(t.buyer), buyerId = t.buyerId, chat = new ViewClientChat() { AccountName = t.chat.AccountName, ChatId = t.chatId, DateTime = t.chat.DateTime, Message = t.chat.Message, MessageId = t.chat.MessageId, Sender = t.chat.Sender }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new ViewPosts() { } });
+                    this.ordersOutgoing.Add(new ViewOrder() { buyer = new ViewAccount(t.buyer), chat = new ViewClientChat() { ChatId = t.chatId }, status = t.status, post = new ViewPosts() { PostId = t.postId }, orderMessage = t.orderMessage });
                 }
             }
             this.PFP = dto.PFP;

@@ -1,9 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Factory.Factory;
 using Data;
-using Common;
 using Contract;
-using Common.Models;
 
 namespace Tests
 {
@@ -19,7 +17,7 @@ namespace Tests
         [TestMethod]
         public void GetMessages()
         {
-            new Logic.ChatContainer("mock").Index("TestChatId", "TestId");
+        //    new Logic.ChatContainer("mock").Index("TestChatId", "TestId");
         }
 
         [TestMethod]

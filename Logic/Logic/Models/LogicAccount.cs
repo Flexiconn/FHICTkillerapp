@@ -19,6 +19,15 @@ namespace Logic.Models
 
         }
 
+        public LogicAccount(string balance, string id, string sessionId, string name, string password)
+        {
+            this.Balance = balance;
+            this.Id = id;
+            this.Name = name;
+            this.Password = password;
+            this.SessionId = sessionId;
+        }
+
         public LogicAccount(Contract.Models.ContractAccount dto)
         {
             this.Balance = dto.Balance;
@@ -28,5 +37,24 @@ namespace Logic.Models
             this.SessionId = dto.SessionId;
         }
 
+
+
+        public string GetId() {
+            return this.Id;
+        }
+
+        public string GetSessionId()
+        {
+            return this.SessionId;
+        }
+
+        public string GetBalance()
+        {
+            return this.Balance;
+        }
+        public string GetName()
+        {
+            return this.Name;
+        }
     }
 }

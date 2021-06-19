@@ -58,10 +58,7 @@ namespace Data
             //Read the data and store them in the list
             while (dataReader.Read())
             {
-                thisAccount.Id = dataReader["Id"].ToString();
-                thisAccount.SessionId = dataReader["SessionId"].ToString();
-                thisAccount.Name = dataReader["Name"].ToString();
-                thisAccount.Password = dataReader["Password"].ToString();
+                thisAccount.SetAccount(dataReader["Id"].ToString(), dataReader["SessionId"].ToString(), dataReader["Name"].ToString(), dataReader["Password"].ToString(), dataReader["Balance"].ToString());
             }
             dataReader.Close();
             close();
@@ -125,7 +122,7 @@ namespace Data
 
         public string SetSessionId(string Id, string newSessionId) {
 
-                
+            open();
             string query = $"UPDATE account SET SessionId=@SessionId WHERE Id=@Id";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@SessionId", newSessionId);

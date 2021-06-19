@@ -5,6 +5,8 @@ using Data;
 using static Factory.Factory;
 using Microsoft.AspNetCore.Http;
 using Contract;
+using Logic.Models;
+
 namespace Logic
 {
     public class AccountContainer 
@@ -15,7 +17,7 @@ namespace Logic
         {
             
             if(CheckIfSignedIn(SessionId)){
-                return new Logic.Models.LogicmyAccountModel( new Contract.Models.ContractmyAccountModel() { PFP = IAccount.GetPFP(IAccount.GetAccountId(SessionId)), ordersIncoming = IAccount.GetOrdersIncoming(IAccount.GetAccountId(SessionId)), ordersOutgoing = IAccount.GetOrders(IAccount.GetAccountId(SessionId)), account = IAccount.GetProfileInfo(IAccount.GetAccountId(SessionId)) }) ;
+                return new Logic.Models.LogicmyAccountModel( new Contract.Models.ContractmyAccountModel() { PFP = IAccount.GetPFP(IAccount.GetAccountId(SessionId)) != null ? IAccount.GetPFP(IAccount.GetAccountId(SessionId)).ToString() : "NotFound", ordersIncoming = IAccount.GetOrdersIncoming(IAccount.GetAccountId(SessionId)), ordersOutgoing = IAccount.GetOrders(IAccount.GetAccountId(SessionId)), account = IAccount.GetAccount(IAccount.GetAccountId(SessionId)) }) ;
             }
             return new Models.LogicmyAccountModel();
         }
@@ -41,7 +43,7 @@ namespace Logic
         public string LoginAccount(string Password, string Name)
         {
             if (IAccount.LoginAccountCheck(Password, Name).Id != null) {
-                return IAccount.SetSessionId(IAccount.LoginAccountCheck(Password, Name).Id, Guid.NewGuid().ToString());
+                return IAccount.SetSessionId(new LogicAccount(IAccount.LoginAccountCheck(Password, Name)).GetId(), Guid.NewGuid().ToString());
             }
             return "Failed";
         }
@@ -71,7 +73,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (IAccount.GetOrderOwner(OrderId) == IAccount.GetAccount(IAccount.GetAccountId(SessionId)).SessionId)
+                if (IAccount.GetOrderOwner(OrderId) == new LogicAccount(IAccount.GetAccount(IAccount.GetAccountId(SessionId))).GetSessionId())
                 {
                     if (IAccount.GetOrderStatus(OrderId) == "ordered")
                     {
@@ -102,7 +104,7 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (IAccount.GetOrderOwner(OrderId) == IAccount.GetAccount(IAccount.GetAccountId(SessionId)).SessionId)
+                if (IAccount.GetOrderOwner(OrderId) == new LogicAccount(IAccount.GetAccount(IAccount.GetAccountId(SessionId))).GetSessionId())
                 {
                     if (IAccount.GetOrderStatus(OrderId) == "ordered")
                     {

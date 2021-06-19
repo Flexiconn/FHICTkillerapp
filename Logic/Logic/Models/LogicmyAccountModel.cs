@@ -16,6 +16,14 @@ namespace Logic.Models
             ordersOutgoing = new List<LogicOrder>();
         }
 
+        public LogicmyAccountModel(string pfp, List<LogicOrder> incoming, List<LogicOrder> outgoing, LogicAccount newAccount)
+        {
+            PFP = pfp;
+            ordersIncoming = incoming;
+            ordersOutgoing = outgoing;
+            account = newAccount;
+        }
+
         public LogicmyAccountModel(Contract.Models.ContractmyAccountModel dto) {
             this.ordersIncoming = new List<LogicOrder>();
             this.ordersOutgoing = new List<LogicOrder>();
@@ -30,6 +38,23 @@ namespace Logic.Models
             }
             this.PFP = dto.PFP;
             this.account = new LogicAccount(dto.account);
+        }
+
+        public string GetPFP() {
+            return PFP;
+        }
+
+        public List<LogicOrder> GetIncomingOrders() {
+            return ordersIncoming;
+        }
+
+        public List<LogicOrder> GetOutgoingOrders()
+        {
+            return ordersOutgoing;
+        }
+
+        public LogicAccount GetAccount() {
+            return account;
         }
     }
 }

@@ -126,7 +126,7 @@ namespace MockData
             //Read the data and store them in the list
             while (dataReader.Read())
             {
-                postsList.Add(new Contract.Models.ContractPosts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() });
+                postsList.Add(new Contract.Models.ContractPosts() { PostAuthor = new Contract.Models.ContractAccount() { Id = dataReader["PostAuthor"].ToString() }, PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() });
             }
             dataReader.Close();
 
@@ -186,7 +186,7 @@ namespace MockData
             while (dataReader.Read())
             {
 
-                post = new Contract.Models.ContractPosts() { PostAuthor = dataReader["PostAuthor"].ToString(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
+                post = new Contract.Models.ContractPosts() { PostAuthor = new Contract.Models.ContractAccount(), PostId = dataReader["PostId"].ToString(), PostName = dataReader["PostName"].ToString(), PostDescription = dataReader["PostDescription"].ToString() };
             }
             dataReader.Close();
 
@@ -289,7 +289,7 @@ namespace MockData
                 reviews.Add(new Contract.Models.ContractReview()
                 {
                     Account = new Contract.Models.ContractAccount() { Name = dataReader["Name"].ToString() },
-                    postId = dataReader["post"].ToString(),
+                    post = new Contract.Models.ContractPosts() { PostId = dataReader["post"].ToString() },
                     //score = Int32.Parse(dataReader["Id"].ToString()),
                     text = dataReader["text"].ToString(),
                     reviewId = dataReader["id"].ToString()

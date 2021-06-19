@@ -8,11 +8,10 @@ namespace Logic.Models
     public class LogicPosts
     {
         public string PostId { get; set; }
-        public string PostAuthor { get; set; }
+        public LogicAccount PostAuthor { get; set; }
         public string PostName { get; set; }
         public string PostDescription { get; set; }
         public List<string> images { get; set; }
-        public virtual LogicAccount Account { get; set; }
         public List<LogicReview> reviews { get; set; }
 
 
@@ -26,7 +25,7 @@ namespace Logic.Models
             this.PostId = dto.PostId;
             this.PostName = dto.PostName;
             this.PostDescription = dto.PostDescription;
-            this.PostAuthor = dto.PostAuthor;
+            this.PostAuthor = new LogicAccount(dto.PostAuthor);
             this.images = new List<string>();
             this.reviews = new List<LogicReview>();
             //this.Account = new LogicAccount(dto.Account);
@@ -38,6 +37,32 @@ namespace Logic.Models
             {
                 this.images.Add(t);
             }
+        }
+
+        public string GetPostId() {
+            return PostId;
+        }
+
+        public LogicAccount GetAuthor() {
+            return PostAuthor;
+        }
+
+        public string GetName()
+        {
+            return PostName;
+        }
+
+        public string GetDescription()
+        {
+            return PostDescription;
+        }
+
+        public List<string> GetImages() {
+            return images;
+        }
+
+        public List<LogicReview> GetReviews() { 
+        return reviews;
         }
     }
 }

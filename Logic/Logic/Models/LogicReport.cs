@@ -19,13 +19,47 @@ namespace Logic.Models
         }
         public LogicReport(Contract.Models.ContractReport dto)
         {
-            this.creatorId = new LogicAccount() { Balance = dto.creatorId.Balance, Id = dto.creatorId.Balance, Name = dto.creatorId.Name, Password = dto.creatorId.Password, SessionId = dto.creatorId.SessionId };
+            this.creatorId = new LogicAccount(dto.creatorId.Balance, dto.creatorId.Balance, dto.creatorId.SessionId , dto.creatorId.Name, dto.creatorId.Password);
             this.id = dto.id;
             this.reportComment = dto.reportComment;
             this.reportId = dto.reportId;
             this.reportReason = dto.reportReason;
             this.ReportType = dto.ReportType;
             this.status = dto.status;
+        }
+
+        public LogicAccount GetAccount() {
+            return creatorId;
+        }
+
+        public string GetId() {
+            return id;
+        }
+
+        public int GetType()
+        {
+            return ReportType;
+        }
+
+        public int GetReason()
+        {
+            return reportReason;
+        }
+
+        public string GetComment()
+        {
+            return reportComment;
+        }
+
+        public string GetReportedId()
+        {
+            return reportId;
+        }
+
+
+        public string GetStatus()
+        {
+            return status;
         }
     }
 }

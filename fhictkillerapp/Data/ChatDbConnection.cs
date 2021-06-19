@@ -119,7 +119,7 @@ namespace Data
             //Create a data reader and Execute the command
             while (dataReader.Read())
             {
-                msgs.Add(new Contract.Models.ContractClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), AccountName = dataReader["Name"].ToString(), DateTime = DateTime.Parse(dataReader["DateTime"].ToString()),});
+                msgs.Add(new Contract.Models.ContractClientChat() { Message = dataReader["Message"].ToString(), MessageId = dataReader["MessageId"].ToString(), account = new Contract.Models.ContractAccount() { Name = dataReader["Name"].ToString() }, DateTime = DateTime.Parse(dataReader["DateTime"].ToString()),});
             }
             dataReader.Close();
             close();

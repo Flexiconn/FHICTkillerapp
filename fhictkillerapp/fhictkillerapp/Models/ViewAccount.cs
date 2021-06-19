@@ -21,8 +21,8 @@ namespace fhictkillerapp.Models
 
         public ViewAccount(Logic.Models.LogicAccount dto)
         {
-            this.Balance = dto.Balance;
-            this.Id = dto.Id;
+            this.Balance = dto.GetBalance();
+            this.Id = dto.GetId;
             this.Name = dto.Name;
             this.Password = dto.Password;
             this.SessionId = dto.SessionId;

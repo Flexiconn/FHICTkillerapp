@@ -13,11 +13,17 @@ namespace fhictkillerapp.Controllers
         Logic.AccountContainer Logic = new Logic.AccountContainer();
         public IActionResult Index()
         {
-            return View();
+            if (HttpContext.Session.GetString("SessionId") != null) {
+                return RedirectToAction("MyAccount");
+            }
+            return RedirectToAction("Login");
         }
 
-        public IActionResult Login()
+        public IActionResult Login(bool test)
         {
+            if (false) {
+                ViewBag.Error = "Wrong Password or Username";
+            }
             return View();
         }
 
@@ -29,13 +35,17 @@ namespace fhictkillerapp.Controllers
         [Route("Myaccount")]
         public IActionResult MyAccount()
         {
-            Models.ViewmyAccountModel myAccountModel = new Models.ViewmyAccountModel(Logic.GetMyAccountInfo(HttpContext.Session.GetString("SessionId")));
+            if (HttpContext.Session.GetString("SessionId") != null)
+            {
+                Models.ViewmyAccountModel myAccountModel = new Models.ViewmyAccountModel(Logic.GetMyAccountInfo(HttpContext.Session.GetString("SessionId")));
 
-            ViewBag.pfp = myAccountModel.PFP;
-            ViewBag.OrdersIncoming = myAccountModel.ordersIncoming;
-            ViewBag.Orders = myAccountModel.ordersOutgoing;
-            ViewBag.Profile = myAccountModel.account;
-            return View();
+                ViewBag.pfp = myAccountModel.PFP;
+                ViewBag.OrdersIncoming = myAccountModel.ordersIncoming;
+                ViewBag.Orders = myAccountModel.ordersOutgoing;
+                ViewBag.Profile = myAccountModel.account;
+                return View();
+            }
+            return RedirectToAction("Login");
         }
 
         public IActionResult AddFunds()
@@ -47,7 +57,7 @@ namespace fhictkillerapp.Controllers
         public IActionResult RegisterAccount(ViewAccount account)
         {
             Logic.RegisterAccount(account.Name, account.Password);
-            return View("Index");
+            return RedirectToAction("Index", "Posts");
         }
 
         [HttpPost]
@@ -55,7 +65,7 @@ namespace fhictkillerapp.Controllers
         {
             Console.WriteLine(Logic.LoginAccount(account.Name, account.Password));
             HttpContext.Session.SetString("SessionId", Logic.LoginAccount(account.Name, account.Password));
-            return View("Index");
+            return RedirectToAction("Index","Posts", false);
         }
 
         [HttpPost]

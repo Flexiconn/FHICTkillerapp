@@ -90,7 +90,7 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult createReview(ViewReview review) 
         {
-            if (Logic.createReview(review.text, review.score,review.postId, HttpContext.Session.GetString("SessionId")))
+            if (Logic.createReview(review.text, review.score,review.postId , HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("ViewPost", new { id = review.postId });
 

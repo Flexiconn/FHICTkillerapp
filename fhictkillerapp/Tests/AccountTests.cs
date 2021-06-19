@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Factory.MockFactory;
 using Data;
-using Common;
 using Contract;
 using System;
 
@@ -11,34 +10,16 @@ namespace Tests
     public class AccountTests
     {
         [TestMethod]
-        public void TestLogin()
+        public void LoginAccount()
         {
-            new Logic.AccountContainer("mock").LoginAccount("Name","Password");
+           bool test = false;
+           var login = new Logic.AccountContainer("mock").LoginAccount("Name", "Password");
+            if (login.Length > 6) {
+                test = true;
+            }
+            Assert.IsTrue(test);
         }
 
-        [TestMethod]
-        public void CreateAccount()
-        {
-            new Logic.AccountContainer("mock").RegisterAccount("Name", "Password");
-
-        }
-
-        [TestMethod]
-        public void AddFunds()
-        {
-            new Logic.AccountContainer("mock").AddfundsToAccount(20, "TestId");
-        }
-
-        [TestMethod]
-        public void Myaccount()
-        {
-            new Logic.AccountContainer("mock").MyAccount("TestId");
-        }
-
-        [TestMethod]
-        public void SetPfp()
-        {
-            new Logic.AccountContainer("mock").SetPFP(null, "TestId");
-        }
+        
     }
 }

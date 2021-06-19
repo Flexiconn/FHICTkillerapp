@@ -14,5 +14,14 @@ namespace Contract.Models
         public string Password { get; set; }
         public string Balance { get; set; }
 
+        public void SetAccount(string newId, string newSessionId, string newName, string newPassword, string newBalance) {
+            Id = newId;
+            SessionId = newSessionId;
+            Name = newName;
+            Password = newPassword;
+            Balance = newBalance;
+        }
+
+
     }
 }

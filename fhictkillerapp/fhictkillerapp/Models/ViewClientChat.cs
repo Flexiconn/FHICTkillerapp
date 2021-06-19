@@ -6,7 +6,7 @@ namespace fhictkillerapp.Models
 {
     public class ViewClientChat
     {
-        public string AccountName { get; set; }
+        public ViewAccount Account { get; set; }
         public string MessageId { get; set; }
         public string ChatId { get; set; }
         public string Message { get; set; }
@@ -18,7 +18,7 @@ namespace fhictkillerapp.Models
         }
 
         public ViewClientChat(Logic.Models.LogicClientChat dto) {
-            this.AccountName = dto.AccountName;
+            this.Account = new ViewAccount(dto.Account);
             this.ChatId = dto.ChatId;
             this.DateTime = dto.DateTime;
             this.Message = dto.Message;
