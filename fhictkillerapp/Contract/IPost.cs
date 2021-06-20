@@ -22,6 +22,9 @@ namespace Contract
         List<Contract.Models.ContractReview> GetReview(string postId);
         Int64 PostAmount(string id);
         void AddImageToDB(string postId, string path, string Id);
+        void AddFavourite(string Id, string AccountId, string PostId);
+        List<Contract.Models.ContractFavourite> GetFavourites(string UserId);
+        void RemoveFavourite(string Id);
 
 
 

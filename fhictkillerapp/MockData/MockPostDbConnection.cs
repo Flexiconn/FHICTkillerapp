@@ -312,7 +312,53 @@ namespace MockData
             close();
         }
 
-        
-        
+        public void AddFavourite(string Id, string AccountId, string PostId)
+        {
+            open();
+            string query = $"INSERT INTO favourites (Id, UserId, PostId) VALUES(@Id, @UserId, @PostId);";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", Id);
+            cmd.Parameters.AddWithValue("@UserId", AccountId);
+            cmd.Parameters.AddWithValue("@PostId", PostId);
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
+
+        public List<Contract.Models.ContractFavourite> GetFavourites(string UserId)
+        {
+            open();
+            List<Contract.Models.ContractFavourite> favourites = new List<Contract.Models.ContractFavourite>();
+            string query = $"SELECT * FROM favourites WHERE UserId=@UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            //Create a data reader and Execute the command
+            while (dataReader.Read())
+            {
+                favourites.Add(new Contract.Models.ContractFavourite()
+                {
+                    Id = dataReader["Id"].ToString(),
+                    Account = new Contract.Models.ContractAccount() { Id = dataReader["UserId"].ToString() },
+                    Post = new Contract.Models.ContractPosts() { PostId = dataReader["PostId"].ToString() }
+                });
+            }
+            dataReader.Close();
+            close();
+            return favourites;
+        }
+
+        public void RemoveFavourite(string Id)
+        {
+            open();
+            string query = $"DELETE FROM favourites WHERE Id=@Id";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", Id);
+
+            //Create a data reader and Execute the command
+            cmd.ExecuteNonQuery();
+            close();
+        }
+
     }
 }

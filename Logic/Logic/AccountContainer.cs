@@ -17,7 +17,7 @@ namespace Logic
         {
             
             if(CheckIfSignedIn(SessionId)){
-                return new Logic.Models.LogicmyAccountModel( new Contract.Models.ContractmyAccountModel() { PFP = IAccount.GetPFP(IAccount.GetAccountId(SessionId)) != null ? IAccount.GetPFP(IAccount.GetAccountId(SessionId)).ToString() : "NotFound", ordersIncoming = IAccount.GetOrdersIncoming(IAccount.GetAccountId(SessionId)), ordersOutgoing = IAccount.GetOrders(IAccount.GetAccountId(SessionId)), account = IAccount.GetAccount(IAccount.GetAccountId(SessionId)) }) ;
+                return new Logic.Models.LogicmyAccountModel( new Contract.Models.ContractmyAccountModel(IAccount.GetPFP(IAccount.GetAccountId(SessionId)), IAccount.GetOrdersIncoming(IAccount.GetAccountId(SessionId)), IAccount.GetOrders(IAccount.GetAccountId(SessionId)),IAccount.GetAccount(IAccount.GetAccountId(SessionId)));
             }
             return new Models.LogicmyAccountModel();
         }

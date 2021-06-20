@@ -102,6 +102,24 @@ namespace Logic
             return false;
         }
 
+        public bool FavouriteToggle(string PostId, string AccountId) {
+            if (CheckIfSignedIn(AccountId))
+            {
+                if (IPost.GetFavourites(IPost.GetAccountId(AccountId)).Find(x => x.Post.PostId == PostId) == null)
+                {
+                    IPost.AddFavourite(Guid.NewGuid().ToString(), IPost.GetAccountId(AccountId), PostId);
+
+                }
+                else
+                {
+                    IPost.RemoveFavourite(IPost.GetFavourites(IPost.GetAccountId(AccountId)).Find(x => x.Post.PostId == PostId).Id);
+                    
+                }
+                return true;
+            }
+            return false;
+        }
+
         public PostContainer() {
             IPost = Factory.Factory.GetPostDAL();
         }

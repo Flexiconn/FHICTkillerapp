@@ -111,6 +111,21 @@ namespace fhictkillerapp.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
+        [HttpPost]
+        public ActionResult ToggleFavourite(string PostId)
+        {
+            Console.WriteLine("favourite");
+            if (Logic.FavouriteToggle(PostId, HttpContext.Session.GetString("SessionId")) == true)
+            {
+                return RedirectToAction("ViewPost", new { id = PostId });
+            }
+            else {
+                return RedirectToAction("Login", "Account");
+
+            }
+        }
+
         [HttpPost]
         public ActionResult createReviewReport(string reviewId, string postId)
         {
