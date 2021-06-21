@@ -17,5 +17,15 @@ namespace fhictkillerapp.Models
             Account = new ViewAccount(dto.Account);
             Post = new ViewPosts(dto.Post);
         }
+
+        static public List<ViewFavourite> Favourites(List<Logic.Models.LogicFavourite> order)
+        {
+            List<ViewFavourite> orders = new List<ViewFavourite>();
+            foreach (var t in order)
+            {
+                orders.Add(new ViewFavourite(t));
+            }
+            return orders;
+        }
     }
 }

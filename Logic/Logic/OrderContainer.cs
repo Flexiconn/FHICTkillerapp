@@ -48,8 +48,11 @@ namespace Logic
             {
                 if (IOrder.GetPost(postId).PostId == postId)
                 {
-                    IOrder.AddOrder(Guid.NewGuid().ToString(), IAccount.GetAccountId(SessionId), postId, Guid.NewGuid().ToString());
-                    return true;
+                    if (Int32.Parse(IAccount.GetAccount(IAccount.GetAccountId(SessionId)).Balance) > 10)
+                    {
+                        IOrder.AddOrder(Guid.NewGuid().ToString(), IAccount.GetAccountId(SessionId), postId, Guid.NewGuid().ToString());
+                        return true;
+                    }
                 }
             }
             return false;

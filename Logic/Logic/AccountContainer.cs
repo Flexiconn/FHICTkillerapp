@@ -42,7 +42,7 @@ namespace Logic
 
         public string LoginAccount(string Password, string Name)
         {
-            if (IAccount.LoginAccountCheck(Password, Name).Id.Length > 4) {
+            if (IAccount.LoginAccountCheck(Password, Name).Id != null && IAccount.LoginAccountCheck(Password, Name).Id.Length > 4) {
                 return IAccount.SetSessionId(new LogicAccount(IAccount.LoginAccountCheck(Password, Name)).GetId(), Guid.NewGuid().ToString());
             }
             return "Failed";
