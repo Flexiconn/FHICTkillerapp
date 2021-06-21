@@ -35,7 +35,7 @@ namespace Tests
         [TestMethod]
         public void OrderPost()
         {
-            var check = new Logic.OrderContainer("Mock").OrderPost("empty", "test", "test");
+            var check = new Logic.OrderContainer("mock").OrderPost("empty", "test", "test");
 
             Assert.IsTrue(check);
         }
@@ -43,7 +43,15 @@ namespace Tests
         [TestMethod]
         public void OrderPostNonExistantPost()
         {
-            var check = new Logic.OrderContainer("Mock").OrderPost("empty", "empty", "test");
+            var check = new Logic.OrderContainer("mock").OrderPost("empty", "empty", "test");
+
+            Assert.IsFalse(check);
+        }
+
+        [TestMethod]
+        public void AcceptOrder()
+        {
+            var check = new Logic.OrderContainer("mock").AcceptOrder("test","test");
 
             Assert.IsFalse(check);
         }

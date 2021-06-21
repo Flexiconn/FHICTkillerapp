@@ -36,18 +36,23 @@ namespace MockData
 
         public string GetOrderStatus(string OrderId)
         {
-            string status = "";
-            return status;
+
+            if (OrderId == "test")
+            {
+                return "ordered";
+            }
+            return "";
         }
 
         public string ChangeOrderStatus(string OrderId, string Status)
         {
+
             return Status;
         }
 
         public string GetOrderOwner(string OrderId)
         {
-            string owner = "";
+            string owner = "TestId";
             return owner;
         }
 

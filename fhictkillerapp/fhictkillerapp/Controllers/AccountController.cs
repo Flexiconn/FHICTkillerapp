@@ -40,7 +40,7 @@ namespace fhictkillerapp.Controllers
             if (HttpContext.Session.GetString("SessionId") != null)
             {
                 Models.ViewmyAccountModel AccountInfo = new Models.ViewmyAccountModel(AccountContainer.GetMyAccountInfo(HttpContext.Session.GetString("SessionId")));
-                Models.ViewmyAccountModel Orders = new Models.ViewmyAccountModel();
+                Models.ViewmyAccountModel Orders = new Models.ViewmyAccountModel(OrderContainer.GetOrders(HttpContext.Session.GetString("SessionId")).ordersIncoming, OrderContainer.GetOrders(HttpContext.Session.GetString("SessionId")).ordersOutgoing);
                 ViewBag.pfp = AccountInfo.PFP;
                 ViewBag.OrdersIncoming = Orders.ordersIncoming;
                 ViewBag.Orders = Orders.ordersOutgoing;
