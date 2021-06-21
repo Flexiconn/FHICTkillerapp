@@ -88,7 +88,7 @@ namespace Data
         public void CreateAccount(string Password, string Name, string Id)
         {
             open();
-            string query = $"INSERT INTO account (Id, Name, Password) VALUES(@Id, @Name, @Password); ";
+            string query = $"INSERT INTO account (Id, Name, Password) VALUES(@Id, @Name, @Password);";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@Id", Id);
             cmd.Parameters.AddWithValue("@Name", Name);
