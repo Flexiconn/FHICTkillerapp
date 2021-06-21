@@ -31,7 +31,7 @@ namespace Logic.Models
         public LogicmyAccountModel(Contract.Models.ContractmyAccountModel dto) {
             this.ordersIncoming = new List<LogicOrder>();
             this.ordersOutgoing = new List<LogicOrder>();
-            if (dto.ordersIncoming.Count > 0)
+            if (dto.ordersIncoming != null)
             {
                 foreach (var t in dto.ordersIncoming)
                 {
@@ -39,7 +39,7 @@ namespace Logic.Models
                 }
             }
 
-            if (dto.ordersOutgoing.Count > 0)
+            if (dto.ordersOutgoing != null)
             {
                 foreach (var t in dto.ordersOutgoing)
                 {

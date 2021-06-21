@@ -43,7 +43,7 @@ namespace Tests
         [TestMethod]
         public void OrderPostNonExistantPost()
         {
-            var check = new Logic.OrderContainer("Mock").OrderPost("empty", "wrong", "test");
+            var check = new Logic.OrderContainer("Mock").OrderPost("empty", "empty", "test");
 
             Assert.IsFalse(check);
         }
