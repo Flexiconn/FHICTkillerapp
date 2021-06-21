@@ -165,7 +165,7 @@ namespace Data
                 };
             }
             dataReader.Close();
-
+            close();
             return review;
         }
     }

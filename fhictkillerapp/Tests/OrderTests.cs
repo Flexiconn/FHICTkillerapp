@@ -55,5 +55,16 @@ namespace Tests
 
             Assert.IsFalse(check);
         }
+
+        [TestMethod]
+        public void GetOrders()
+        {
+            var test = false;
+            var orders = new Logic.OrderContainer("mock").GetOrders("test");
+            if (orders.ordersIncoming.Count > 0) {
+                test = true;
+            }
+            Assert.IsTrue(test);
+        }
     }
 }

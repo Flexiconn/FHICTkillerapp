@@ -11,7 +11,22 @@ namespace Tests
         [TestMethod]
         public void CreateChatReport()
         {
-            new Logic.ReportContainer("mock").createChatReport(1, "TestComment", "TestChatId", "TestId");
+            var test = new Logic.ReportContainer("mock").createChatReport(1, "TestComment", "TestChatId", "test");
+            Assert.IsTrue(test);
+        }
+
+        [TestMethod]
+        public void CreatePostReport()
+        {
+            var test = new Logic.ReportContainer("mock").createPostReport(1, "TestComment", "TestPostId", "test");
+            Assert.IsTrue(test);
+        }
+
+        [TestMethod]
+        public void CreateReviewReport()
+        {
+            var test = new Logic.ReportContainer("mock").createReviewReport( "TestComment", "TestChatId", "test");
+            Assert.IsTrue(test);
         }
     }
 }
