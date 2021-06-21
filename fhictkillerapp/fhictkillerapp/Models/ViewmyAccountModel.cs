@@ -16,6 +16,12 @@ namespace fhictkillerapp.Models
             ordersOutgoing = new List<ViewOrder>();
         }
 
+        public ViewmyAccountModel(List<ViewOrder> newOrdersIncoming, List<ViewOrder> newOrdersOutgoing)
+        {
+            ordersIncoming = newOrdersIncoming;
+            ordersOutgoing = newOrdersOutgoing;
+        }
+
         public ViewmyAccountModel(Logic.Models.LogicmyAccountModel dto) {
             this.ordersIncoming = new List<ViewOrder>();
             this.ordersOutgoing = new List<ViewOrder>();

@@ -62,7 +62,7 @@ namespace MockData
         public Contract.Models.ContractAccount GetAccount(string id)
         {
 
-            return new Contract.Models.ContractAccount() { Id = "TestId", Balance = "69", Name= "TestName", Password = "TestPassword", SessionId = "TestSessionId" };
+            return new Contract.Models.ContractAccount() { Id = "test", Balance = "69", Name= "TestName", Password = "TestPassword", SessionId = "TestSessionId" };
         }
 
         public string GetAccountName(string id)
