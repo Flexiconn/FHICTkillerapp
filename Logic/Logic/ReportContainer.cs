@@ -21,9 +21,7 @@ namespace Logic
             {
                 return true;
             }
-
             return false;
-
         }
 
         public bool createPostReport(int reportReasonform, string comment, string PostId, string SessionId)

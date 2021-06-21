@@ -94,6 +94,13 @@ namespace Logic
             return false;
         }
 
+
+        public List<Logic.Models.LogicFavourite> GetFavourites(string AccountId)
+        {
+
+            return LogicListDto.Favourites(IPost.GetFavourites(IAccount.GetAccountId(AccountId)));
+  
+        }
         public PostContainer() {
             IPost = Factory.Factory.GetPostDAL();
             IAccount = Factory.Factory.GetAccountDAL();

@@ -13,7 +13,7 @@
                 <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Profile</a>
                 <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Your Orders</a>
                 <a class="list-group-item list-group-item-action" id="list-incomingOrder-list" data-toggle="list" href="#list-incomingOrder" role="tab" aria-controls="incomingOrder">Incoming Orders</a>
-
+                <a class="list-group-item list-group-item-action" id="list-Favourites-list" data-toggle="list" href="#list-Favourites" role="tab" aria-controls="Favourites">Favourites</a>
             </div>
         </div>
         <div class="col-8">
@@ -88,23 +88,43 @@
                         </div>
                         @{ foreach (var t in ViewBag.OrdersIncoming)
                             {
-                                                <div class="card-body">
-                                                    <h5 class="card-title">@t.status</h5>
-                                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                                    <a style="float: left;" href="chat/@t.chatId" class="btn btn-primary">Chat</a>
-                                                    <form style="margin-left: 6px; float: right;" asp-action="CancelOrder" asp-controller="Account" enctype="multipart/form-data">
-                                                        <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
-                                                        <input class="btn btn-danger" type="submit" value="Cancel" />
-                                                    </form>
-                                                    <form style="float: right;" asp-action="AcceptOrder" asp-controller="Account" enctype="multipart/form-data">
-                                                        <input type="hidden" name="OrderId" id="PostId" value="@t.post.PostId">
-                                                        <input class="btn btn-success" type="submit" value="Accept" />
-                                                    </form>
-                                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@t.status</h5>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                    <a style="float: left;" href="chat/@t.chatId" class="btn btn-primary">Chat</a>
+                                    <form style="margin-left: 6px; float: right;" asp-action="CancelOrder" asp-controller="Account" enctype="multipart/form-data">
+                                        <input type="hidden" name="OrderId" id="PostId" value="@t.orderId">
+                                        <input class="btn btn-danger" type="submit" value="Cancel" />
+                                    </form>
+                                    <form style="float: right;" asp-action="AcceptOrder" asp-controller="Account" enctype="multipart/form-data">
+                                        <input type="hidden" name="OrderId" id="PostId" value="@t.post.PostId">
+                                        <input class="btn btn-success" type="submit" value="Accept" />
+                                    </form>
+                                </div>
                             }
                         }
                     </div>
                 </div>
+
+                <div class="tab-pane fade" id="list-Favourites" role="tabpanel" aria-labelledby="list-incomingOrder-list">
+                    <div class="card">
+                        <div class="card-header">
+                            Incoming Orders
+                        </div>
+                        @{ foreach (var t in ViewBag.Favourites)
+                            {
+                                <div class="card-body">
+                                    <h5 class="card-title">@t.Post.PostId</h5>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                    <a style="float: left;" href="viewpost/@t.Post.PostId" class="btn btn-primary">Chat</a>
+                                    
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
             </div>
         </div>

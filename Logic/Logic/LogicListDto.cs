@@ -24,6 +24,16 @@ namespace Logic
             return orders;
         }
 
+        static public List<Logic.Models.LogicFavourite> Favourites(List<Contract.Models.ContractFavourite> order)
+        {
+            List<Logic.Models.LogicFavourite> orders = new List<Logic.Models.LogicFavourite>();
+            foreach (var t in order)
+            {
+                orders.Add(new Logic.Models.LogicFavourite(t));
+            }
+            return orders;
+        }
+
         static public List<Logic.Models.LogicReport> Reports(List<Contract.Models.ContractReport> report)
         {
             List<Logic.Models.LogicReport> reports = new List<Logic.Models.LogicReport>();

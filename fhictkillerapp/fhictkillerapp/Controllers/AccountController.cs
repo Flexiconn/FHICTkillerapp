@@ -12,6 +12,7 @@ namespace fhictkillerapp.Controllers
     {
         Logic.AccountContainer AccountContainer = new Logic.AccountContainer();
         Logic.OrderContainer OrderContainer = new Logic.OrderContainer();
+        Logic.PostContainer PostContainer = new Logic.PostContainer();
 
         public IActionResult Index()
         {
@@ -45,6 +46,7 @@ namespace fhictkillerapp.Controllers
                 ViewBag.OrdersIncoming = Orders.ordersIncoming;
                 ViewBag.Orders = Orders.ordersOutgoing;
                 ViewBag.Profile = AccountInfo.account;
+                ViewBag.Favourites = ViewFavourite.Favourites(PostContainer.GetFavourites(HttpContext.Session.GetString("SessionId")));
                 return View();
             }
             return RedirectToAction("Login");
