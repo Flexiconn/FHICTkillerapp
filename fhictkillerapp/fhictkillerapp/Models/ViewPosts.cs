@@ -25,7 +25,10 @@ namespace fhictkillerapp.Models
             this.PostId = dto.PostId;
             this.PostName = dto.PostName;
             this.PostDescription = dto.PostDescription;
-            this.PostAuthor = new ViewAccount(dto.PostAuthor);
+            if (dto.PostAuthor != null)
+            {
+                this.PostAuthor = new ViewAccount(dto.PostAuthor);
+            }
             this.images = new List<string>();
             this.reviews = new List<ViewReview>();
             //this.Account = new Account(dto.Account);
@@ -35,8 +38,6 @@ namespace fhictkillerapp.Models
 
             foreach (var t in dto.images)
             {
-                Console.WriteLine("image " + t);
-
                 this.images.Add(t);
             }
         }

@@ -25,7 +25,10 @@ namespace Logic.Models
             this.PostId = dto.PostId;
             this.PostName = dto.PostName;
             this.PostDescription = dto.PostDescription;
-            this.PostAuthor = new LogicAccount(dto.PostAuthor);
+            if (dto.PostAuthor != null)
+            {
+                this.PostAuthor = new LogicAccount(dto.PostAuthor);
+            }
             this.images = new List<string>();
             this.reviews = new List<LogicReview>();
             //this.Account = new LogicAccount(dto.Account);

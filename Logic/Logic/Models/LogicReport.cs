@@ -19,7 +19,11 @@ namespace Logic.Models
         }
         public LogicReport(Contract.Models.ContractReport dto)
         {
-            this.creatorId = new LogicAccount(dto.creatorId.Balance, dto.creatorId.Balance, dto.creatorId.SessionId , dto.creatorId.Name, dto.creatorId.Password);
+            if (dto.creatorId != null)
+            {
+                this.creatorId = new LogicAccount(dto.creatorId.Balance, dto.creatorId.Balance, dto.creatorId.SessionId, dto.creatorId.Name, dto.creatorId.Password);
+
+            }
             this.id = dto.id;
             this.reportComment = dto.reportComment;
             this.reportId = dto.reportId;

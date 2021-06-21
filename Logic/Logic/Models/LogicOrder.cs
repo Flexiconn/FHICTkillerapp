@@ -28,11 +28,19 @@ namespace Logic.Models
             this.orderId = dto.orderId;
             this.orderMessage = dto.orderMessage;
             this.postId = dto.postId;
-            this.post = new LogicPosts(dto.post);
+            if (dto.post != null) {
+                this.post = new LogicPosts(dto.post);
+            }
             this.status = dto.status;
-            this.buyer = new LogicAccount(dto.buyer);
+            if (dto.buyer != null)
+            {
+                this.buyer = new LogicAccount(dto.buyer);
+            }
             this.buyerId = dto.buyerId;
-            this.chat = new LogicClientChat(dto.chat);
+            if (dto.chat != null)
+            {
+                this.chat = new LogicClientChat(dto.chat);
+            }
             this.chatId = dto.chatId;
         }
     }

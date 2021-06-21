@@ -8,7 +8,6 @@ namespace fhictkillerapp.Models
     {
         public List<ViewOrder> orders { get; set; }
         public int earnings  { get; set; }
-        public ViewAccount Account { get; set; }
 
         public ViewBackPanel() {
             orders = new List<ViewOrder>();
