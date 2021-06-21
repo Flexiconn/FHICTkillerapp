@@ -46,18 +46,10 @@ namespace MockData
 
         public string GetAccountId(string SessionId)
         {
-            open();
-            string query = $"SELECT Id FROM account WHERE SessionId='{SessionId}'";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            while (dataReader.Read())
-            {
-                SessionId = dataReader["Id"].ToString();
+            if (SessionId == "admin") {
+                return "admin";
             }
-            dataReader.Close();
-            close();
-            return SessionId;
+            return "test";
         }
 
         public Contract.Models.ContractPosts GetPost(string id)
@@ -96,26 +88,7 @@ namespace MockData
         }
 
        
-        public bool CheckIfSignedIn(string Id)
-        {
-            open();
-            string query = $"SELECT SessionId FROM account WHERE SessionId='{Id}'";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            while (dataReader.Read())
-            {
-                if (Id != null && Id == dataReader["SessionId"].ToString())
-                {
-                    dataReader.Close();
-                    close();
-                    return true;
-                }
-            }
-            dataReader.Close();
-            close();
-            return false;
-        }
+
 
         
         public Contract.Models.ContractBackPanel GetEarnings(string id)
@@ -158,27 +131,7 @@ namespace MockData
             return admin;
         }
         
-        public List<Contract.Models.ContractReport> getReports(string id)
-        {
-            List<Contract.Models.ContractReport> reports = new List<Contract.Models.ContractReport>();
-            string query = $"SELECT * FROM report INNER JOIN account ON report.creator = account.Id WHERE status='open'";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            //Create a data reader and Execute the command
-            while (dataReader.Read())
-            {
-                reports.Add(new Contract.Models.ContractReport()
-                {
-                    creatorId = new Contract.Models.ContractAccount() { Name = dataReader["Name"].ToString() },
-                    reportComment = dataReader["comment"].ToString(),
-                    reportId = dataReader["reportId"].ToString(),
-                    ReportType = Int32.Parse(dataReader["type"].ToString()),
-                    reportReason = Int32.Parse(dataReader["reason"].ToString())
-                });
-            }
-            dataReader.Close();
-            return reports;
-        }
+        
 
         public void banUser(string adminId, string userId)
         {

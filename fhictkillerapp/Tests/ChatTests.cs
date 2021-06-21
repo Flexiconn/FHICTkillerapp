@@ -11,19 +11,30 @@ namespace Tests
         [TestMethod]
         public void SendMessage()
         {
-            new Logic.ChatContainer("mock").SendMessage("TestMessage", "TestChatId", "TestId");
+            var test = new Logic.ChatContainer("mock").SendMessage("TestMessage", "TestChatId", "test");
+            Assert.IsTrue(test);
+        }
+
+        [TestMethod]
+        public void SendMessageWhenNotLoggedIn()
+        {
+            var test = new Logic.ChatContainer("mock").SendMessage("TestMessage", "TestChatId", "empty");
+            Assert.IsFalse(test);
         }
 
         [TestMethod]
         public void GetMessages()
         {
-        //    new Logic.ChatContainer("mock").Index("TestChatId", "TestId");
+            var test = new Logic.ChatContainer("mock").GetChat("Test", "Test");
+            Assert.IsNotNull(test);
         }
 
+
+
         [TestMethod]
-        public void CreateReport()
+        public void CheckIfSignedIn()
         {
-            new Logic.ChatContainer("mock").createReport(1, "TestComment", "TestChatId", "TestId");
+            new Logic.ChatContainer("mock").CheckIfSignedIn("test");
         }
     }
 }

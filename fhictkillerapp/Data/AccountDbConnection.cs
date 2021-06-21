@@ -174,43 +174,6 @@ namespace Data
             return acc;
         }
 
-        public List<Contract.Models.Contractorder> GetOrders(string Id)
-        {
-            open();
-            string query = $"SELECT * FROM `order` WHERE BuyerId=@Id;";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Id", Id);
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
-            //Create a data reader and Execute the command
-            while (dataReader.Read())
-            {
-                orders.Add(new Contract.Models.Contractorder() { orderId = dataReader["OrderId"].ToString(), postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
-            }
-            dataReader.Close();
-            close();
-            return orders;
-        }
-
-        public List<Contract.Models.Contractorder> GetOrdersIncoming(string Id)
-        {
-            open();
-            string query = $"SELECT * FROM `order` INNER JOIN post ON order.PostId = post.PostId WHERE post.PostAuthor=@Id;";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Id", Id);
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-
-            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
-            //Create a data reader and Execute the command
-            while (dataReader.Read())
-            {
-                orders.Add(new Contract.Models.Contractorder() { postId = dataReader["PostId"].ToString(), status = dataReader["Status"].ToString(), chatId = dataReader["ChatId"].ToString() });
-            }
-            dataReader.Close();
-            close();
-            return orders;
-        }
-
         public void AddFunds(float amount, string id)
         {
             open();
@@ -275,55 +238,6 @@ namespace Data
             return path;
         }
 
-        public string GetOrderStatus(string OrderId)
-        {
-            open();
-            string status = "";
-            string query = $"SELECT * FROM `order` WHERE OrderId=@OrderId ;";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@OrderId", OrderId);
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            //Create a data reader and Execute the command
-            while (dataReader.Read())
-            {
-                status = dataReader["Status"].ToString();
-            }
-            dataReader.Close();
-            close();
-            return status;
-        }
-
-        public string ChangeOrderStatus(string OrderId, string Status)
-        {
-            open();
-            string query = $"UPDATE `order` SET Status=@Status WHERE OrderId=@OrderId;";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@OrderId", OrderId);
-            cmd.Parameters.AddWithValue("@Status", Status);
-
-            cmd.ExecuteNonQuery();
-            close();
-            return Status;
-        }
-
-        public string GetOrderOwner(string OrderId)
-        {
-            open();
-            //Create a data reader and Execute the command
-            string owner = "";
-            string query = $"SELECT * FROM `order` INNER JOIN `post` ON order.PostId=post.PostId WHERE OrderId=@OrderId;";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@OrderId", OrderId);
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-
-            //Create a data reader and Execute the command
-            while (dataReader.Read())
-            {
-                owner = dataReader["PostAuthor"].ToString();
-            }
-            dataReader.Close();
-            close();
-            return owner;
-        }
+        
     }
 }

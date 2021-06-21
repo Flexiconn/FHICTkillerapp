@@ -10,35 +10,9 @@ namespace Tests
     public class BackPanelTests
     {
         [TestMethod]
-        public void Index()
-        {
-            new Logic.BackPanelContainer("mock").Index("TestId");
+        public void Test() {
+        
         }
-
-        [TestMethod]
-        public void Admin()
-        {
-            new Logic.BackPanelContainer("mock").Admin("TestId");
-        }
-
-        [TestMethod]
-        public void BanUser()
-        {
-            new Logic.BackPanelContainer("mock").BanUser("BanId", "TestID");
-
-        }
-
-        [TestMethod]
-        public void BanUserByPost()
-        {
-            new Logic.BackPanelContainer("mock").BanUserByPost("PostId", "TestId");
-
-        }
-
-        [TestMethod]
-        public void ViewReportPost()
-        {
-            new Logic.BackPanelContainer("mock").ViewReportPost("ReportId", "TestId");
-        }
+        
     }
 }

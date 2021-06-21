@@ -26,23 +26,7 @@ namespace Data
             connection.Close();
         }
 
-        public string GetAccountId(string SessionId)
-        {
-            open();
-            string query = $"SELECT Id FROM account WHERE SessionId=@Id";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Id", SessionId);
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            while (dataReader.Read())
-            {
-                SessionId = dataReader["Id"].ToString();
-            }
-            dataReader.Close();
-            close();
-            return SessionId;
-        }
-
+        
         public Contract.Models.ContractAccount GetAccount(string id)
         {
             open();
@@ -67,28 +51,7 @@ namespace Data
 
 
 
-        public bool CheckIfSignedIn(string Id)
-        {
-            open();
-            string query = $"SELECT SessionId FROM account WHERE SessionId=@Id";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Id", Id);
-
-            //Create a data reader and Execute the command
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            while (dataReader.Read())
-            {
-                if (Id != null && Id == dataReader["SessionId"].ToString())
-                {
-                    dataReader.Close();
-                    close();
-                    return true;
-                }
-            }
-            dataReader.Close();
-            close();
-            return false;
-        }
+        
 
         public void SendMessage(DateTime dateTime, string MessageId, string Message, string Id, string chatid)
         {
@@ -125,25 +88,6 @@ namespace Data
             close();
 
             return msgs.ToList();
-        }
-
-
-        public void createReport(string reportId, string id, Contract.reportTypes reportType, Contract.reportReasons reportReason, string comment, string reportedId)
-        {
-            open();
-
-
-            string query = $"INSERT INTO report (id, type, reason, comment, reportId, creator) VALUES(@id, @type, @reason, @comment, @reportId, @creator);";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@id", reportId);
-            cmd.Parameters.AddWithValue("@type", (int)reportType);
-            cmd.Parameters.AddWithValue("@reason", (int)reportReason);
-            cmd.Parameters.AddWithValue("@comment", comment);
-            cmd.Parameters.AddWithValue("@reportId", reportedId);
-            cmd.Parameters.AddWithValue("@creator", id);
-            //Create a data reader and Execute the command
-            cmd.ExecuteNonQuery();
-            close();
         }
 
     }

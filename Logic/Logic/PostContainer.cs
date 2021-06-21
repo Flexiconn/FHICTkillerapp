@@ -9,18 +9,24 @@ namespace Logic
 {
     public class PostContainer
     {
-        Contract.IPost IPost;
+        readonly Contract.IPost IPost;
+        readonly Contract.IAccount IAccount;
+
         public bool AddPost(IFormFile myImage, string postName, string postDescription, string SessionId)
         {
-            if (CheckIfSignedIn(IPost.GetAccountId(SessionId)))
+            if (CheckIfSignedIn(IAccount.GetAccountId(SessionId)))
             {
                 if (IPost.PostAmount(SessionId) < 3)
                 {
                     string postId = Guid.NewGuid().ToString();
-                    IPost.AddPost(postId, postName, postDescription, IPost.GetAccountId(SessionId));
-                    IPost.AddImageToDB(postId, FileControl.AddFileToSystem(myImage, $"post/{postId}"), IPost.GetAccountId(SessionId));
+                    IPost.AddPost(postId, postName, postDescription, IAccount.GetAccountId(SessionId));
+                    if (myImage != null)
+                    {
+                        IPost.AddImageToDB(postId, FileControl.AddFileToSystem(myImage, $"post/{postId}"), IAccount.GetAccountId(SessionId));
+                    }
+                    return true;
                 }
-                return true;
+                return false;
             }
             else {
                 return false;
@@ -45,7 +51,7 @@ namespace Logic
 
         public bool CheckIfSignedIn(string SessionId)
         {
-            if (IPost.CheckIfSignedIn(SessionId))
+            if (IAccount.CheckIfSignedIn(SessionId))
             {
                 return true;
             }
@@ -55,77 +61,47 @@ namespace Logic
         }
 
 
-        public bool OrderPost(string orderMessage, string postId, string SessionId)
-        {
-            if (CheckIfSignedIn(SessionId))
-            {
-                
-                IPost.AddOrder(Guid.NewGuid().ToString(), IPost.GetAccountId(SessionId), postId, Guid.NewGuid().ToString());
-
-                return true;
-            }
-
-            return false;
-
-        }
 
 
         public bool createReview(string text, int score, string postId, string SessionId)
         {
             if (CheckIfSignedIn(SessionId))
             {
-                IPost.createReview(IPost.GetAccountId(SessionId), text,  score,  postId);
+                IPost.createReview(IAccount.GetAccountId(SessionId), text,  score,  postId);
                 return true;
             }
             return false;
         }
 
 
-        public bool createReport(int reportReasonform, string comment, string PostId, string SessionId)
-        {
-            if (CheckIfSignedIn(SessionId))
-            {
-                IPost.createReport(IPost.GetAccountId(SessionId), Contract.reportTypes.post, Contract.reportReasons.scam, comment, PostId);
-                return true;
-            }
-            return false;
-        }
-
-        public bool createReviewReport(string reviewId, string postIdstring, string SessionId)
-        {
-            if (CheckIfSignedIn(SessionId))
-            {
-
-                IPost.createReport(IPost.GetAccountId(SessionId), Contract.reportTypes.review, Contract.reportReasons.scam, "test" , reviewId);
-                return true;
-            }
-            return false;
-        }
+        
 
         public bool FavouriteToggle(string PostId, string AccountId) {
             if (CheckIfSignedIn(AccountId))
             {
-                if (IPost.GetFavourites(IPost.GetAccountId(AccountId)).Find(x => x.Post.PostId == PostId) == null)
+                if (IPost.GetFavourites(IAccount.GetAccountId(AccountId)).Find(x => x.Post.PostId == PostId) == null)
                 {
-                    IPost.AddFavourite(Guid.NewGuid().ToString(), IPost.GetAccountId(AccountId), PostId);
-
+                    IPost.AddFavourite(Guid.NewGuid().ToString(), IAccount.GetAccountId(AccountId), PostId);
+                    return true;
                 }
                 else
                 {
-                    IPost.RemoveFavourite(IPost.GetFavourites(IPost.GetAccountId(AccountId)).Find(x => x.Post.PostId == PostId).Id);
-                    
+                    IPost.RemoveFavourite(IPost.GetFavourites(IAccount.GetAccountId(AccountId)).Find(x => x.Post.PostId == PostId).Id);
+                    return true;
                 }
-                return true;
+                
             }
             return false;
         }
 
         public PostContainer() {
             IPost = Factory.Factory.GetPostDAL();
+            IAccount = Factory.Factory.GetAccountDAL();
         }
         public PostContainer(string mode) {
-            if (mode == "mock") {
+            if (mode == "Mock") {
                 IPost = Factory.MockFactory.GetPostDAL();
+                IAccount = Factory.MockFactory.GetAccountDAL();
             }
         }
 

@@ -27,5 +27,16 @@ namespace Factory
             Contract.IAccount Account = new MockAccountDbConnection();
             return Account;
         }
+
+        public static Contract.IOrder GetOrderDAL()
+        {
+            Contract.IOrder Order = new MockOrderDbConnection();
+            return Order;
+        }
+        public static Contract.IReport GetReportDAL()
+        {
+            Contract.IReport Report = new MockReportDbConnection();
+            return Report;
+        }
     }
 }

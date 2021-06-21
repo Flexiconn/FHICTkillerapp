@@ -8,18 +8,21 @@ namespace Logic
 {
     public class BackPanelContainer
     {
-        Contract.IBackPanel IBackPanel;
+        readonly Contract.IBackPanel IBackPanel;
+        readonly Contract.IAccount IAccount;
+        readonly Contract.IReport IReport;
+
         public Logic.Models.LogicBackPanel GetBackPanelInfo(string SessionId)
         {
             if (CheckIfSignedIn(SessionId)) { 
-                return new Logic.Models.LogicBackPanel(IBackPanel.GetEarnings(IBackPanel.GetAccountId(SessionId)));
+                return new Logic.Models.LogicBackPanel(IBackPanel.GetEarnings(IAccount.GetAccountId(SessionId)));
             }
             return new Logic.Models.LogicBackPanel();
         }
 
         public bool CheckIfSignedIn(string SessionId)
         {
-            if (IBackPanel.CheckIfSignedIn(SessionId))
+            if (IAccount.CheckIfSignedIn(SessionId))
             {
                 return true;
             }
@@ -33,9 +36,9 @@ namespace Logic
         {
 
             if (CheckIfSignedIn(SessionId)) {
-                if (IBackPanel.CheckIfAdmin(IBackPanel.GetAccountId(SessionId)))
+                if (IBackPanel.CheckIfAdmin(IAccount.GetAccountId(SessionId)))
                 {
-                    return LogicListDto.Reports(IBackPanel.getReports(SessionId));
+                    return LogicListDto.Reports(IReport.getReports(SessionId));
                 }
             }
             return new List<Logic.Models.LogicReport>();
@@ -45,9 +48,9 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (IBackPanel.CheckIfAdmin(IBackPanel.GetAccountId(SessionId)))
+                if (IBackPanel.CheckIfAdmin(IAccount.GetAccountId(SessionId)))
                 {
-                    IBackPanel.banUser(IBackPanel.GetAccountId(SessionId), userId);
+                    IBackPanel.banUser(IAccount.GetAccountId(SessionId), userId);
                     return true;
                 }
             }
@@ -59,9 +62,9 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                if (IBackPanel.CheckIfAdmin(IBackPanel.GetAccountId(SessionId)))
+                if (IBackPanel.CheckIfAdmin(IAccount.GetAccountId(SessionId)))
                 {
-                    IBackPanel.banUser(IBackPanel.GetAccountId(SessionId), IBackPanel.GetPost(postId).PostAuthor.Id);
+                    IBackPanel.banUser(IAccount.GetAccountId(SessionId), IBackPanel.GetPost(postId).PostAuthor.Id);
                     return true;
                 }
             }
@@ -74,7 +77,7 @@ namespace Logic
             Logic.Models.LogicPosts post = new Logic.Models.LogicPosts();
             if (CheckIfSignedIn(SessionId))
             {
-                if (IBackPanel.CheckIfAdmin(IBackPanel.GetAccountId(SessionId)))
+                if (IBackPanel.CheckIfAdmin(IAccount.GetAccountId(SessionId)))
                 {
                     post = new Logic.Models.LogicPosts(IBackPanel.GetPost(IBackPanel.GetPostByReviewId(reportId)));
                     post.reviews.Add(new Logic.Models.LogicReview(IBackPanel.GetReportReview(reportId)));
@@ -87,10 +90,15 @@ namespace Logic
 
         public BackPanelContainer() {
             IBackPanel = Factory.Factory.GetBackpanelDAL();
+            IAccount = Factory.Factory.GetAccountDAL();
+            IReport = Factory.Factory.GetReportDAL();
         }
+
         public BackPanelContainer(string mode) {
             if (mode == "mock") {
                 IBackPanel = Factory.MockFactory.GetBackpanelDAL();
+                IAccount = Factory.MockFactory.GetAccountDAL();
+                IReport = Factory.MockFactory.GetReportDAL();
             }
         }
 

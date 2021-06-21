@@ -11,11 +11,15 @@ namespace Contract.Models
         public List<Contractorder> ordersOutgoing { get; set; }
         public ContractAccount account { get; set; }
 
-        public ContractmyAccountModel(string newPFP, List<Contractorder> newOrdersIncoming, List<Contractorder> newOrdersOutgoing, ContractAccount newAccount) {
+        public ContractmyAccountModel(string newPFP, ContractAccount newAccount) {
             PFP = newPFP;
+            account = newAccount;
+        }
+
+        public ContractmyAccountModel(List<Contractorder> newOrdersIncoming, List<Contractorder> newOrdersOutgoing)
+        {
             ordersIncoming = newOrdersIncoming;
             ordersOutgoing = newOrdersOutgoing;
-            account = newAccount;
         }
 
         public ContractmyAccountModel() {

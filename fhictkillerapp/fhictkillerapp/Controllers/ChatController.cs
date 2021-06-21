@@ -10,11 +10,13 @@ namespace fhictkillerapp.Controllers
 {
     public class ChatController : Controller
     {
-        Logic.ChatContainer Logic = new Logic.ChatContainer();
+        Logic.ChatContainer ChatContainer = new Logic.ChatContainer();
+        Logic.ReportContainer ReportContainer = new Logic.ReportContainer();
+
         [Route("chat/{id}")]
         public IActionResult Index(string id)
         {
-            ViewBag.chat = Logic.GetChat(id, HttpContext.Session.GetString("SessionId"));
+            ViewBag.chat = ChatContainer.GetChat(id, HttpContext.Session.GetString("SessionId"));
             ViewBag.chatid = id;
             return View();
         }
@@ -29,7 +31,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult SendMessage(ViewClientChat chat, string ChatId)
         {
-            if (Logic.SendMessage(chat.Message, ChatId, HttpContext.Session.GetString("SessionId")))
+            if (ChatContainer.SendMessage(chat.Message, ChatId, HttpContext.Session.GetString("SessionId")))
             {
                 return LocalRedirect("/chat/" + ChatId);
             }
@@ -42,7 +44,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult createReport(int reportReasonform, string comment, string chatId)
         {
-            if (Logic.createReport(reportReasonform, comment, chatId, HttpContext.Session.GetString("SessionId")))
+            if (ReportContainer.createChatReport(reportReasonform, comment, chatId, HttpContext.Session.GetString("SessionId")))
             {
 
                 return RedirectToAction("Index", new { id = chatId });

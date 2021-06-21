@@ -11,43 +11,87 @@ namespace Tests
     public class PostTests
     {
         [TestMethod]
+        public void AddPostLimitNotReached() {
+            var test = new Logic.PostContainer("Mock").AddPost(null, "Test", "Test", "test");
+            Assert.IsTrue(test);
+        }
+
+        [TestMethod]
+        public void AddPostLimitReached()
+        {
+            var test = new Logic.PostContainer("Mock").AddPost(null, "Test", "Test", "4");
+            Assert.IsFalse(test);
+        }
+
+
+        [TestMethod]
         public void GetPosts()
         {
-            new Logic.PostContainer("mock").Index();
-
+            bool test = false;
+            var list = new Logic.PostContainer("Mock").GetPostsList();
+            if(list.Count > 0)
+            {
+                test = true;
+            }
+            Assert.IsTrue(test);
         }
 
         [TestMethod]
-        public void GetPost()
+        public void ViewPost()
         {
-            new Logic.PostContainer("mock").ViewPost("TestPostId");
+            bool test = false;
+            var post = new Logic.PostContainer("Mock").ViewPost("test");
+            if (post.PostId == "test")
+            {
+                test = true;
+            }
+            Assert.IsTrue(test);
         }
 
-
-
         [TestMethod]
-        public void OrderPost() {
-            new Logic.PostContainer("mock").OrderPost("TestMessage", "TestPostId", "TestId");
-        }
-
-
-
-        [TestMethod]
-        public void CreateReview()
+        public void ViewPostWrongId()
         {
-            new Logic.PostContainer("mock").createReview("TestText", 5, "TestPostId", "TestId");
+            bool test = false;
+            var post = new Logic.PostContainer("Mock").ViewPost("empty");
+            if (post.PostId == "test")
+            {
+                test = true;
+            }
+            Assert.IsFalse(test);
         }
 
         [TestMethod]
-        public void CreateReport()
+        public void CheckIfSignedIn()
         {
-            new Logic.PostContainer("mock").createReport(1, "TestComment", "TestPostId", "TestId");
+            var check = new Logic.PostContainer("Mock").CheckIfSignedIn("test");
+
+            Assert.IsTrue(check);
         }
 
         [TestMethod]
-        public void Addpost()
+        public void CheckIfSignedInWithIncorrectSessionId()
         {
-            new Logic.PostContainer("mock").AddPost(null,"TestPostName", "TestDescription", "TestId");
+            var check = new Logic.PostContainer("Mock").CheckIfSignedIn("empty");
+
+            Assert.IsFalse(check);
+        }
+
+
+
+        [TestMethod]
+        public void SetFavourite()
+        {
+            var check = new Logic.PostContainer("Mock").FavouriteToggle("test","test");
+
+            Assert.IsTrue(check);
+        }
+
+        [TestMethod]
+        public void RemoveFavourite()
+        {
+            var check = new Logic.PostContainer("Mock").FavouriteToggle("test", "test");
+
+            Assert.IsTrue(check);
         }
     }
 }

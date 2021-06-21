@@ -26,5 +26,17 @@ namespace Factory
             Contract.IAccount Account = new AccountDbConnection();
             return Account;
         }
+
+        public static Contract.IOrder GetOrderDAL()
+        {
+            Contract.IOrder Order = new OrderDbConnection();
+            return Order;
+        }
+
+        public static Contract.IReport GetReportDAL()
+        {
+            Contract.IReport Report = new ReportDBConnection();
+            return Report;
+        }
     }
 }

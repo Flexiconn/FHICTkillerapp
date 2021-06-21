@@ -10,18 +10,18 @@ namespace fhictkillerapp.Controllers
 {
     public class backPanelController : Controller
     {
-        Logic.BackPanelContainer Logic = new Logic.BackPanelContainer();
+        Logic.BackPanelContainer BackPanelContainer = new Logic.BackPanelContainer();
 
         public ActionResult Index()
         {
-            ViewBag.earnings = Logic.GetBackPanelInfo(HttpContext.Session.GetString("SessionId"));
+            ViewBag.earnings = BackPanelContainer.GetBackPanelInfo(HttpContext.Session.GetString("SessionId"));
             return View();
         }
 
         public ActionResult Admin()
         {
             List<fhictkillerapp.Models.ViewReport> reports = new List<fhictkillerapp.Models.ViewReport>();
-            foreach (var t in Logic.GetAdminPanelInfo(HttpContext.Session.GetString("SessionId"))) {
+            foreach (var t in BackPanelContainer.GetAdminPanelInfo(HttpContext.Session.GetString("SessionId"))) {
                 reports.Add(new fhictkillerapp.Models.ViewReport(t));
             }
             ViewBag.reports = reports;
@@ -31,7 +31,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult BanUser(string userId)
         {
-            if (Logic.BanUser(HttpContext.Session.GetString("SessionId"), userId))
+            if (BackPanelContainer.BanUser(HttpContext.Session.GetString("SessionId"), userId))
             {
                 return RedirectToAction("Admin");
 
@@ -45,7 +45,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult BanUserByPost(string postId)
         {
-            if (Logic.BanUserByPost(postId, HttpContext.Session.GetString("SessionId")))
+            if (BackPanelContainer.BanUserByPost(postId, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("Admin");
 
@@ -59,8 +59,8 @@ namespace fhictkillerapp.Controllers
         public ActionResult ViewReportPost(string reportId)
         {
             
-            ViewBag.Post = Logic.ViewReportPost(reportId,  HttpContext.Session.GetString("SessionId"));
-            ViewBag.Review = Logic.ViewReportPost(reportId, HttpContext.Session.GetString("SessionId")).reviews;
+            ViewBag.Post = BackPanelContainer.ViewReportPost(reportId,  HttpContext.Session.GetString("SessionId"));
+            ViewBag.Review = BackPanelContainer.ViewReportPost(reportId, HttpContext.Session.GetString("SessionId")).reviews;
             return View("ReportView");
         }
 

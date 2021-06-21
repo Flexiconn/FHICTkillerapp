@@ -35,7 +35,10 @@ namespace fhictkillerapp.Models
                 }
             }
             this.PFP = dto.PFP;
-            this.account = new ViewAccount(dto.account);
+            if (dto.account != null) {
+                this.account = new ViewAccount(dto.account);
+            }
+
         }
     }
 }

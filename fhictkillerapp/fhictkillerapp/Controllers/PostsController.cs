@@ -14,14 +14,15 @@ namespace fhictkillerapp.Controllers
 {
     public class PostsController : Controller
     {
-        Logic.PostContainer Logic = new Logic.PostContainer();
-        // GET: PostsController
+        Logic.PostContainer PostContainer = new Logic.PostContainer();
+        Logic.OrderContainer OrderContainer = new Logic.OrderContainer();
+        Logic.ReportContainer ReportContainer = new Logic.ReportContainer();
 
         [HttpPost]
         public ActionResult AddPost(ViewPostUpload postUpload)
         {
 
-            if (Logic.AddPost(postUpload.MyImage, postUpload.PostName, postUpload.PostDescription, HttpContext.Session.GetString("SessionId")))
+            if (PostContainer.AddPost(postUpload.MyImage, postUpload.PostName, postUpload.PostDescription, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("Viewpost", new { id = postUpload.PostId });
 
@@ -37,7 +38,7 @@ namespace fhictkillerapp.Controllers
         {
             Console.WriteLine("sessionId" + HttpContext.Session.GetString("SessionId"));
             List<fhictkillerapp.Models.ViewPosts> post = new List<fhictkillerapp.Models.ViewPosts>();
-            foreach (var t in Logic.GetPostsList()) {
+            foreach (var t in PostContainer.GetPostsList()) {
                 post.Add(new Models.ViewPosts(t));
             }
             ViewBag.Posts = post;
@@ -49,7 +50,7 @@ namespace fhictkillerapp.Controllers
         [Route("post/{id}")]
         public ActionResult ViewPost(string Id)
         {
-            Models.ViewPosts post = new Models.ViewPosts(Logic.ViewPost(Id));
+            Models.ViewPosts post = new Models.ViewPosts(PostContainer.ViewPost(Id));
             ViewBag.Post = post;
             ViewBag.Review = post.reviews;
             return View();
@@ -57,7 +58,7 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult CreatePost()
         {
-            if (Logic.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
+            if (PostContainer.CheckIfSignedIn(HttpContext.Session.GetString("SessionId")))
             {
                 return View();
             }
@@ -75,7 +76,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult OrderPost( string orderMessage, string postId)
         {
-            if (Logic.OrderPost(orderMessage, postId, HttpContext.Session.GetString("SessionId")))
+            if (OrderContainer.OrderPost(orderMessage, postId, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("Myaccount", "Account");
 
@@ -90,7 +91,7 @@ namespace fhictkillerapp.Controllers
 
         public ActionResult createReview(ViewReview review) 
         {
-            if (Logic.createReview(review.text, review.score,review.postId , HttpContext.Session.GetString("SessionId")))
+            if (PostContainer.createReview(review.text, review.score,review.postId , HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("ViewPost", new { id = review.postId });
 
@@ -102,7 +103,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult createReport(int reportReasonform, string comment, string PostId)
         {
-            if (Logic.createReport(reportReasonform, comment, PostId, HttpContext.Session.GetString("SessionId")))
+            if (ReportContainer.createPostReport(reportReasonform, comment, PostId, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("ViewPost", new { id = PostId });
 
@@ -116,7 +117,7 @@ namespace fhictkillerapp.Controllers
         public ActionResult ToggleFavourite(string PostId)
         {
             Console.WriteLine("favourite");
-            if (Logic.FavouriteToggle(PostId, HttpContext.Session.GetString("SessionId")) == true)
+            if (PostContainer.FavouriteToggle(PostId, HttpContext.Session.GetString("SessionId")) == true)
             {
                 return RedirectToAction("ViewPost", new { id = PostId });
             }
@@ -129,7 +130,7 @@ namespace fhictkillerapp.Controllers
         [HttpPost]
         public ActionResult createReviewReport(string reviewId, string postId)
         {
-            if (Logic.createReviewReport(reviewId, postId, HttpContext.Session.GetString("SessionId")))
+            if (ReportContainer.createReviewReport(reviewId, postId, HttpContext.Session.GetString("SessionId")))
             {
                 return RedirectToAction("ViewPost", new { id = postId });
             } else

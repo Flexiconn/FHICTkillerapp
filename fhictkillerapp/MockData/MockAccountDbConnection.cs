@@ -48,6 +48,14 @@ namespace MockData
 
         public string GetAccountId(string SessionId)
         {
+            if (SessionId == "owner") {
+                return "owner";
+            }
+
+            if (SessionId == "buyer")
+            {
+                return "buyer";
+            }
             return "testId";
         }
 
@@ -76,35 +84,23 @@ namespace MockData
 
         public Contract.Models.ContractAccount LoginAccountCheck(string Password, string Name)
         {
-            
-            return new Contract.Models.ContractAccount();
+            if (Name == "empty") {
+                return new Contract.Models.ContractAccount() {Id = "t" };
+            }
+            return new Contract.Models.ContractAccount() {Id = "testingId" };
         }
 
         public bool CheckIfSignedIn(string Id)
         {
-            
+            if (Id == "empty") {
+                return false;
+            }
             return true;
         }
 
         public Contract.Models.ContractAccount GetProfileInfo(string Id)
         {
             return new Contract.Models.ContractAccount() {Name = "TestName", Balance = "69" };
-        }
-
-        public List<Contract.Models.Contractorder> GetOrders(string Id)
-        {
-            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
-            //Create a data reader and Execute the command
-            orders.Add(new Contract.Models.Contractorder() { orderId = "TestOrderId", postId = "TestPostId", status = "Ordered", chatId = "TestChatId" });
-            return orders;
-        }
-
-        public List<Contract.Models.Contractorder> GetOrdersIncoming(string Id)
-        {
-            List<Contract.Models.Contractorder> orders = new List<Contract.Models.Contractorder>();
-            //Create a data reader and Execute the command
-            orders.Add(new Contract.Models.Contractorder() { orderId = "TestOrderId", postId = "TestPostId", status = "Ordered", chatId = "TestChatId" });
-            return orders;
         }
 
         public void AddFunds(float amount, string id)
@@ -134,6 +130,16 @@ namespace MockData
 
         public string GetOrderOwner(string OrderId)
         {
+            if (OrderId == "owner")
+            {
+                return "owner";
+            }
+
+            if (OrderId == "buyer")
+            {
+                return "buyer";
+            }
+
             return "TestId";
         }
 

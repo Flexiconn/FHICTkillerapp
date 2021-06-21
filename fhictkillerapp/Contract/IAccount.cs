@@ -15,13 +15,9 @@ namespace Contract
         string SetSessionId(string Id, string newSessionId);
         bool CheckIfSignedIn(string Id);
         Contract.Models.ContractAccount GetProfileInfo(string Id);
-        List<Contract.Models.Contractorder> GetOrders(string Id);
-        List<Contract.Models.Contractorder> GetOrdersIncoming(string Id);
         void AddFunds(float amount, string id);
         void AddPFP(string Path,string ParentId, string Id);
         string GetPFP(string Id);
-        string GetOrderStatus(string OrderId);
-        string ChangeOrderStatus(string OrderId, string Status);
-        string GetOrderOwner(string OrderId);
+
     }
 }

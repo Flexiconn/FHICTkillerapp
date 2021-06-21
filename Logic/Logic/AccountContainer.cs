@@ -11,13 +11,13 @@ namespace Logic
 {
     public class AccountContainer 
     {
-        Contract.IAccount IAccount;
+        readonly Contract.IAccount IAccount;
 
         public Logic.Models.LogicmyAccountModel GetMyAccountInfo(string SessionId)
         {
             
             if(CheckIfSignedIn(SessionId)){
-                return new Logic.Models.LogicmyAccountModel( new Contract.Models.ContractmyAccountModel(IAccount.GetPFP(IAccount.GetAccountId(SessionId)), IAccount.GetOrdersIncoming(IAccount.GetAccountId(SessionId)), IAccount.GetOrders(IAccount.GetAccountId(SessionId)),IAccount.GetAccount(IAccount.GetAccountId(SessionId)));
+                return new Logic.Models.LogicmyAccountModel( new Contract.Models.ContractmyAccountModel(IAccount.GetPFP(IAccount.GetAccountId(SessionId)),IAccount.GetAccount(IAccount.GetAccountId(SessionId))));
             }
             return new Models.LogicmyAccountModel();
         }
@@ -42,7 +42,7 @@ namespace Logic
 
         public string LoginAccount(string Password, string Name)
         {
-            if (IAccount.LoginAccountCheck(Password, Name).Id != null) {
+            if (IAccount.LoginAccountCheck(Password, Name).Id.Length > 4) {
                 return IAccount.SetSessionId(new LogicAccount(IAccount.LoginAccountCheck(Password, Name)).GetId(), Guid.NewGuid().ToString());
             }
             return "Failed";
@@ -51,10 +51,13 @@ namespace Logic
 
         public bool AddfundsToAccount(int amount, string SessionId)
         {
-            if (CheckIfSignedIn(IAccount.GetAccountId(SessionId)))
+            if (amount > 0)
             {
-                IAccount.AddFunds(amount, IAccount.GetAccountId(SessionId));
-                return true;
+                if (CheckIfSignedIn(IAccount.GetAccountId(SessionId)))
+                {
+                    IAccount.AddFunds(amount, IAccount.GetAccountId(SessionId));
+                    return true;
+                }
             }
             return false;
         }
@@ -63,59 +66,19 @@ namespace Logic
         {
             if (CheckIfSignedIn(SessionId))
             {
-                IAccount.AddPFP(FileControl.AddFileToSystem(pfp,$"pfp/{IAccount.GetAccountId(SessionId)}/"), IAccount.GetAccountId(SessionId), Guid.NewGuid().ToString());
-                return true;
-            }
-            return false;
-        }
-
-        public bool cancelOrder(string OrderId, string SessionId)
-        {
-            if (CheckIfSignedIn(SessionId))
-            {
-                if (IAccount.GetOrderOwner(OrderId) == new LogicAccount(IAccount.GetAccount(IAccount.GetAccountId(SessionId))).GetSessionId())
+                if (pfp != null || SessionId == "NaN")
                 {
-                    if (IAccount.GetOrderStatus(OrderId) == "ordered")
-                    {
-                        IAccount.ChangeOrderStatus(OrderId, "cancelled");
-                        return true;
-                    }
-
-                    if (IAccount.GetOrderStatus(OrderId) == "accepted")
-                    {
-                        IAccount.ChangeOrderStatus(OrderId, "cancelled");
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (IAccount.GetOrderStatus(OrderId) == "ordered")
-                    {
-                        IAccount.ChangeOrderStatus(OrderId, "cancelled");
-                        return true;
-                    }
+                    IAccount.AddPFP(FileControl.AddFileToSystem(pfp, $"pfp/{IAccount.GetAccountId(SessionId)}/"), IAccount.GetAccountId(SessionId), Guid.NewGuid().ToString());
+                    return true;
                 }
                 return false;
             }
             return false;
         }
 
-        public bool AcceptOrder(string OrderId, string SessionId)
-        {
-            if (CheckIfSignedIn(SessionId))
-            {
-                if (IAccount.GetOrderOwner(OrderId) == new LogicAccount(IAccount.GetAccount(IAccount.GetAccountId(SessionId))).GetSessionId())
-                {
-                    if (IAccount.GetOrderStatus(OrderId) == "ordered")
-                    {
-                        IAccount.ChangeOrderStatus(OrderId, "accepted");
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return false;
-        }
+        
+
+
 
         public AccountContainer() {
             IAccount = Factory.Factory.GetAccountDAL();

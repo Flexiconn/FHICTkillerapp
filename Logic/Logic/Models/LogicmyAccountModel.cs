@@ -16,28 +16,40 @@ namespace Logic.Models
             ordersOutgoing = new List<LogicOrder>();
         }
 
-        public LogicmyAccountModel(string pfp, List<LogicOrder> incoming, List<LogicOrder> outgoing, LogicAccount newAccount)
+        public LogicmyAccountModel(string pfp, LogicAccount newAccount)
         {
             PFP = pfp;
+            account = newAccount;
+        }
+
+        public LogicmyAccountModel(List<LogicOrder> incoming, List<LogicOrder> outgoing)
+        {
             ordersIncoming = incoming;
             ordersOutgoing = outgoing;
-            account = newAccount;
         }
 
         public LogicmyAccountModel(Contract.Models.ContractmyAccountModel dto) {
             this.ordersIncoming = new List<LogicOrder>();
             this.ordersOutgoing = new List<LogicOrder>();
-            foreach (var t in dto.ordersIncoming)
+            if (dto.ordersIncoming.Count > 0)
             {
-                this.ordersIncoming.Add(new LogicOrder() { buyer = new LogicAccount(t.buyer), buyerId = t.buyerId, chat = new LogicClientChat() { }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new LogicPosts() { } });
+                foreach (var t in dto.ordersIncoming)
+                {
+                    this.ordersIncoming.Add(new LogicOrder() { buyer = new LogicAccount(t.buyer), buyerId = t.buyerId, chat = new LogicClientChat() { }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new LogicPosts() { } });
+                }
             }
 
-            foreach (var t in dto.ordersOutgoing)
+            if (dto.ordersOutgoing.Count > 0)
             {
-                this.ordersOutgoing.Add(new LogicOrder() { buyer = new LogicAccount(t.buyer), buyerId = t.buyerId, chat = new LogicClientChat() { }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new LogicPosts() { } });
+                foreach (var t in dto.ordersOutgoing)
+                {
+                    this.ordersOutgoing.Add(new LogicOrder() { buyer = new LogicAccount(t.buyer), buyerId = t.buyerId, chat = new LogicClientChat() { }, chatId = t.chatId, orderId = t.orderId, orderMessage = t.orderMessage, post = new LogicPosts() { } });
+                }
             }
             this.PFP = dto.PFP;
-            this.account = new LogicAccount(dto.account);
+            if (dto.account != null) {
+                this.account = new LogicAccount(dto.account);
+            }
         }
 
         public string GetPFP() {
