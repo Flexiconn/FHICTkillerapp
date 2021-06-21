@@ -18,7 +18,10 @@ namespace fhictkillerapp.Models
         }
 
         public ViewClientChat(Logic.Models.LogicClientChat dto) {
-            this.Account = new ViewAccount(dto.Account);
+            if (dto.Account != null)
+            {
+                this.Account = new ViewAccount(dto.Account);
+            }
             this.ChatId = dto.ChatId;
             this.DateTime = dto.DateTime;
             this.Message = dto.Message;

@@ -18,7 +18,9 @@ namespace Logic.Models
         }
 
         public LogicClientChat(Contract.Models.ContractClientChat dto) {
-            this.Account = new LogicAccount(dto.account);
+            if (dto.account != null) {
+                this.Account = new LogicAccount(dto.account);
+            }
             this.ChatId = dto.ChatId;
             this.DateTime = dto.DateTime;
             this.Message = dto.Message;

@@ -19,7 +19,10 @@ namespace fhictkillerapp.Models
 
         public ViewReview(Logic.Models.LogicReview dto)
         {
-            this.Account = new ViewAccount() { Balance = dto.Account.Balance, Id = dto.Account.Balance, Name = dto.Account.Name, Password = dto.Account.Password, SessionId = dto.Account.SessionId };
+            if (dto.Account != null)
+            {
+                this.Account = new ViewAccount() { Balance = dto.Account.Balance, Id = dto.Account.Balance, Name = dto.Account.Name, Password = dto.Account.Password, SessionId = dto.Account.SessionId };
+            }
             this.reviewId = dto.reviewId;
             this.score = dto.score;
             this.text = dto.text;

@@ -18,7 +18,10 @@ namespace Logic.Models
 
         public LogicReview(Contract.Models.ContractReview dto)
         {
-            this.Account = new LogicAccount(dto.Account.Balance, dto.Account.Balance, dto.Account.SessionId, dto.Account.Name, dto.Account.Password);
+            if (dto.Account != null)
+            {
+                this.Account = new LogicAccount(dto.Account.Balance, dto.Account.Balance, dto.Account.SessionId, dto.Account.Name, dto.Account.Password);
+            }
             this.reviewId = dto.reviewId;
             this.score = dto.score;
             this.text = dto.text;

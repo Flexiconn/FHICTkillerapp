@@ -27,12 +27,20 @@ namespace fhictkillerapp.Models
         {
             this.orderId = dto.orderId;
             this.orderMessage = dto.orderMessage;
-            this.postId = dto.postId;
-            this.post = new ViewPosts(dto.post);
+            this.postId = dto.postId; if (dto.post != null)
+            {
+                this.post = new ViewPosts(dto.post);
+            }
             this.status = dto.status;
-            this.buyer = new ViewAccount(dto.buyer);
+            if (dto.buyer != null)
+            {
+                this.buyer = new ViewAccount(dto.buyer);
+            }
             this.buyerId = dto.buyerId;
-            this.chat = new ViewClientChat(dto.chat);
+            if (dto.chat != null)
+            {
+                this.chat = new ViewClientChat(dto.chat);
+            }
             this.chatId = dto.chatId;
         }
     }

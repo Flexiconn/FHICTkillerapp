@@ -19,7 +19,10 @@ namespace fhictkillerapp.Models
         }
         public ViewReport(Logic.Models.LogicReport dto)
         {
-            this.creatorId = new ViewAccount() { Balance = dto.creatorId.Balance, Id = dto.creatorId.Balance, Name = dto.creatorId.Name, Password = dto.creatorId.Password, SessionId = dto.creatorId.SessionId };
+            if (dto.creatorId != null)
+            {
+                this.creatorId = new ViewAccount() { Balance = dto.creatorId.Balance, Id = dto.creatorId.Balance, Name = dto.creatorId.Name, Password = dto.creatorId.Password, SessionId = dto.creatorId.SessionId };
+            }
             this.id = dto.id;
             this.reportComment = dto.reportComment;
             this.reportId = dto.reportId;
