@@ -16,10 +16,20 @@ namespace fhictkillerapp.Models
             ordersOutgoing = new List<ViewOrder>();
         }
 
-        public ViewmyAccountModel(List<ViewOrder> newOrdersIncoming, List<ViewOrder> newOrdersOutgoing)
+        static public List<ViewOrder> Orders(List<Logic.Models.LogicOrder> order)
         {
-            ordersIncoming = newOrdersIncoming;
-            ordersOutgoing = newOrdersOutgoing;
+            List<ViewOrder> orders = new List<ViewOrder>();
+            foreach (var t in order)
+            {
+                orders.Add(new ViewOrder(t));
+            }
+            return orders;
+        }
+
+        public ViewmyAccountModel(List<Logic.Models.LogicOrder> newOrdersIncoming, List<Logic.Models.LogicOrder> newOrdersOutgoing)
+        {
+            ordersIncoming = Orders(newOrdersIncoming);
+            ordersOutgoing = Orders(newOrdersOutgoing);
         }
 
         public ViewmyAccountModel(Logic.Models.LogicmyAccountModel dto) {
