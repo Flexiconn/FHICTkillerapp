@@ -10,9 +10,32 @@ namespace Tests
     public class BackPanelTests
     {
         [TestMethod]
-        public void Test() {
+        public void TestBackpanelEarnings() {
         
         }
+
+        [TestMethod]
+        public void GetAdminPanel()
+        {
+
+        }
+
+        [TestMethod]
+        public void ViewReportPost() 
+        { 
         
+        }
+
+        [TestMethod]
+        public void BanUser()
+        {
+
+        }
+
+        [TestMethod]
+        public void BanUserByPost()
+        {
+
+        }
     }
 }

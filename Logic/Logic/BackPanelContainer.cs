@@ -11,6 +11,7 @@ namespace Logic
         readonly Contract.IBackPanel IBackPanel;
         readonly Contract.IAccount IAccount;
         readonly Contract.IReport IReport;
+        readonly Contract.IPost IPost;
 
         public Logic.Models.LogicBackPanel GetBackPanelInfo(string SessionId)
         {
@@ -64,7 +65,7 @@ namespace Logic
             {
                 if (IBackPanel.CheckIfAdmin(IAccount.GetAccountId(SessionId)))
                 {
-                    IBackPanel.banUser(IAccount.GetAccountId(SessionId), IBackPanel.GetPost(postId).PostAuthor.Id);
+                    IBackPanel.banUser(IAccount.GetAccountId(SessionId), IPost.GetPost(postId).PostAuthor.Id);
                     return true;
                 }
             }
@@ -79,7 +80,7 @@ namespace Logic
             {
                 if (IBackPanel.CheckIfAdmin(IAccount.GetAccountId(SessionId)))
                 {
-                    post = new Logic.Models.LogicPosts(IBackPanel.GetPost(IBackPanel.GetPostByReviewId(reportId)));
+                    post = new Logic.Models.LogicPosts(IPost.GetPost(IBackPanel.GetPostByReviewId(reportId)));
                     post.reviews.Add(new Logic.Models.LogicReview(IBackPanel.GetReportReview(reportId)));
                     return post;
                 }
@@ -92,6 +93,7 @@ namespace Logic
             IBackPanel = Factory.Factory.GetBackpanelDAL();
             IAccount = Factory.Factory.GetAccountDAL();
             IReport = Factory.Factory.GetReportDAL();
+            IPost = Factory.Factory.GetPostDAL();
         }
 
         public BackPanelContainer(string mode) {
@@ -99,6 +101,7 @@ namespace Logic
                 IBackPanel = Factory.MockFactory.GetBackpanelDAL();
                 IAccount = Factory.MockFactory.GetAccountDAL();
                 IReport = Factory.MockFactory.GetReportDAL();
+                IPost = Factory.MockFactory.GetPostDAL();
             }
         }
 
